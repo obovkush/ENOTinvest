@@ -1,15 +1,15 @@
 /* eslint-disable class-methods-use-this */
 const bcrypt = require('bcrypt');
 const uuid = require('uuid');
-const User = require('../db/models');
+const { User } = require('../db/models');
 const mailService = require('./mailService');
 const tokenService = require('./tokenService');
 const UserDto = require('../dtos/userDTO');
 const ApiError = require('../exceptions/apiError');
 
 class UserService {
-  async registration(email, password) {
-    const candidate = await User.findOne({ email });
+  async registration(name, email, password) {
+    const candidate = await User.findOne({ where: { email } });
     if (candidate) {
       throw ApiError.BadRequest(
         `Пользователь с почтовым адресом ${email} уже существует`,
@@ -19,13 +19,14 @@ class UserService {
     const activationLink = uuid.v4(); // v34fa-asfasf-142saf-sa-asf
 
     const user = await User.create({
+      name,
       email,
       password: hashPassword,
       activationLink,
     });
     await mailService.sendActivationMail(
       email,
-      `${process.env.API_URL}/api/activate/${activationLink}`,
+      `${process.env.API_URL}/api/user/activate/${activationLink}`,
     );
 
     const userDto = new UserDto(user); // id, email, isActivated
@@ -36,7 +37,7 @@ class UserService {
   }
 
   async activate(activationLink) {
-    const user = await User.findOne({ activationLink });
+    const user = await User.findOne({ where: { activationLink } });
     if (!user) {
       throw ApiError.BadRequest('Неккоректная ссылка активации');
     }
@@ -45,11 +46,12 @@ class UserService {
   }
 
   async login(email, password) {
-    const user = await User.findOne({ email });
+    const user = await User.findOne({ where: { email } });
     if (!user) {
       throw ApiError.BadRequest('Пользователь с таким email не найден');
     }
     const isPassEquals = await bcrypt.compare(password, user.password);
+    console.log(isPassEquals);
     if (!isPassEquals) {
       throw ApiError.BadRequest('Неверный пароль');
     }
