@@ -22,12 +22,22 @@ class UserController {
         httpOnly: true,
       });
       return res.json(userData);
-    } catch (error) {
-      next(error);
+    } catch (err) {
+      if (err instanceof ApiError) {
+        return res.status(err.status).send({
+          error: err.code,
+          description: err.message,
+        });
+      }
+      console.log('error', err);
+      return res.status(500).send({
+        error: 'GENERIC',
+        description: 'Что-то пошло не так',
+      });
     }
   }
 
-  async login(req, res, next) {
+  async login(req, res) {
     try {
       const { email, password } = req.body;
       const userData = await userService.login(email, password);
@@ -36,52 +46,104 @@ class UserController {
         httpOnly: true,
       });
       return res.json(userData);
-    } catch (error) {
-      next(error);
+    } catch (err) {
+      if (err instanceof ApiError) {
+        return res.status(err.status).send({
+          error: err.code,
+          description: err.message,
+        });
+      }
+      console.log('error', err);
+      return res.status(500).send({
+        error: 'GENERIC',
+        description: 'Что-то пошло не так',
+      });
     }
   }
 
-  async logout(req, res, next) {
+  async logout(req, res) {
     try {
       const { refreshToken } = req.cookies;
+      console.log(req.cookies);
       const token = await userService.logout(refreshToken);
       res.clearCookie('refreshToken');
       return res.json(token);
-    } catch (error) {
-      next(error);
+    } catch (err) {
+      if (err instanceof ApiError) {
+        return res.status(err.status).send({
+          error: err.code,
+          description: err.message,
+        });
+      }
+      console.log('error', err);
+      return res.status(500).send({
+        error: 'GENERIC',
+        description: 'Что-то пошло не так',
+      });
     }
   }
 
-  async activate(req, res, next) {
+  async activate(req, res) {
     try {
       const activationLink = req.params.link;
       await userService.activate(activationLink);
       return res.redirect(process.env.CLIENT_URL);
-    } catch (error) {
-      next(error);
+    } catch (err) {
+      if (err instanceof ApiError) {
+        return res.status(err.status).send({
+          error: err.code,
+          description: err.message,
+        });
+      }
+      console.log('error', err);
+      return res.status(500).send({
+        error: 'GENERIC',
+        description: 'Что-то пошло не так',
+      });
     }
   }
 
-  async refresh(req, res, next) {
+  async refresh(req, res) {
     try {
       const { refreshToken } = req.cookies;
+      console.log('refreshToken', refreshToken);
       const userData = await userService.refresh(refreshToken);
       res.cookie('refreshToken', userData.refreshToken, {
         maxAge: 30 * 24 * 60 * 60 * 1000,
         httpOnly: true,
       });
       return res.json(userData);
-    } catch (error) {
-      next(error);
+    } catch (err) {
+      if (err instanceof ApiError) {
+        return res.status(err.status).send({
+          error: err.code,
+          description: err.message,
+        });
+      }
+      console.log('error', err);
+      return res.status(500).send({
+        error: 'GENERIC',
+        description: 'Что-то пошло не так',
+      });
     }
   }
 
-  async getUsers(req, res, next) {
+  async getUsers(req, res) {
     try {
       const users = await userService.getAllUsers();
       return res.json(users);
-    } catch (error) {
-      next(error);
+    } catch (err) {
+      if (err instanceof ApiError) {
+        return res.status(err.status).send({
+          error: err.code,
+          description: err.message,
+        });
+      }
+      console.log('error', err);
+      return res.status(500).send({
+        error: 'GENERIC',
+        description: 'Что-то пошло не так',
+      });
     }
   }
 }
