@@ -42,12 +42,12 @@ function SignPage() {
               },
             }}
           >
-            <Card sx={{ maxWidth: 465, p: 2, mt: 5, mx: 'auto', boxShadow: 3 }}>
+            <Card sx={{ maxWidth: 465, p: 3, mt: 5, mx: 'auto', boxShadow: 3 }}>
               {isSignInRoute ? (
                 <>
                   <CardHeader
                     sx={headerSX}
-                    title={<Typography variant="h4">Авторизация</Typography>}
+                    title={<Typography variant="h5">Вход в аккаунт</Typography>}
                   />
                   <SignIn />
                 </>
@@ -55,7 +55,9 @@ function SignPage() {
                 <>
                   <CardHeader
                     sx={headerSX}
-                    title={<Typography variant="h4">Регистрация</Typography>}
+                    title={
+                      <Typography variant="h5">Создание аккаунта</Typography>
+                    }
                   />
                   <SignUp />
                 </>
