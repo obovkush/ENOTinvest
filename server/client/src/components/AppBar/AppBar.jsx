@@ -1,5 +1,8 @@
 import React, { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useLocation } from 'react-router-dom';
+
+import { logout } from '../../api/userAPI';
 
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
@@ -14,21 +17,38 @@ import Menu from '@mui/material/Menu';
 
 import MenuIcon from '@mui/icons-material/Menu';
 import AccountCircle from '@mui/icons-material/AccountCircle';
-import { SIGNIN_ROUTE, SIGNUP_ROUTE } from '../../utils/consts';
+import { HOME_ROUTE, SIGNIN_ROUTE, SIGNUP_ROUTE } from '../../utils/consts';
 
 export default function MenuAppBar() {
+  const dispatch = useDispatch();
+  const user = useSelector((store) => store.user);
+  console.log('user', user);
+  const handleLogout = () => {
+    try {
+      logout()
+        .then(localStorage.removeItem('token'))
+        .then(() => {
+          dispatch({
+            type: 'LOGOUT_USER',
+            payload: {},
+          });
+        })
+        .then(() => navigate(HOME_ROUTE));
+    } catch (err) {
+      console.log(err.response?.data?.message);
+    }
+  };
+
   const navigate = useNavigate();
   const location = useLocation();
   const isSignRoute =
     location.pathname === SIGNIN_ROUTE || location.pathname === SIGNUP_ROUTE;
   // console.log(isSignRoute);
 
-  const [auth, setAuth] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
 
   const handleChange = (event) => {
-    navigate(SIGNIN_ROUTE);
-    setAuth(event.target.checked);
+    user.email ? handleLogout() : navigate(SIGNIN_ROUTE);
   };
 
   const handleMenu = (event) => {
@@ -55,7 +75,7 @@ export default function MenuAppBar() {
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
             Content
           </Typography>
-          {(auth || !isSignRoute) && (
+          {(user.email || !isSignRoute) && (
             <div>
               <IconButton
                 size="large"
@@ -90,11 +110,11 @@ export default function MenuAppBar() {
           {!isSignRoute ? (
             <FormGroup>
               <FormControlLabel
-                label={auth ? 'Logout' : 'Login'}
+                label={user.email ? 'Logout' : 'Login'}
                 control={
                   <Switch
                     color="secondary"
-                    checked={auth}
+                    checked={Boolean(user.email)}
                     onChange={handleChange}
                     aria-label="login switch"
                   />
@@ -104,12 +124,12 @@ export default function MenuAppBar() {
           ) : (
             <FormGroup>
               <FormControlLabel
-                label={auth ? 'Logout' : 'Login'}
+                label={user.email ? 'Logout' : 'Login'}
                 control={
                   <Switch
                     disabled
                     color="secondary"
-                    checked={auth}
+                    checked={Boolean(user.email)}
                     // onChange={handleChange}
                     aria-label="login switch"
                   />

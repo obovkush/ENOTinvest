@@ -1,30 +1,30 @@
 // has number
-const hasNumber = (number) => new RegExp(/[0-9]/).test(number);
+const hasNumber = (password) => new RegExp(/[0-9]/).test(password);
 
 // has mix of small and capitals
-const hasMixed = (number) =>
-  new RegExp(/[a-z]/).test(number) && new RegExp(/[A-Z]/).test(number);
+const hasMixed = (password) =>
+  new RegExp(/[a-z]/).test(password) && new RegExp(/[A-Z]/).test(password);
 
 // has special chars
-const hasSpecial = (number) => new RegExp(/[!#@$%^&*)(+=._-]/).test(number);
+const hasSpecial = (password) => new RegExp(/[!#@$%^&*)(+=._-]/).test(password);
 
 // set color based on password strength
 export const strengthColor = (count) => {
-  if (count < 4) return { label: 'Очень слабый', color: 'error.main' };
-  if (count < 5) return { label: 'Слабый', color: 'warning.main' };
-  if (count < 6) return { label: 'Нормальный', color: 'warning.dark' };
-  if (count < 7) return { label: 'Хороший', color: 'success.main' };
-  if (count < 8) return { label: 'Сильный', color: 'success.dark' };
-  return { label: 'Poor', color: 'error.main' };
+  if (count === 0) return { label: 'Пустой', color: 'error.main' };
+  else if (count < 5) return { label: 'Очень слабый', color: 'error.main' };
+  else if (count < 6) return { label: 'Слабый', color: 'warning.main' };
+  else if (count < 7) return { label: 'Нормальный', color: 'warning.dark' };
+  else if (count < 8) return { label: 'Хороший', color: 'success.main' };
+  else return { label: 'Сильный', color: 'success.dark' };
 };
 
 // password strength indicator
-export const strengthIndicator = (number) => {
+export const strengthIndicator = (password) => {
   let strengths = 0;
-  if (number.length > 7) strengths += 1;
-  if (number.length > 8) strengths += 1;
-  if (hasNumber(number)) strengths += 1;
-  if (hasSpecial(number)) strengths += 1;
-  if (hasMixed(number)) strengths += 1;
+  if (password.length > 5) strengths += 1;
+  if (password.length > 7) strengths += 1;
+  if (hasNumber(password)) strengths += 2;
+  if (hasSpecial(password)) strengths += 2;
+  if (hasMixed(password)) strengths += 2;
   return strengths;
 };
