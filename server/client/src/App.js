@@ -3,6 +3,7 @@ import { useEffect } from 'react';
 
 import AppBar from './components/AppBar/AppBar';
 import AppRouter from './routes/AppRouter';
+import 'boxicons/css/boxicons.min.css'
 
 import { checkAuth } from './api/userAPI';
 import { useDispatch } from 'react-redux';
