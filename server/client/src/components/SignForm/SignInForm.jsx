@@ -1,5 +1,10 @@
 import React, { useState } from 'react';
-import { Link as RouterLink } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { Link as RouterLink, useNavigate } from 'react-router-dom';
+
+import { login } from '../../api/userAPI';
+
+import { HOME_ROUTE, SIGNUP_ROUTE } from '../../utils/consts';
 
 // material-ui
 import {
@@ -23,11 +28,17 @@ import * as Yup from 'yup';
 import { Formik } from 'formik';
 // assets
 import { EyeOutlined, EyeInvisibleOutlined } from '@ant-design/icons';
-import { SIGNUP_ROUTE } from '../../utils/consts';
 
 const labelSX = { mb: -2 };
 
 const SignIn = () => {
+  const user = useSelector((store) => store.user);
+
+  console.log('user', user);
+
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
   const [checked, setChecked] = useState(false);
 
   const [showPassword, setShowPassword] = useState(false);
@@ -50,19 +61,30 @@ const SignIn = () => {
         validationSchema={Yup.object().shape({
           email: Yup.string()
             .email('Некорректный email')
-            .max(255, 'Максимум 255 символов')
-            .required('* Поле обязательно к заполнению'),
+            .max(255, 'Максимум 32 символа')
+            .required('Обязательное поле'),
           password: Yup.string()
             .max(255, 'Максимум 255 символов')
-            .required('* Поле обязательно к заполнению'),
+            .required('Обязательное поле'),
         })}
         onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
           try {
+            console.log(values);
+            await login(values.email, values.password)
+              .then((data) => {
+                console.log('dataFromServerLogin', data);
+                dispatch({
+                  type: 'SET_USER',
+                  payload: data,
+                });
+              })
+              .then(() => navigate(HOME_ROUTE));
             setStatus({ success: false });
             setSubmitting(false);
           } catch (err) {
+            console.log('errorFromServerLogin', err);
             setStatus({ success: false });
-            setErrors({ submit: err.message });
+            setErrors({ submit: err.response.data.description });
             setSubmitting(false);
           }
         }}
@@ -81,7 +103,7 @@ const SignIn = () => {
               <Grid item xs={12}>
                 <Divider>
                   <Typography variant="caption">
-                    <LockOutlinedIcon />
+                    <LockOutlinedIcon fontSize="large" color="primary" />
                   </Typography>
                 </Divider>
               </Grid>
@@ -185,6 +207,7 @@ const SignIn = () => {
                     component={RouterLink}
                     to={SIGNUP_ROUTE}
                     color="primary"
+                    underline="none"
                   >
                     Нет аккаунта?
                   </Link>
@@ -198,7 +221,7 @@ const SignIn = () => {
               <Grid item xs={12}>
                 <Button
                   disableElevation
-                  disabled={isSubmitting}
+                  disabled={isSubmitting || !values.email || !values.password}
                   fullWidth
                   size="large"
                   type="submit"
@@ -208,6 +231,11 @@ const SignIn = () => {
                 >
                   Войти
                 </Button>
+              </Grid>
+              <Grid item xs={12}>
+                <Divider>
+                  <Typography variant="caption">Войти с помощью</Typography>
+                </Divider>
               </Grid>
             </Grid>
           </form>

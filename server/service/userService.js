@@ -51,7 +51,6 @@ class UserService {
       throw ApiError.BadRequest('Пользователь с таким email не найден');
     }
     const isPassEquals = await bcrypt.compare(password, user.password);
-    console.log(isPassEquals);
     if (!isPassEquals) {
       throw ApiError.BadRequest('Неверный пароль');
     }
@@ -76,7 +75,7 @@ class UserService {
     if (!userData || !tokenFromDb) {
       throw ApiError.UnauthorizedError();
     }
-    const user = await User.findById(userData.id);
+    const user = await User.findByPk(userData.id);
     const userDto = new UserDto(user);
     const tokens = tokenService.generateTokens({ ...userDto });
 

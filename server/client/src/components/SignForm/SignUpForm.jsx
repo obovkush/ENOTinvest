@@ -1,5 +1,10 @@
 import { useEffect, useState } from 'react';
-import { Link as RouterLink } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { Link as RouterLink, useNavigate } from 'react-router-dom';
+
+import { registration } from '../../api/userAPI';
+
+import { HOME_ROUTE, SIGNIN_ROUTE } from '../../utils/consts';
 
 // material-ui
 import {
@@ -33,11 +38,17 @@ import {
 
 // assets
 import { EyeOutlined, EyeInvisibleOutlined } from '@ant-design/icons';
-import { SIGNIN_ROUTE } from '../../utils/consts';
 
 const labelSX = { mb: -2 };
 
 const SignUp = () => {
+  const user = useSelector((store) => store.user);
+
+  console.log('user', user);
+
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
   const [level, setLevel] = useState();
   const [showPassword, setShowPassword] = useState(false);
   const handleClickShowPassword = () => {
@@ -50,6 +61,7 @@ const SignUp = () => {
 
   const changePassword = (value) => {
     const temp = strengthIndicator(value);
+    console.log(temp);
     setLevel(strengthColor(temp));
   };
 
@@ -61,31 +73,39 @@ const SignUp = () => {
     <>
       <Formik
         initialValues={{
-          firstname: '',
+          name: '',
           email: '',
           password: '',
           submit: null,
         }}
         validationSchema={Yup.object().shape({
-          firstname: Yup.string()
-            .max(255)
-            .required('* Поле обязательно к заполнению'),
+          name: Yup.string().max(32, 'Максимум 32 символа'),
           email: Yup.string()
             .email('Некорректный email')
-            .max(255, 'Максимум 255 символов')
-            .required('* Поле обязательно к заполнению'),
+            .max(32, 'Максимум 32 символа')
+            .required('Обязательное поле'),
           password: Yup.string()
             .max(255, 'Максимум 255 символов')
-            .required('* Поле обязательно к заполнению'),
+            .required('Обязательное поле'),
         })}
         onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
           try {
+            console.log(values);
+            await registration(values.name, values.email, values.password)
+              .then((data) => {
+                console.log('dataFromServerLogin', data);
+                dispatch({
+                  type: 'SET_USER',
+                  payload: data,
+                });
+              })
+              .then(() => navigate(HOME_ROUTE));
             setStatus({ success: false });
             setSubmitting(false);
           } catch (err) {
             console.error(err);
             setStatus({ success: false });
-            setErrors({ submit: err.message });
+            setErrors({ submit: err.response.data.description });
             setSubmitting(false);
           }
         }}
@@ -103,31 +123,29 @@ const SignUp = () => {
             <Grid container spacing={1}>
               <Grid item xs={12}>
                 <Divider>
-                  <Typography variant="caption">
-                    <AssignmentIndOutlinedIcon />
-                  </Typography>
+                  <AssignmentIndOutlinedIcon fontSize="large" color="primary" />
                 </Divider>
               </Grid>
               <Grid item xs={12}>
                 <Stack spacing={1}>
-                  <InputLabel htmlFor="firstname-signup" sx={labelSX}>
+                  <InputLabel htmlFor="name-signup" sx={labelSX}>
                     Имя
                   </InputLabel>
                   <OutlinedInput
-                    id="firstname-signup"
-                    type="firstname"
+                    fullWidth
+                    error={Boolean(touched.name && errors.name)}
+                    id="name-signup"
+                    type="name"
                     value={values.firstname}
-                    name="firstname"
+                    name="name"
                     onBlur={handleBlur}
                     onChange={handleChange}
                     placeholder="Введите имя"
-                    fullWidth
-                    error={Boolean(touched.firstname && errors.firstname)}
                     inputProps={{}}
                   />
-                  {touched.firstname && errors.firstname && (
-                    <FormHelperText error id="helper-text-firstname-signup">
-                      {errors.firstname}
+                  {touched.name && errors.name && (
+                    <FormHelperText error id="helper-text-name-signup">
+                      {errors.name}
                     </FormHelperText>
                   )}
                 </Stack>
@@ -236,6 +254,7 @@ const SignUp = () => {
                     component={RouterLink}
                     to={SIGNIN_ROUTE}
                     color="primary"
+                    underline="none"
                   >
                     Есть аккаунт?
                   </Link>
@@ -270,7 +289,7 @@ const SignUp = () => {
                   variant="contained"
                   color="primary"
                 >
-                  Создать аккаунт
+                  Создать
                 </Button>
                 {/* </AnimateButton> */}
               </Grid>
