@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate, useLocation, Outlet } from 'react-router-dom';
+import Sidebar from '../sidebar/Sidebar';
 
 import { logout } from '../../api/userAPI';
 
@@ -60,85 +61,91 @@ export default function MenuAppBar() {
   };
 
   return (
-    <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="static">
-        <Toolbar>
-          <IconButton
-            size="large"
-            edge="start"
-            color="inherit"
-            aria-label="menu"
-            sx={{ mr: 2 }}
-          >
-            <MenuIcon />
-          </IconButton>
-          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-            Content
-          </Typography>
-          {(user.email || !isSignRoute) && (
-            <div>
-              <IconButton
-                size="large"
-                aria-label="account of current user"
-                aria-controls="menu-appbar"
-                aria-haspopup="true"
-                onClick={handleMenu}
-                color="inherit"
-              >
-                <AccountCircle />
-              </IconButton>
-              <Menu
-                id="menu-appbar"
-                anchorEl={anchorEl}
-                anchorOrigin={{
-                  vertical: 'top',
-                  horizontal: 'right',
-                }}
-                keepMounted
-                transformOrigin={{
-                  vertical: 'top',
-                  horizontal: 'right',
-                }}
-                open={Boolean(anchorEl)}
-                onClose={handleClose}
-              >
-                <MenuItem onClick={handleClose}>Профиль</MenuItem>
-                <MenuItem onClick={handleClose}>Мой аккаунт</MenuItem>
-              </Menu>
-            </div>
-          )}
-          {!isSignRoute ? (
-            <FormGroup>
-              <FormControlLabel
-                label={user.email ? 'Logout' : 'Login'}
-                control={
-                  <Switch
-                    color="secondary"
-                    checked={Boolean(user.email)}
-                    onChange={handleChange}
-                    aria-label="login switch"
-                  />
-                }
-              />
-            </FormGroup>
-          ) : (
-            <FormGroup>
-              <FormControlLabel
-                label={user.email ? 'Logout' : 'Login'}
-                control={
-                  <Switch
-                    disabled
-                    color="secondary"
-                    checked={Boolean(user.email)}
-                    // onChange={handleChange}
-                    aria-label="login switch"
-                  />
-                }
-              />
-            </FormGroup>
-          )}
-        </Toolbar>
-      </AppBar>
-    </Box>
+    // <Box sx={{ flexGrow: 1 }}>
+    //   <AppBar position="static" >
+    //     <Toolbar>
+    //       <IconButton
+    //         size="large"
+    //         edge="start"
+    //         color="inherit"
+    //         aria-label="menu"
+    //         sx={{ mr: 2 }}
+    //       >
+    //         <MenuIcon />
+    //       </IconButton>
+    //       <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+    //         Content
+    //       </Typography>
+    //       {(user.email || !isSignRoute) && (
+    //         <div>
+    //           <IconButton
+    //             size="large"
+    //             aria-label="account of current user"
+    //             aria-controls="menu-appbar"
+    //             aria-haspopup="true"
+    //             onClick={handleMenu}
+    //             color="inherit"
+    //           >
+    //             <AccountCircle />
+    //           </IconButton>
+    //           <Menu
+    //             id="menu-appbar"
+    //             anchorEl={anchorEl}
+    //             anchorOrigin={{
+    //               vertical: 'top',
+    //               horizontal: 'right',
+    //             }}
+    //             keepMounted
+    //             transformOrigin={{
+    //               vertical: 'top',
+    //               horizontal: 'right',
+    //             }}
+    //             open={Boolean(anchorEl)}
+    //             onClose={handleClose}
+    //           >
+    //             <MenuItem onClick={handleClose}>Профиль</MenuItem>
+    //             <MenuItem onClick={handleClose}>Мой аккаунт</MenuItem>
+    //           </Menu>
+    //         </div>
+    //       )}
+    //       {!isSignRoute ? (
+    //         <FormGroup>
+    //           <FormControlLabel
+    //             label={user.email ? 'Logout' : 'Login'}
+    //             control={
+    //               <Switch
+    //                 color="secondary"
+    //                 checked={Boolean(user.email)}
+    //                 onChange={handleChange}
+    //                 aria-label="login switch"
+    //               />
+    //             }
+    //           />
+    //         </FormGroup>
+    //       ) : (
+    //         <FormGroup>
+    //           <FormControlLabel
+    //             label={user.email ? 'Logout' : 'Login'}
+    //             control={
+    //               <Switch
+    //                 disabled
+    //                 color="secondary"
+    //                 checked={Boolean(user.email)}
+    //                 // onChange={handleChange}
+    //                 aria-label="login switch"
+    //               />
+    //             }
+    //           />
+    //         </FormGroup>
+    //       )}
+    //     </Toolbar>
+    //   </AppBar>
+    // </Box>
+    <div style={{
+      padding: '50px 0px 0px 370px'
+    }}>
+      <Sidebar/>
+      <Outlet/>
+    </div>
   );
 }
