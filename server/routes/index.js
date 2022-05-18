@@ -1,7 +1,11 @@
 const router = require('express').Router();
-const Parser = require('rss-parser');
+
+const stocksRouter = require('./stockRouter');
 const userRouter = require('./userRouter');
 
+router.use('/stocks', stocksRouter);
+
+const Parser = require('rss-parser');
 const parser = new Parser();
 
 router.use('/user', userRouter);

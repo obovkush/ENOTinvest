@@ -11,31 +11,32 @@ import StraightOutlinedIcon from '@mui/icons-material/StraightOutlined';
 import { Badge } from 'antd';
 
 function StockAccordion() {
-  const [stocksData, setStocksData] = useState([]);
-
-  
-  async function moexTickerLast(ticker) {
-    const res = await fetch(
-      'https://iss.moex.com/iss/engines/stock/markets/shares/securities/boards/TQBR/' +
-        ticker +
-        '.json',
-    );
-    // .then(function (res) {
-    return res.json();
-    // });
-    // return json.marketdata.data.filter(function (d) {
-    //   return ['TQBR', 'TQTF'].indexOf(d[1]) !== -1;
-    // })[0][12];
-  }
-  // useEffect(() => {
-  //   fetch(
-  //     'https://iss.moex.com/iss/engines/stock/markets/shares/securities/boards/TQBR/' +
-  //       ticker +
-  //       '.json'
-  //   )
-  // })
-
   const [expanded, setExpanded] = useState(false);
+  const [fullStocksENG, setStocksENG] = useState('');
+
+  // useEffect(() => {
+  //   fetch('https://api.polygon.io/v2/aggs/ticker/AAPL/range/1/day/2020-06-01/2020-06-17?apiKey=MVOp2FJDsLDLqEmq1t6tYy8hXro8YgUh', {
+  //     method: 'GET',
+  //     headers: { 'Content-Type': 'application/json' },
+  //   }).then((res) => res.json())
+  //     .then((data) => {
+  //       console.log(data.results);
+  //     })
+  //     .catch((err) => console.log('stocks GET =>', err));
+  // });
+
+  useEffect(() => {
+    fetch('http://localhost:4000/api/stocks/stocksENG', {
+      method: 'GET', 
+      // withCredentials: true,
+      headers: { 'Content-Type': 'application/json' },
+    }).then((res) => res.json())
+      .then((data) => {
+        console.log(data);
+        setStocksENG(data);
+      })
+      .catch((err) => console.log('stocks GET =>', err));
+  }, []);
 
   const handleChange = (panel) => (event, isExpanded) => {
     setExpanded(isExpanded ? panel : false);
@@ -66,7 +67,7 @@ function StockAccordion() {
               Apple Inc.
             </Typography>
             <Typography title="Текущая цена" sx={{ width: '20%' }}>
-              149,24$
+             {fullStocksENG.c}$
             </Typography>
             <Typography title="Дневной прирост" sx={{ width: '20%' }}>
               -2,67$
