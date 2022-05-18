@@ -1,6 +1,6 @@
 require('dotenv').config();
 const express = require('express');
-const cors = require('cors');
+// const cors = require('cors');
 const cookieParser = require('cookie-parser');
 
 const app = express();
@@ -16,12 +16,16 @@ const PORT = process.env.PORT ?? 5000;
 const dbConnectionCheck = require('./db/dbConnectionCheck');
 
 app.use(cookieParser());
-app.use(
-  cors({
-    credentials: true,
-    origin: process.env.CLIENT_URL,
-  }),
-);
+
+// Вместо политики CORS
+app.use((req, res, next) => { const accessList = [ 'http://localhost:3000', ]; const origin = req.get('origin'); if (accessList.includes(origin)) { res.header('Access-Control-Allow-Origin', origin); res.header('Access-Control-Allow-Headers', 'Content-type'); res.header('Access-Control-Allow-Credentials', true); } next(); });
+
+// app.use(
+//   cors({
+//     credentials: true,
+//     origin: process.env.CLIENT_URL,
+//   }),
+// );
 app.use(express.json());
 app.use(express.static(path.resolve(__dirname, 'static')));
 

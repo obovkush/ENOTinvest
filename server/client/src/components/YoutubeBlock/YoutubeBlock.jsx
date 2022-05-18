@@ -58,7 +58,7 @@ export default function YoutubeBlock() {
       }}
       elevation={16}
     >
-      <h3 style={{ marginTop: 10 }}>Youtube News Block</h3>
+      <h3 style={{ marginTop: 10, backgroundColor: 'lightgrey' }}>YouTube News</h3>
       <Stack spacing={2}>
         {dataFromChanelInvestFuture &&
           dataFromChanelInvestFuture.map(elem => {
