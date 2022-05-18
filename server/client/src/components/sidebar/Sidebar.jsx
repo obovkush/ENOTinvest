@@ -19,7 +19,7 @@ const sidebarNavItems = [
     {
         display: 'Акции',
         icon: <img src={stock} />,
-        to: '/stock',
+        to: '/stocks',
         section: 'stock'
     },
     {

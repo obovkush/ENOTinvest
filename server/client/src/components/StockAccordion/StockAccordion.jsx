@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import {
   Accordion,
   AccordionDetails,
@@ -11,8 +12,13 @@ import StraightOutlinedIcon from '@mui/icons-material/StraightOutlined';
 import { Badge } from 'antd';
 
 function StockAccordion() {
+  const dispatch = useDispatch();
+  const stocks = useSelector((state) => state.stocks);
+  console.log('stocks', stocks);
   const [expanded, setExpanded] = useState(false);
-  const [fullStocksENG, setStocksENG] = useState('');
+  const [fullStocksENG, setStocksENG] = useState([]);
+
+  console.log('allQuotesStocks =>', fullStocksENG);
 
   // useEffect(() => {
   //   fetch('https://api.polygon.io/v2/aggs/ticker/AAPL/range/1/day/2020-06-01/2020-06-17?apiKey=MVOp2FJDsLDLqEmq1t6tYy8hXro8YgUh', {
@@ -26,28 +32,151 @@ function StockAccordion() {
   // });
 
   useEffect(() => {
-    fetch('http://localhost:4000/api/stocks/stocksENG', {
-      method: 'GET', 
-      // withCredentials: true,
-      headers: { 'Content-Type': 'application/json' },
-    }).then((res) => res.json())
+    fetch('http://localhost:4000/api/stocks/stocksENG/NFLX')
+      .then((res) => res.json())
       .then((data) => {
-        console.log(data);
-        setStocksENG(data);
+        fullStocksENG.push({ data, name: 'NFLX' })
+        dispatch({ type: 'ADD_QUOTES', payload: { data, name: 'NFLX' }})
+      })
+      .catch((err) => console.log('stocks GET =>', err));
+  }, []);
+
+  useEffect(() => {
+    fetch('http://localhost:4000/api/stocks/stocksENG/INTC')
+      .then((res) => res.json())
+      .then((data) => {
+        fullStocksENG.push({ data, name: 'INTC' })
+        dispatch({ type: 'ADD_QUOTES', payload: { data, name: 'INTC' }})
+      })
+      .catch((err) => console.log('stocks GET =>', err));
+  }, []);
+  
+  useEffect(() => {
+    fetch('http://localhost:4000/api/stocks/stocksENG/NVDA')
+      .then((res) => res.json())
+      .then((data) => {
+        fullStocksENG.push({ data, name: 'NVDA' })
+        dispatch({ type: 'ADD_QUOTES', payload: { data, name: 'NVDA' }})
+      })
+      .catch((err) => console.log('stocks GET =>', err));
+  }, []);
+
+  
+  useEffect(() => {
+    fetch('http://localhost:4000/api/stocks/stocksENG/AAPL')
+    .then((res) => res.json())
+    .then((data) => {
+      fullStocksENG.push({ data, name: 'AAPL' })
+      dispatch({ type: 'ADD_QUOTES', payload: { data, name: 'AAPL' }})
+    })
+    .catch((err) => console.log('stocks GET =>', err));
+  }, [])
+  
+  useEffect(() => {
+    fetch('http://localhost:4000/api/stocks/stocksENG/TWTR')
+      .then((res) => res.json())
+      .then((data) => {
+        fullStocksENG.push({ data, name: 'TWTR' })
+        dispatch({ type: 'ADD_QUOTES', payload: { data, name: 'TWTR' }})
+      })
+      .catch((err) => console.log('stocks GET =>', err));
+  }, []);
+  
+  useEffect(() => {
+    fetch('http://localhost:4000/api/stocks/stocksENG/DIS')
+      .then((res) => res.json())
+      .then((data) => {
+        fullStocksENG.push({ data, name: 'DIS' })
+        dispatch({ type: 'ADD_QUOTES', payload: { data, name: 'DIS' }})
+      })
+      .catch((err) => console.log('stocks GET =>', err));
+  }, []);
+
+  useEffect(() => {
+    fetch('http://localhost:4000/api/stocks/stocksENG/AMZN')
+      .then((res) => res.json())
+      .then((data) => {
+        fullStocksENG.push({ data, name: 'AMZN' })
+        dispatch({ type: 'ADD_QUOTES', payload: { data, name: 'AMZN' }})
+      })
+      .catch((err) => console.log('stocks GET =>', err));
+  }, []);
+
+  useEffect(() => {
+    fetch('http://localhost:4000/api/stocks/stocksENG/TSLA')
+      .then((res) => res.json())
+      .then((data) => {
+        fullStocksENG.push({ data, name: 'TSLA' })
+        dispatch({ type: 'ADD_QUOTES', payload: { data, name: 'TSLA' }})
       })
       .catch((err) => console.log('stocks GET =>', err));
   }, []);
 
   const handleChange = (panel) => (event, isExpanded) => {
-    setExpanded(isExpanded ? panel : false);
-  };
+    setExpanded(isExpanded ? panel : false)
+  }
 
   return (
     <div>
-      <Accordion
+      {fullStocksENG && fullStocksENG.map((el, index) => {
+        return (
+          <Accordion
+            expanded={expanded === 'panel1'}
+            onChange={handleChange('panel1')}
+            key={index}
+          >
+            <Badge.Ribbon placement="start" text={el.name} color="red">
+              <AccordionSummary
+                expandIcon={<AddTaskOutlinedIcon />}
+                aria-controls="panel1bh-content"
+                id="panel1bh-header"
+                sx={{
+                  backgroundColor: `${el.data.d ? 'pink' : 'palegreen'}`,
+                  color: `${el.data.d ? 'red' : 'green'}`,
+                  padding: '0 30px 0 70px',
+                }}
+              >
+                <StraightOutlinedIcon
+                  fontSize="small"
+                  sx={{ transform: 'rotate(135deg)' }}
+                />
+                <Typography sx={{ width: '33%', flexShrink: 0 }}>
+                  {el.name}
+                </Typography>
+                <Typography title="Текущая цена" sx={{ width: '20%' }}>
+                  {el.data.c}$
+                </Typography>
+                <Typography title="Дневной прирост" sx={{ width: '20%' }}>
+                  {el.data.d}$
+                </Typography>
+                <Typography
+                  title="Процент изменения за день"
+                  sx={{
+                    width: '20%',
+                    color: 'red',
+                  }}
+                >
+                  {el.data.d ?
+                    (<>-{((el.data.pc - el.data.c) / el.data.c * 100).toFixed(2)}%</>)
+                    : (<>{((el.data.pc - el.data.c) / el.data.c * 100).toFixed(2)}%</>)
+                  }
+                </Typography>
+              </AccordionSummary>
+            </Badge.Ribbon>
+            <AccordionDetails>
+              <Typography>Здесь будет график</Typography>
+            </AccordionDetails>
+          </Accordion>
+        )
+      })}
+
+
+
+
+      {/* <Accordion
         expanded={expanded === 'panel1'}
         onChange={handleChange('panel1')}
-      >
+        >
         <Badge.Ribbon placement="start" text="AAPL" color="red">
           <AccordionSummary
             expandIcon={<AddTaskOutlinedIcon />}
@@ -70,7 +199,7 @@ function StockAccordion() {
              {fullStocksENG.c}$
             </Typography>
             <Typography title="Дневной прирост" sx={{ width: '20%' }}>
-              -2,67$
+              {fullStocksENG.d}$
             </Typography>
             <Typography
               title="Процент изменения за день"
@@ -79,14 +208,18 @@ function StockAccordion() {
                 color: 'red',
               }}
             >
-              -1,23%
+              {fullStocksENG.d ? 
+               (<>-{((fullStocksENG.pc - fullStocksENG.c) / fullStocksENG.c * 100).toFixed(2)}%</>)
+              :(<>{((fullStocksENG.pc - fullStocksENG.c) / fullStocksENG.c * 100).toFixed(2)}%</>)
+            } 
             </Typography>
           </AccordionSummary>
         </Badge.Ribbon>
         <AccordionDetails>
           <Typography>Здесь будет график</Typography>
         </AccordionDetails>
-      </Accordion>
+      </Accordion> */}
+
       <Accordion
         expanded={expanded === 'panel2'}
         onChange={handleChange('panel2')}
