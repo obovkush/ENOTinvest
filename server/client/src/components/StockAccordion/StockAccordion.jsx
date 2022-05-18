@@ -1,12 +1,41 @@
-import * as React from 'react';
-import Accordion from '@mui/material/Accordion';
-import AccordionDetails from '@mui/material/AccordionDetails';
-import AccordionSummary from '@mui/material/AccordionSummary';
-import Typography from '@mui/material/Typography';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import React, { useState, useEffect } from 'react';
+import {
+  Accordion,
+  AccordionDetails,
+  AccordionSummary,
+  Typography,
+} from '@mui/material';
+import AddTaskOutlinedIcon from '@mui/icons-material/AddTaskOutlined';
+import StraightOutlinedIcon from '@mui/icons-material/StraightOutlined';
+
+import { Badge } from 'antd';
 
 function StockAccordion() {
-  const [expanded, setExpanded] = React.useState(false);
+  const [stocksData, setStocksData] = useState([]);
+
+  
+  async function moexTickerLast(ticker) {
+    const res = await fetch(
+      'https://iss.moex.com/iss/engines/stock/markets/shares/securities/boards/TQBR/' +
+        ticker +
+        '.json',
+    );
+    // .then(function (res) {
+    return res.json();
+    // });
+    // return json.marketdata.data.filter(function (d) {
+    //   return ['TQBR', 'TQTF'].indexOf(d[1]) !== -1;
+    // })[0][12];
+  }
+  // useEffect(() => {
+  //   fetch(
+  //     'https://iss.moex.com/iss/engines/stock/markets/shares/securities/boards/TQBR/' +
+  //       ticker +
+  //       '.json'
+  //   )
+  // })
+
+  const [expanded, setExpanded] = useState(false);
 
   const handleChange = (panel) => (event, isExpanded) => {
     setExpanded(isExpanded ? panel : false);
@@ -18,63 +47,126 @@ function StockAccordion() {
         expanded={expanded === 'panel1'}
         onChange={handleChange('panel1')}
       >
-        <AccordionSummary
-          expandIcon={<ExpandMoreIcon />}
-          aria-controls="panel1bh-content"
-          id="panel1bh-header"
-        >
-          <Typography sx={{ width: '33%', flexShrink: 0 }}>
-            General settings
-          </Typography>
-          <Typography sx={{ color: 'text.secondary' }}>
-            I am an accordion
-          </Typography>
-        </AccordionSummary>
+        <Badge.Ribbon placement="start" text="AAPL" color="red">
+          <AccordionSummary
+            expandIcon={<AddTaskOutlinedIcon />}
+            aria-controls="panel1bh-content"
+            id="panel1bh-header"
+            sx={{
+              backgroundColor: 'pink',
+              color: 'red',
+              padding: '0 30px 0 70px',
+            }}
+          >
+            <StraightOutlinedIcon
+              fontSize="small"
+              sx={{ transform: 'rotate(135deg)' }}
+            />
+            <Typography sx={{ width: '33%', flexShrink: 0 }}>
+              Apple Inc.
+            </Typography>
+            <Typography title="Текущая цена" sx={{ width: '20%' }}>
+              149,24$
+            </Typography>
+            <Typography title="Дневной прирост" sx={{ width: '20%' }}>
+              -2,67$
+            </Typography>
+            <Typography
+              title="Процент изменения за день"
+              sx={{
+                width: '20%',
+                color: 'red',
+              }}
+            >
+              -1,23%
+            </Typography>
+          </AccordionSummary>
+        </Badge.Ribbon>
         <AccordionDetails>
-          <Typography>
-            Nulla facilisi. Phasellus sollicitudin nulla et quam mattis feugiat.
-            Aliquam eget maximus est, id dignissim quam.
-          </Typography>
+          <Typography>Здесь будет график</Typography>
         </AccordionDetails>
       </Accordion>
       <Accordion
         expanded={expanded === 'panel2'}
         onChange={handleChange('panel2')}
       >
-        <AccordionSummary
-          expandIcon={<ExpandMoreIcon />}
-          aria-controls="panel2bh-content"
-          id="panel2bh-header"
-        >
-          <Typography sx={{ width: '33%', flexShrink: 0 }}>Users</Typography>
-          <Typography sx={{ color: 'text.secondary' }}>
-            You are currently not an owner
-          </Typography>
-        </AccordionSummary>
+        <Badge.Ribbon placement="start" text="SBER" color="green">
+          <AccordionSummary
+            expandIcon={<AddTaskOutlinedIcon />}
+            aria-controls="panel1bh-content"
+            id="panel1bh-header"
+            sx={{
+              backgroundColor: 'palegreen',
+              color: 'green',
+              padding: '0 30px 0 70px',
+            }}
+          >
+            <StraightOutlinedIcon
+              fontSize="small"
+              sx={{ transform: 'rotate(45deg)' }}
+            />
+            <Typography sx={{ width: '33%', flexShrink: 0 }}>
+              Сбербанк ПАО
+            </Typography>
+            <Typography title="Текущая цена" sx={{ width: '20%' }}>
+              153.70&#8381;
+            </Typography>
+            <Typography title="Дневной прирост" sx={{ width: '20%' }}>
+              +4&#8381;
+            </Typography>
+            <Typography
+              title="Процент изменения за день"
+              sx={{
+                width: '20%',
+                color: 'green',
+              }}
+            >
+              +3.5%
+            </Typography>
+          </AccordionSummary>
+        </Badge.Ribbon>
         <AccordionDetails>
-          <Typography>
-            Donec placerat, lectus sed mattis semper, neque lectus feugiat
-            lectus, varius pulvinar diam eros in elit. Pellentesque convallis
-            laoreet laoreet.
-          </Typography>
+          <Typography>Здесь будет график</Typography>
         </AccordionDetails>
       </Accordion>
       <Accordion
         expanded={expanded === 'panel3'}
         onChange={handleChange('panel3')}
       >
-        <AccordionSummary
-          expandIcon={<ExpandMoreIcon />}
-          aria-controls="panel3bh-content"
-          id="panel3bh-header"
-        >
-          <Typography sx={{ width: '33%', flexShrink: 0 }}>
-            Advanced settings
-          </Typography>
-          <Typography sx={{ color: 'text.secondary' }}>
-            Filtering has been entirely disabled for whole web server
-          </Typography>
-        </AccordionSummary>
+        <Badge.Ribbon placement="start" text="AAPL">
+          <AccordionSummary
+            expandIcon={<AddTaskOutlinedIcon />}
+            aria-controls="panel1bh-content"
+            id="panel1bh-header"
+            sx={{ padding: '0 30px 0 70px' }}
+          >
+            <StraightOutlinedIcon fontSize="small" />
+            <Typography sx={{ width: '33%', flexShrink: 0 }}>
+              Apple Inc.
+            </Typography>
+            <Typography
+              title="Текущая цена"
+              sx={{ width: '20%', color: 'text.secondary' }}
+            >
+              34$
+            </Typography>
+            <Typography
+              title="Дневной прирост"
+              sx={{ width: '20%', color: 'text.primary' }}
+            >
+              +0,00035&#8381;
+            </Typography>
+            <Typography
+              title="Процент изменения за день"
+              sx={{
+                width: '20%',
+                color: 'text.primary',
+              }}
+            >
+              2%
+            </Typography>
+          </AccordionSummary>
+        </Badge.Ribbon>
         <AccordionDetails>
           <Typography>
             Nunc vitae orci ultricies, auctor nunc in, volutpat nisl. Integer
@@ -86,15 +178,40 @@ function StockAccordion() {
         expanded={expanded === 'panel4'}
         onChange={handleChange('panel4')}
       >
-        <AccordionSummary
-          expandIcon={<ExpandMoreIcon />}
-          aria-controls="panel4bh-content"
-          id="panel4bh-header"
-        >
-          <Typography sx={{ width: '33%', flexShrink: 0 }}>
-            Personal data
-          </Typography>
-        </AccordionSummary>
+        <Badge.Ribbon placement="start" text="AAPL">
+          <AccordionSummary
+            expandIcon={<AddTaskOutlinedIcon />}
+            aria-controls="panel1bh-content"
+            id="panel1bh-header"
+            sx={{ padding: '0 30px 0 70px' }}
+          >
+            <StraightOutlinedIcon fontSize="small" />
+            <Typography sx={{ width: '33%', flexShrink: 0 }}>
+              Apple Inc.
+            </Typography>
+            <Typography
+              title="Текущая цена"
+              sx={{ width: '20%', color: 'text.secondary' }}
+            >
+              34$
+            </Typography>
+            <Typography
+              title="Дневной прирост"
+              sx={{ width: '20%', color: 'text.primary' }}
+            >
+              +4$
+            </Typography>
+            <Typography
+              title="Процент изменения за день"
+              sx={{
+                width: '20%',
+                color: 'text.primary',
+              }}
+            >
+              2%
+            </Typography>
+          </AccordionSummary>
+        </Badge.Ribbon>
         <AccordionDetails>
           <Typography>
             Nunc vitae orci ultricies, auctor nunc in, volutpat nisl. Integer
