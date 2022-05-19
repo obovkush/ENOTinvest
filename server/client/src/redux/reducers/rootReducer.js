@@ -4,6 +4,7 @@ import { userReducer } from './userReducer';
 import { userInputsReducer } from './userInputsReducer';
 import { youtubeReducer } from './youtubeReducer';
 import { newsReducer } from './newsReducer';
+import { allNewsReducer } from './allNewsReducer';
 
 export const rootReducer = combineReducers({
   actions: actionsReducer,
@@ -11,4 +12,5 @@ export const rootReducer = combineReducers({
   userInputs: userInputsReducer,
   youtube: youtubeReducer,
   news: newsReducer,
+  allNews: allNewsReducer,
 });
