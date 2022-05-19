@@ -20,7 +20,8 @@ export default function AllNewsBlock({ spinner, Item }) {
         const { items } = listFromRSS.data
         // console.log('====> RSS новости Finam', items)
         if (items.length) {
-          dispatch({ type: 'SET_ALL_NEWS', payload: items })
+          const sortedArray = sortedByPublishedDate(items)
+          dispatch({ type: 'SET_ALL_NEWS', payload: sortedArray })
           setLoading(false)
         }
       })
@@ -34,7 +35,8 @@ export default function AllNewsBlock({ spinner, Item }) {
         const { items } = listFromChanelInvestFuture.data
         // console.log('====> Видео с канала InvestFuture', items);
         if (items.length) {
-          dispatch({ type: 'SET_ALL_YOUTUBE_VIDEO', payload: items })
+          const sortedArray = sortedByPublishedDate(items)
+          dispatch({ type: 'SET_ALL_YOUTUBE_VIDEO', payload: sortedArray })
           setLoading(false)
         }
       })
@@ -44,22 +46,28 @@ export default function AllNewsBlock({ spinner, Item }) {
   // Функция совмещающая и сортирующая два массива
   const combinedAndSortNews = (array1, array2) => {
     const concatArray = array1.concat(array2)
-    const sortedArray = concatArray.sort((a, b) => {   
-        const newsElemA = a?.pubDate?.replace(/[A-Z-:\s]/gmi, '').trim()
-        const newsElemB = b?.pubDate?.replace(/[A-Z-:\s]/gmi, '').trim()
-        const youtubeElemA = a?.snippet?.publishedAt?.replace(/[A-Z-:]/gmi, '').trim()
-        const youtubeElemB = b?.snippet?.publishedAt?.replace(/[A-Z-:]/gmi, '').trim()
-        if ((newsElemA || youtubeElemA) > (newsElemB || youtubeElemB)) {
-          return -1
-        }
-        if ((newsElemA || youtubeElemA) < (newsElemB || youtubeElemB)) {
-          return 1
-        }
-        return 0;
-      })
-    console.log(sortedArray)
+    const sortedArray = sortedByPublishedDate(concatArray)
+    // console.log(sortedArray)
     dispatch({ type: 'SET_NEWS_AND_YOUTUBE_TOGETHER', payload: sortedArray })
     setLoading(false)
+  }
+
+  // Функция сортировки по дате публикации новости или ролика
+  const sortedByPublishedDate = (array) => {
+    const sortedArray = array.sort((a, b) => {   
+      const newsElemA = a?.pubDate?.replace(/[A-Z-:\s]/gmi, '').trim()
+      const newsElemB = b?.pubDate?.replace(/[A-Z-:\s]/gmi, '').trim()
+      const youtubeElemA = a?.snippet?.publishedAt?.replace(/[A-Z-:]/gmi, '').trim()
+      const youtubeElemB = b?.snippet?.publishedAt?.replace(/[A-Z-:]/gmi, '').trim()
+      if ((newsElemA || youtubeElemA) > (newsElemB || youtubeElemB)) {
+        return -1
+      }
+      if ((newsElemA || youtubeElemA) < (newsElemB || youtubeElemB)) {
+        return 1
+      }
+      return 0;
+    })
+    return sortedArray;
   }
 
   // Эффект на вызов совмещающей функции. 
@@ -94,7 +102,6 @@ export default function AllNewsBlock({ spinner, Item }) {
       </Box> :
       (
         <Stack spacing={2}>
-
           {listOfConcatNews &&
             listOfConcatNews.map((elem, index) => {
               if (elem.title) {
