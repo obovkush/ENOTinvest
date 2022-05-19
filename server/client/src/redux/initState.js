@@ -3,4 +3,7 @@ export const initState = {
   user: {},
   userInputs: {},
   stocks: [],
+  news: [],
+  youtube: [],
+  allNews: [],
 };

@@ -5,20 +5,91 @@ import {
   AccordionDetails,
   AccordionSummary,
   Typography,
+  Button,
 } from '@mui/material';
 import AddTaskOutlinedIcon from '@mui/icons-material/AddTaskOutlined';
 import StraightOutlinedIcon from '@mui/icons-material/StraightOutlined';
+import TextField from '@mui/material/TextField';
+import MenuItem from '@mui/material/MenuItem';
 
 import { Badge } from 'antd';
+
+const currencies = [
+  {
+    value: 'Все',
+    label: 'Все',
+  },
+  {
+    value: 'USD',
+    label: '$',
+  },
+  {
+    value: 'EUR',
+    label: '€',
+  },
+
+];
 
 function StockAccordion() {
   const dispatch = useDispatch();
   const stocks = useSelector((state) => state.stocks);
   console.log('stocks', stocks);
+  const [stocksData, setStocksData] = useState({});
+
+  // useEffect(() => {
+  //   !stocksData.securities &&
+  //     fetch(
+  //       `https://iss.moex.com/iss/engines/stock/markets/shares/boards/TQBR/securities.json`,
+  //     )
+  //       .then((data) => data.json())
+  //       .then((data) => setStocksData(data));
+  // }, [stocksData]);
+  useEffect(() => {
+    fetch(`http://localhost:5000/api/stocks/stocksRU`, {
+      method: 'GET',
+      withCredentials: true,
+      headers: { 'Content-Type': 'application/json' },
+    })
+      .then((data) => data.json())
+      .then((data) => setStocksData(data));
+  }, []);
+
+  // let filterMarketData;
+  // if (stocksData.marketdata) {
+  //   filterMarketData = stocksData.marketdata.data.filter((el) =>
+  //     demoStocks.includes(el[0]),
+  //   );
+  // }
+  // let filterSecurities;
+  // if (stocksData.securities) {
+  //   filterSecurities = stocksData.securities.data.filter((el) =>
+  //     demoStocks.includes(el[0]),
+  //   );
+  // }
+  // console.log(filterMarketData);
+  // console.log(filterSecurities);
+
+  // const oneStockMarketData = filterMarketData[0] || [];
+  // const oneStockSecurities = stocksData?.securities?.data[0] || [];
+  // const tiker = oneStockSecurities[0] || 'нет данных';
+  // const companyName = oneStockSecurities[2] || 'нет данных';
+  // const currentPrice = oneStockMarketData[12] || 'нет данных';
+  // const prevPrice = oneStockSecurities[3] || 'нет данных';
+  // const diffPrice = Number(currentPrice) - Number(prevPrice) || 'нет данных';
+  // const diffPercent =
+  //   ((diffPrice / prevPrice) * 100).toFixed(2) || 'нет данных';
+
+  // let isGrow = diffPrice > 0 ? true : false;
+
+  const [currency, setCurrency] = React.useState('Все');
   const [expanded, setExpanded] = useState(false);
   const [fullStocksENG, setStocksENG] = useState([]);
 
   console.log('allQuotesStocks =>', fullStocksENG);
+
+  // const moneyChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  //   setCurrency(event.target.value);
+  // };
 
   // useEffect(() => {
   //   fetch('https://api.polygon.io/v2/aggs/ticker/AAPL/range/1/day/2020-06-01/2020-06-17?apiKey=MVOp2FJDsLDLqEmq1t6tYy8hXro8YgUh', {
@@ -122,18 +193,14 @@ function StockAccordion() {
         console.log(index)
         return (
           <Accordion
-            // expanded={expanded === 'panel1'}
             expanded={expanded === `panel${el.name}`}
-            // onChange={handleChange('panel1')}
             onChange={handleChange(`panel${el.name}`)}
             key={index}
           >
             <Badge.Ribbon placement="start" text={el.name} color="red">
               <AccordionSummary
                 expandIcon={<AddTaskOutlinedIcon />}
-                // aria-controls="panel1bh-content"
                 aria-controls={el.name}
-                // id="panel1bh-header"
                 id={el.name}
                 sx={{
                   backgroundColor: `${el.data.d ? 'pink' : 'palegreen'}`,
@@ -174,8 +241,7 @@ function StockAccordion() {
           </Accordion>
         )
       })}
-
-      {/* <Accordion
+      <Accordion
         expanded={expanded === 'panel1'}
         onChange={handleChange('panel1')}
         >
@@ -198,7 +264,7 @@ function StockAccordion() {
               Apple Inc.
             </Typography>
             <Typography title="Текущая цена" sx={{ width: '20%' }}>
-             {fullStocksENG.c}$
+              {fullStocksENG.c}$
             </Typography>
             <Typography title="Дневной прирост" sx={{ width: '20%' }}>
               {fullStocksENG.d}$
@@ -220,7 +286,7 @@ function StockAccordion() {
         <AccordionDetails>
           <Typography>Здесь будет график</Typography>
         </AccordionDetails>
-      </Accordion> */}
+      </Accordion>
 
       <Accordion
         expanded={expanded === 'panel2'}
@@ -254,7 +320,6 @@ function StockAccordion() {
               title="Процент изменения за день"
               sx={{
                 width: '20%',
-                color: 'green',
               }}
             >
               +3.5%
@@ -269,37 +334,41 @@ function StockAccordion() {
         expanded={expanded === 'panel3'}
         onChange={handleChange('panel3')}
       >
-        <Badge.Ribbon placement="start" text="AAPL">
+        <Badge.Ribbon
+          placement="start"
+          // text={tiker}
+          // color={isGrow ? 'green' : 'red'}
+        >
           <AccordionSummary
             expandIcon={<AddTaskOutlinedIcon />}
-            aria-controls="panel1bh-content"
-            id="panel1bh-header"
-            sx={{ padding: '0 30px 0 70px' }}
+            aria-controls="panel3bh-content"
+            id="panel3Sbh-header"
+            sx={{
+              // backgroundColor: isGrow ? 'palegreen' : 'pink',
+              // color: isGrow ? 'green' : 'red',
+              padding: '0 30px 0 70px',
+            }}
           >
-            <StraightOutlinedIcon fontSize="small" />
+            <StraightOutlinedIcon
+              fontSize="small"
+              // sx={{ transform: isGrow ? 'rotate(45deg)' : 'rotate(135deg)' }}
+            />
             <Typography sx={{ width: '33%', flexShrink: 0 }}>
-              Apple Inc.
+              {/* {companyName} */}
             </Typography>
-            <Typography
-              title="Текущая цена"
-              sx={{ width: '20%', color: 'text.secondary' }}
-            >
-              34$
+            <Typography title="Текущая цена" sx={{ width: '20%' }}>
+              {/* {currentPrice}&#8381; */}
             </Typography>
-            <Typography
-              title="Дневной прирост"
-              sx={{ width: '20%', color: 'text.primary' }}
-            >
-              +0,00035&#8381;
+            <Typography title="Дневной прирост" sx={{ width: '20%' }}>
+              {/* {diffPrice}&#8381; */}
             </Typography>
             <Typography
               title="Процент изменения за день"
               sx={{
                 width: '20%',
-                color: 'text.primary',
               }}
             >
-              2%
+              {/* {diffPercent}% */}
             </Typography>
           </AccordionSummary>
         </Badge.Ribbon>
