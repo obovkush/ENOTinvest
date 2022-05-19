@@ -141,9 +141,7 @@ export default function MenuAppBar() {
     //     </Toolbar>
     //   </AppBar>
     // </Box>
-    <div style={{
-      padding: '50px 0px 0px 370px'
-    }}>
+    <div>
       <Sidebar/>
       <Outlet/>
     </div>

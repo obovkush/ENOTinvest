@@ -60,11 +60,9 @@ export default function FullWidthTabs() {
     <Paper
       sx={{
         bgcolor: 'background.paper',
-        height: 700,
+        height: 920,
         overflowY: 'hidden',
-        width: 400
       }}
-      elevation={8}
 
     >
       <AppBar position="static">
@@ -88,9 +86,8 @@ export default function FullWidthTabs() {
         id="custom_scroll"
         sx={{
           bgcolor: 'background.paper',
-          height: 640,
+          height: 920,
           overflowY: 'auto',
-          width: 400
         }}
       >
         <TabPanel value={value} index={0} dir={theme.direction}>
