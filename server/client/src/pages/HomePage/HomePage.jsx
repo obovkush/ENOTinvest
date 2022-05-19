@@ -1,6 +1,5 @@
 import React from 'react';
 import { Grid } from '@mui/material';
-import NewsBlock from '../../components/NewsBlock/NewsBlock';
 import SliderForNewsAndYouTube from '../../components/SliderForNewsAndYouTube/SliderForNewsAndYouTube';
 
 function HomePage() {

@@ -7,8 +7,9 @@ import Tab from '@mui/material/Tab';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import { Paper } from '@mui/material';
-import YoutubeBlock from '../YoutubeBlock/YoutubeBlock';
-import NewsBlock from '../NewsBlock/NewsBlock';
+import YoutubeBlock from '../News/YoutubeBlock/YoutubeBlock';
+import NewsBlock from '../News/NewsBlock/NewsBlock';
+import AllNewsBlock from '../News/AllNewsBlock/AllNewsBlock';
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -93,7 +94,7 @@ export default function FullWidthTabs() {
         }}
       >
         <TabPanel value={value} index={0} dir={theme.direction}>
-          Item One
+          <AllNewsBlock />
         </TabPanel>
         <TabPanel value={value} index={1} dir={theme.direction}>
           <NewsBlock />
