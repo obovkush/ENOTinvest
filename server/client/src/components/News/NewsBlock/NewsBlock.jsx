@@ -1,37 +1,13 @@
 import { LinearProgress, Stack } from '@mui/material'
-import React, { useEffect, useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import Paper from '@mui/material/Paper';
-import { styled } from '@mui/material/styles';
-import axios from 'axios';
+import React from 'react'
+import { useSelector } from 'react-redux'
 import { Box } from '@mui/system';
 
-export default function NewsBlock() {
-
+export default function NewsBlock({ spinner, Item }) {
+  
+  const { loading, setLoading } = spinner
   // Создам стейт для хранения данных, прилетающих с RSS ленты. 
-  const dispatch = useDispatch()
   const listFromRSS = useSelector(store => store.news)
-  const [loading, setLoading] = useState(true)
-
-  const Item = styled(Paper)(({ theme }) => ({
-    backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
-    ...theme.typography.body2,
-    padding: theme.spacing(1),
-    textAlign: 'center',
-    color: theme.palette.text.secondary,
-  }));
-
-  useEffect(() => {
-    axios.get('http://localhost:5000/api/rssnews')
-      .then((listFromRSS) => {
-        const { items } = listFromRSS.data
-        console.log('====> RSS новости Finam', items)
-        if (items.length) {
-          dispatch({ type: 'SET_ALL_NEWS', payload: items })
-          setLoading(false)
-        }
-      })
-  }, [])
 
   return (
     loading ?

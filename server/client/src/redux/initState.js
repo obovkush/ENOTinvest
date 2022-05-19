@@ -4,4 +4,5 @@ export const initState = {
   userInputs: {},
   news: [],
   youtube: [],
+  allNews: [],
 };
