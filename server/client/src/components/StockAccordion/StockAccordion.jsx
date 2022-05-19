@@ -4,6 +4,7 @@ import {
   AccordionDetails,
   AccordionSummary,
   Typography,
+  Button,
 } from '@mui/material';
 import AddTaskOutlinedIcon from '@mui/icons-material/AddTaskOutlined';
 import StraightOutlinedIcon from '@mui/icons-material/StraightOutlined';
@@ -29,6 +30,44 @@ const currencies = [
 ];
 
 function StockAccordion() {
+  const [stocksData, setStocksData] = useState({
+    // securities: {
+    //   data: ['XXXX', null, 'XXX Corp', null],
+    // },
+  });
+
+  useEffect(() => {
+    !stocksData.securities &&
+      fetch(
+        `https://iss.moex.com/iss/engines/stock/markets/shares/boards/TQBR/securities.json`,
+      )
+        .then((data) => data.json())
+        .then((data) => setStocksData(data));
+  }, [stocksData]);
+
+  // function moexSecurities(
+  //   engineType = 'stock',
+  //   market = 'shares',
+  //   board = 'TQBR',
+  // ) {
+  //   fetch(
+  //     `https://iss.moex.com/iss/engines/stock/markets/shares/boards/TQBR/securities.json`,
+  //   )
+  //     .then((data) => data.json())
+  //     .then((data) => setStocksData(data));
+  // }
+
+  console.log(stocksData);
+  const oneStockSecurities = stocksData?.securities?.data[0] || [];
+  const tiker = oneStockSecurities[0];
+  const companyName = oneStockSecurities[2];
+  const currentPrice = oneStockSecurities[15];
+  const prevPrice = oneStockSecurities[3];
+  const diffPrice = Number(currentPrice) - Number(prevPrice);
+  const diffPercent = ((diffPrice / prevPrice) * 100).toFixed(2);
+
+  let isGrow = diffPrice > 0 ? true : false;
+
   const [currency, setCurrency] = React.useState('Все');
   const [expanded, setExpanded] = useState(false);
   const [fullStocksENG, setStocksENG] = useState('');
@@ -50,7 +89,7 @@ function StockAccordion() {
 
   useEffect(() => {
     fetch('http://localhost:4000/api/stocks/stocksENG', {
-      method: 'GET', 
+      method: 'GET',
       // withCredentials: true,
       headers: { 'Content-Type': 'application/json' },
     }).then((res) => res.json())
@@ -67,6 +106,7 @@ function StockAccordion() {
 
   return (
     <div>
+      <Button>Получить данные</Button>
        {/* <div>
        <TextField
           id="outlined-select-currency"
@@ -158,7 +198,6 @@ function StockAccordion() {
               title="Процент изменения за день"
               sx={{
                 width: '20%',
-                color: 'green',
               }}
             >
               +3.5%
@@ -173,37 +212,41 @@ function StockAccordion() {
         expanded={expanded === 'panel3'}
         onChange={handleChange('panel3')}
       >
-        <Badge.Ribbon placement="start" text="AAPL">
+        <Badge.Ribbon
+          placement="start"
+          text={tiker}
+          color={isGrow ? 'green' : 'red'}
+        >
           <AccordionSummary
             expandIcon={<AddTaskOutlinedIcon />}
-            aria-controls="panel1bh-content"
-            id="panel1bh-header"
-            sx={{ padding: '0 30px 0 70px' }}
+            aria-controls="panel3bh-content"
+            id="panel3Sbh-header"
+            sx={{
+              backgroundColor: isGrow ? 'palegreen' : 'pink',
+              color: isGrow ? 'green' : 'red',
+              padding: '0 30px 0 70px',
+            }}
           >
-            <StraightOutlinedIcon fontSize="small" />
+            <StraightOutlinedIcon
+              fontSize="small"
+              sx={{ transform: isGrow ? 'rotate(45deg)' : 'rotate(135deg)' }}
+            />
             <Typography sx={{ width: '33%', flexShrink: 0 }}>
-              Apple Inc.
+              {companyName}
             </Typography>
-            <Typography
-              title="Текущая цена"
-              sx={{ width: '20%', color: 'text.secondary' }}
-            >
-              34$
+            <Typography title="Текущая цена" sx={{ width: '20%' }}>
+              {currentPrice}&#8381;
             </Typography>
-            <Typography
-              title="Дневной прирост"
-              sx={{ width: '20%', color: 'text.primary' }}
-            >
-              +0,00035&#8381;
+            <Typography title="Дневной прирост" sx={{ width: '20%' }}>
+              {diffPrice}&#8381;
             </Typography>
             <Typography
               title="Процент изменения за день"
               sx={{
                 width: '20%',
-                color: 'text.primary',
               }}
             >
-              2%
+              {diffPercent}%
             </Typography>
           </AccordionSummary>
         </Badge.Ribbon>
