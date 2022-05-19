@@ -41,19 +41,32 @@ export default function AllNewsBlock({ spinner, Item }) {
       .catch(error => console.log(error))
   }, [])
 
+  // Функция совмещающая и сортирующая два массива
+  const combinedAndSortNews = (array1, array2) => {
+    const concatArray = array1.concat(array2)
+    const sortedArray = concatArray.sort((a, b) => {   
+        const newsElemA = a?.pubDate?.replace(/[A-Z-:\s]/gmi, '').trim()
+        const newsElemB = b?.pubDate?.replace(/[A-Z-:\s]/gmi, '').trim()
+        const youtubeElemA = a?.snippet?.publishedAt?.replace(/[A-Z-:]/gmi, '').trim()
+        const youtubeElemB = b?.snippet?.publishedAt?.replace(/[A-Z-:]/gmi, '').trim()
+        if ((newsElemA || youtubeElemA) > (newsElemB || youtubeElemB)) {
+          return -1
+        }
+        if ((newsElemA || youtubeElemA) < (newsElemB || youtubeElemB)) {
+          return 1
+        }
+        return 0;
+      })
+    console.log(sortedArray)
+    dispatch({ type: 'SET_NEWS_AND_YOUTUBE_TOGETHER', payload: sortedArray })
+    setLoading(false)
+  }
+
   // Эффект на вызов совмещающей функции. 
   // Если функцию вызвать просто в теле компонента то уходит в зацикливание
   useEffect(() => {
-    combinedNews(listFromRSS, listFromChanelInvestFuture)
+    combinedAndSortNews(listFromRSS, listFromChanelInvestFuture)
   }, [])
-
-  // Функция совмещающая два массива
-  const combinedNews = (array1, array2) => {
-    const concatArray = array1.concat(array2)
-    console.log(concatArray)
-    dispatch({ type: 'SET_NEWS_AND_YOUTUBE_TOGETHER', payload: concatArray })
-    setLoading(false)
-  }
 
   // Модель плеера с адаптивным дизайном
   const ResponsivePlayer = (videoId) => {
