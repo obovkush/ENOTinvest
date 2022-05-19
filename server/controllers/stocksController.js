@@ -2,9 +2,7 @@ const finnhub = require('finnhub');
 
 class StocksController {
   NFLX(req, res, next) {
-    const {
-      api_key,
-    } = finnhub.ApiClient.instance.authentications;
+    const { api_key } = finnhub.ApiClient.instance.authentications;
     api_key.apiKey = 'sandbox_ca1opiqad3i6tbvcpd50';
     const finnhubClient = new finnhub.DefaultApi();
 
@@ -12,9 +10,7 @@ class StocksController {
   }
 
   INTC(req, res, next) {
-    const {
-      api_key,
-    } = finnhub.ApiClient.instance.authentications;
+    const { api_key } = finnhub.ApiClient.instance.authentications;
     api_key.apiKey = 'sandbox_ca1opiqad3i6tbvcpd50';
     const finnhubClient = new finnhub.DefaultApi();
 
@@ -22,9 +18,7 @@ class StocksController {
   }
 
   NVDA(req, res, next) {
-    const {
-      api_key,
-    } = finnhub.ApiClient.instance.authentications;
+    const { api_key } = finnhub.ApiClient.instance.authentications;
     api_key.apiKey = 'sandbox_ca1opiqad3i6tbvcpd50';
     const finnhubClient = new finnhub.DefaultApi();
 
@@ -32,9 +26,7 @@ class StocksController {
   }
 
   AAPL(req, res, next) {
-    const {
-      api_key,
-    } = finnhub.ApiClient.instance.authentications;
+    const { api_key } = finnhub.ApiClient.instance.authentications;
     api_key.apiKey = 'sandbox_ca1opiqad3i6tbvcpd50';
     const finnhubClient = new finnhub.DefaultApi();
 
@@ -42,9 +34,7 @@ class StocksController {
   }
 
   TWTR(req, res, next) {
-    const {
-      api_key,
-    } = finnhub.ApiClient.instance.authentications;
+    const { api_key } = finnhub.ApiClient.instance.authentications;
     api_key.apiKey = 'sandbox_ca1opiqad3i6tbvcpd50';
     const finnhubClient = new finnhub.DefaultApi();
 
@@ -52,9 +42,7 @@ class StocksController {
   }
 
   DIS(req, res, next) {
-    const {
-      api_key,
-    } = finnhub.ApiClient.instance.authentications;
+    const { api_key } = finnhub.ApiClient.instance.authentications;
     api_key.apiKey = 'sandbox_ca1opiqad3i6tbvcpd50';
     const finnhubClient = new finnhub.DefaultApi();
 
@@ -62,9 +50,7 @@ class StocksController {
   }
 
   AMZN(req, res, next) {
-    const {
-      api_key,
-    } = finnhub.ApiClient.instance.authentications;
+    const { api_key } = finnhub.ApiClient.instance.authentications;
     api_key.apiKey = 'sandbox_ca1opiqad3i6tbvcpd50';
     const finnhubClient = new finnhub.DefaultApi();
 
@@ -72,15 +58,11 @@ class StocksController {
   }
 
   TSLA(req, res, next) {
-    const {
-      api_key,
-    } = finnhub.ApiClient.instance.authentications;
+    const { api_key } = finnhub.ApiClient.instance.authentications;
     api_key.apiKey = 'sandbox_ca1opiqad3i6tbvcpd50';
     const finnhubClient = new finnhub.DefaultApi();
 
-    finnhubClient.quote('TSLA', (error, data, response) => {
-      res.json(data);
-    });
+    finnhubClient.quote('TSLA', (error, data, response) => res.json(data));
   }
 }
 
