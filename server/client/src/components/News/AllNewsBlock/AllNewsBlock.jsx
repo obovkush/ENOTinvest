@@ -13,27 +13,14 @@ export default function AllNewsBlock({ spinner, Item }) {
   const listFromChanelInvestFuture = useSelector(store => store.youtube)
   const listOfConcatNews = useSelector(store => store.allNews)
 
-  // Получаем данные новостей с сервера и записываем в Redux
-  useEffect(() => {
-    axios.get('http://localhost:5000/api/rssnews')
-      .then((listFromRSS) => {
-        const { items } = listFromRSS.data
-        // console.log('====> RSS новости Finam', items)
-        if (items.length) {
-          const sortedArray = sortedByPublishedDate(items)
-          dispatch({ type: 'SET_ALL_NEWS', payload: sortedArray })
-          setLoading(false)
-        }
-      })
-  }, [])
-
+  
   // Получаем данные с API YouTube и записываем в Redux
   useEffect(() => {
     // По необходимости нужно добавить различные свойства к запросу, например сортировка.
     axios.get('https://youtube.googleapis.com/youtube/v3/search?part=snippet&channelId=UC-WK8QlQJpAROCrO7dRvqcw&maxResults=3&key=AIzaSyABhJbYlM-GGIKjhaAguyWZKyaRyKCdtVU')
-      .then((listFromChanelInvestFuture) => {
-        const { items } = listFromChanelInvestFuture.data
-        // console.log('====> Видео с канала InvestFuture', items);
+    .then((listFromChanelInvestFuture) => {
+      const { items } = listFromChanelInvestFuture.data
+      // console.log('====> Видео с канала InvestFuture', items);
         if (items.length) {
           const sortedArray = sortedByPublishedDate(items)
           dispatch({ type: 'SET_ALL_YOUTUBE_VIDEO', payload: sortedArray })
@@ -41,9 +28,23 @@ export default function AllNewsBlock({ spinner, Item }) {
         }
       })
       .catch(error => console.log(error))
-  }, [])
+    }, [])
 
-  // Функция совмещающая и сортирующая два массива
+    // Получаем данные RSS новостей с сервера и записываем в Redux
+    useEffect(() => {
+      axios.get('http://localhost:5000/api/rssnews')
+        .then((listFromRSS) => {
+          const { items } = listFromRSS.data
+          // console.log('====> RSS новости Finam', items)
+          if (items.length) {
+            const sortedArray = sortedByPublishedDate(items)
+            dispatch({ type: 'SET_ALL_NEWS', payload: sortedArray })
+            setLoading(false)
+          }
+        })
+    }, [])
+    
+    // Функция совмещающая и сортирующая два массива
   const combinedAndSortNews = (array1, array2) => {
     const concatArray = array1.concat(array2)
     const sortedArray = sortedByPublishedDate(concatArray)
@@ -74,7 +75,7 @@ export default function AllNewsBlock({ spinner, Item }) {
   // Если функцию вызвать просто в теле компонента то уходит в зацикливание
   useEffect(() => {
     combinedAndSortNews(listFromRSS, listFromChanelInvestFuture)
-  }, [listFromChanelInvestFuture])
+  }, [listFromRSS])
 
   // Модель плеера с адаптивным дизайном
   const ResponsivePlayer = (videoId) => {
