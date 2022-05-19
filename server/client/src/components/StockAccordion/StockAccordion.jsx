@@ -12,43 +12,53 @@ import StraightOutlinedIcon from '@mui/icons-material/StraightOutlined';
 import { Badge } from 'antd';
 
 function StockAccordion() {
-  const [stocksData, setStocksData] = useState({
-    // securities: {
-    //   data: ['XXXX', null, 'XXX Corp', null],
-    // },
-  });
+  const [stocksData, setStocksData] = useState({});
 
+  // useEffect(() => {
+  //   !stocksData.securities &&
+  //     fetch(
+  //       `https://iss.moex.com/iss/engines/stock/markets/shares/boards/TQBR/securities.json`,
+  //     )
+  //       .then((data) => data.json())
+  //       .then((data) => setStocksData(data));
+  // }, [stocksData]);
   useEffect(() => {
-    !stocksData.securities &&
-      fetch(
-        `https://iss.moex.com/iss/engines/stock/markets/shares/boards/TQBR/securities.json`,
-      )
-        .then((data) => data.json())
-        .then((data) => setStocksData(data));
-  }, [stocksData]);
-
-  // function moexSecurities(
-  //   engineType = 'stock',
-  //   market = 'shares',
-  //   board = 'TQBR',
-  // ) {
-  //   fetch(
-  //     `https://iss.moex.com/iss/engines/stock/markets/shares/boards/TQBR/securities.json`,
-  //   )
-  //     .then((data) => data.json())
-  //     .then((data) => setStocksData(data));
-  // }
-
+    fetch(`http://localhost:5000/api/stocks/stocksRU`, {
+      method: 'GET',
+      withCredentials: true,
+      headers: { 'Content-Type': 'application/json' },
+    })
+      .then((data) => data.json())
+      .then((data) => setStocksData(data));
+  }, []);
   console.log(stocksData);
-  const oneStockSecurities = stocksData?.securities?.data[0] || [];
-  const tiker = oneStockSecurities[0];
-  const companyName = oneStockSecurities[2];
-  const currentPrice = oneStockSecurities[15];
-  const prevPrice = oneStockSecurities[3];
-  const diffPrice = Number(currentPrice) - Number(prevPrice);
-  const diffPercent = ((diffPrice / prevPrice) * 100).toFixed(2);
 
-  let isGrow = diffPrice > 0 ? true : false;
+  // let filterMarketData;
+  // if (stocksData.marketdata) {
+  //   filterMarketData = stocksData.marketdata.data.filter((el) =>
+  //     demoStocks.includes(el[0]),
+  //   );
+  // }
+  // let filterSecurities;
+  // if (stocksData.securities) {
+  //   filterSecurities = stocksData.securities.data.filter((el) =>
+  //     demoStocks.includes(el[0]),
+  //   );
+  // }
+  // console.log(filterMarketData);
+  // console.log(filterSecurities);
+
+  // const oneStockMarketData = filterMarketData[0] || [];
+  // const oneStockSecurities = stocksData?.securities?.data[0] || [];
+  // const tiker = oneStockSecurities[0] || 'нет данных';
+  // const companyName = oneStockSecurities[2] || 'нет данных';
+  // const currentPrice = oneStockMarketData[12] || 'нет данных';
+  // const prevPrice = oneStockSecurities[3] || 'нет данных';
+  // const diffPrice = Number(currentPrice) - Number(prevPrice) || 'нет данных';
+  // const diffPercent =
+  //   ((diffPrice / prevPrice) * 100).toFixed(2) || 'нет данных';
+
+  // let isGrow = diffPrice > 0 ? true : false;
 
   const [expanded, setExpanded] = useState(false);
   const [fullStocksENG, setStocksENG] = useState('');
@@ -65,11 +75,12 @@ function StockAccordion() {
   // });
 
   useEffect(() => {
-    fetch('http://localhost:4000/api/stocks/stocksENG', {
+    fetch('http://localhost:5000/api/stocks/stocksENG', {
       method: 'GET',
       // withCredentials: true,
       headers: { 'Content-Type': 'application/json' },
-    }).then((res) => res.json())
+    })
+      .then((res) => res.json())
       .then((data) => {
         console.log(data);
         setStocksENG(data);
@@ -83,7 +94,6 @@ function StockAccordion() {
 
   return (
     <div>
-      <Button>Получить данные</Button>
       <Accordion
         expanded={expanded === 'panel1'}
         onChange={handleChange('panel1')}
@@ -107,7 +117,7 @@ function StockAccordion() {
               Apple Inc.
             </Typography>
             <Typography title="Текущая цена" sx={{ width: '20%' }}>
-             {fullStocksENG.c}$
+              {fullStocksENG.c}$
             </Typography>
             <Typography title="Дневной прирост" sx={{ width: '20%' }}>
               -2,67$
@@ -175,31 +185,31 @@ function StockAccordion() {
       >
         <Badge.Ribbon
           placement="start"
-          text={tiker}
-          color={isGrow ? 'green' : 'red'}
+          // text={tiker}
+          // color={isGrow ? 'green' : 'red'}
         >
           <AccordionSummary
             expandIcon={<AddTaskOutlinedIcon />}
             aria-controls="panel3bh-content"
             id="panel3Sbh-header"
             sx={{
-              backgroundColor: isGrow ? 'palegreen' : 'pink',
-              color: isGrow ? 'green' : 'red',
+              // backgroundColor: isGrow ? 'palegreen' : 'pink',
+              // color: isGrow ? 'green' : 'red',
               padding: '0 30px 0 70px',
             }}
           >
             <StraightOutlinedIcon
               fontSize="small"
-              sx={{ transform: isGrow ? 'rotate(45deg)' : 'rotate(135deg)' }}
+              // sx={{ transform: isGrow ? 'rotate(45deg)' : 'rotate(135deg)' }}
             />
             <Typography sx={{ width: '33%', flexShrink: 0 }}>
-              {companyName}
+              {/* {companyName} */}
             </Typography>
             <Typography title="Текущая цена" sx={{ width: '20%' }}>
-              {currentPrice}&#8381;
+              {/* {currentPrice}&#8381; */}
             </Typography>
             <Typography title="Дневной прирост" sx={{ width: '20%' }}>
-              {diffPrice}&#8381;
+              {/* {diffPrice}&#8381; */}
             </Typography>
             <Typography
               title="Процент изменения за день"
@@ -207,7 +217,7 @@ function StockAccordion() {
                 width: '20%',
               }}
             >
-              {diffPercent}%
+              {/* {diffPercent}% */}
             </Typography>
           </AccordionSummary>
         </Badge.Ribbon>

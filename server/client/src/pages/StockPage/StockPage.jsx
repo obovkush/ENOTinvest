@@ -17,6 +17,7 @@ function StockPage() {
         >
           <Grid
             item
+            md={12}
             xs={12}
             container
             justifyContent="center"

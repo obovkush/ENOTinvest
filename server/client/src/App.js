@@ -3,7 +3,8 @@ import { useEffect } from 'react';
 
 import AppBar from './components/AppBar/AppBar';
 import AppRouter from './routes/AppRouter';
-import 'boxicons/css/boxicons.min.css'
+import 'boxicons/css/boxicons.min.css';
+import { Grid } from '@mui/material';
 
 import { checkAuth } from './api/userAPI';
 import { useDispatch } from 'react-redux';
@@ -28,12 +29,20 @@ function App() {
   }, [dispatch]);
 
   return (
-    <div className="App container">
-      <AppBar />
-      <section className="list App-content">
+    <Grid container spacing={2}>
+      <Grid item xs={4} md={3}>
+        <AppBar />
+      </Grid>
+      <Grid item xs={8} md={9}>
         <AppRouter />
-      </section>
-    </div>
+      </Grid>
+    </Grid>
+    // <div className="App container">
+    //   <AppBar />
+    //   <section className="list App-content">
+    //     <AppRouter />
+    //   </section>
+    // </div>
   );
 }
 

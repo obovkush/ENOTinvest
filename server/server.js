@@ -8,6 +8,8 @@ const path = require('path');
 const router = require('./routes/index');
 const errorMiddleware = require('./middlewares/errorMiddleware');
 
+// const stockController = require('./controllers/stockController');
+
 const log = console;
 // Задаем порт подключения к серверу
 const PORT = process.env.PORT ?? 5000;
@@ -17,7 +19,16 @@ const dbConnectionCheck = require('./db/dbConnectionCheck');
 app.use(cookieParser());
 
 // Вместо политики CORS
-app.use((req, res, next) => { const accessList = [ 'http://localhost:3000', ]; const origin = req.get('origin'); if (accessList.includes(origin)) { res.header('Access-Control-Allow-Origin', origin); res.header('Access-Control-Allow-Headers', 'Content-type'); res.header('Access-Control-Allow-Credentials', true); } next(); });
+app.use((req, res, next) => {
+  const accessList = ['http://localhost:3000'];
+  const origin = req.get('origin');
+  if (accessList.includes(origin)) {
+    res.header('Access-Control-Allow-Origin', origin);
+    res.header('Access-Control-Allow-Headers', 'Content-type');
+    res.header('Access-Control-Allow-Credentials', true);
+  }
+  next();
+});
 
 app.use(express.json());
 app.use(express.static(path.resolve(__dirname, 'static')));
@@ -43,3 +54,7 @@ const start = async () => {
 };
 
 start();
+
+// Вызов функции обновления информации по русским акциям/фондам с API в базу
+// const int = setInterval(stockController.ru, 20000);
+// setTimeout(() => clearInterval(int), 5000);
