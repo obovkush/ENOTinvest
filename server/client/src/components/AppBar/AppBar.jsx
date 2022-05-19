@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useLocation, Outlet } from 'react-router-dom';
-import Sidebar from '../sidebar/Sidebar';
+import Sidebar from '../Sidebar/Sidebar';
 
 import { logout } from '../../api/userAPI';
 
@@ -141,9 +141,7 @@ export default function MenuAppBar() {
     //     </Toolbar>
     //   </AppBar>
     // </Box>
-    <div style={{
-      padding: '50px 0px 0px 370px'
-    }}>
+    <div>
       <Sidebar/>
       <Outlet/>
     </div>

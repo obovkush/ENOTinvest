@@ -3,7 +3,11 @@ import { useEffect } from 'react';
 
 import AppBar from './components/AppBar/AppBar';
 import AppRouter from './routes/AppRouter';
+<<<<<<< HEAD
 import 'boxicons/css/boxicons.min.css';
+=======
+import 'boxicons/css/boxicons.min.css'
+>>>>>>> a68eec3c5b18116e552d929d1a7ac06650ffdda0
 import { Grid } from '@mui/material';
 
 import { checkAuth } from './api/userAPI';
@@ -29,20 +33,15 @@ function App() {
   }, [dispatch]);
 
   return (
-    <Grid container spacing={2}>
-      <Grid item xs={4} md={3}>
+    <Grid container spacing={1}>
+      <Grid item xs={4} md={2}>
         <AppBar />
       </Grid>
-      <Grid item xs={8} md={9}>
+      <Grid item xs={10} md={10} pr={2}>
         <AppRouter />
       </Grid>
     </Grid>
-    // <div className="App container">
-    //   <AppBar />
-    //   <section className="list App-content">
-    //     <AppRouter />
-    //   </section>
-    // </div>
+
   );
 }
 
