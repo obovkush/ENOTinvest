@@ -29,7 +29,7 @@ function App() {
   }, [dispatch]);
 
   return (
-    <Grid container spacing={1}> 
+    <Grid container spacing={1}>
       <Grid item xs={4} md={2}>
         <AppBar />
       </Grid>
