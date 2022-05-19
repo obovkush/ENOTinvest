@@ -74,7 +74,7 @@ export default function AllNewsBlock({ spinner, Item }) {
   // Если функцию вызвать просто в теле компонента то уходит в зацикливание
   useEffect(() => {
     combinedAndSortNews(listFromRSS, listFromChanelInvestFuture)
-  }, [])
+  }, [listFromChanelInvestFuture])
 
   // Модель плеера с адаптивным дизайном
   const ResponsivePlayer = (videoId) => {
