@@ -1,10 +1,9 @@
 const finnhub = require('finnhub');
 
-class StockController {
-
+class StocksController {
   NFLX(req, res, next) {
     const {
-      api_key
+      api_key,
     } = finnhub.ApiClient.instance.authentications;
     api_key.apiKey = 'sandbox_ca1opiqad3i6tbvcpd50';
     const finnhubClient = new finnhub.DefaultApi();
@@ -14,7 +13,7 @@ class StockController {
 
   INTC(req, res, next) {
     const {
-      api_key
+      api_key,
     } = finnhub.ApiClient.instance.authentications;
     api_key.apiKey = 'sandbox_ca1opiqad3i6tbvcpd50';
     const finnhubClient = new finnhub.DefaultApi();
@@ -24,7 +23,7 @@ class StockController {
 
   NVDA(req, res, next) {
     const {
-      api_key
+      api_key,
     } = finnhub.ApiClient.instance.authentications;
     api_key.apiKey = 'sandbox_ca1opiqad3i6tbvcpd50';
     const finnhubClient = new finnhub.DefaultApi();
@@ -34,37 +33,37 @@ class StockController {
 
   AAPL(req, res, next) {
     const {
-      api_key
+      api_key,
     } = finnhub.ApiClient.instance.authentications;
     api_key.apiKey = 'sandbox_ca1opiqad3i6tbvcpd50';
     const finnhubClient = new finnhub.DefaultApi();
 
-    finnhubClient.quote('AAPL', (error, data, response) => res.json(data))
+    finnhubClient.quote('AAPL', (error, data, response) => res.json(data));
   }
 
   TWTR(req, res, next) {
     const {
-      api_key
+      api_key,
     } = finnhub.ApiClient.instance.authentications;
     api_key.apiKey = 'sandbox_ca1opiqad3i6tbvcpd50';
     const finnhubClient = new finnhub.DefaultApi();
 
-    finnhubClient.quote('TWTR', (error, data, response) => res.json(data))
+    finnhubClient.quote('TWTR', (error, data, response) => res.json(data));
   }
 
   DIS(req, res, next) {
     const {
-      api_key
+      api_key,
     } = finnhub.ApiClient.instance.authentications;
     api_key.apiKey = 'sandbox_ca1opiqad3i6tbvcpd50';
     const finnhubClient = new finnhub.DefaultApi();
 
-    finnhubClient.quote('DIS', (error, data, response) => res.json(data))
+    finnhubClient.quote('DIS', (error, data, response) => res.json(data));
   }
 
   AMZN(req, res, next) {
     const {
-      api_key
+      api_key,
     } = finnhub.ApiClient.instance.authentications;
     api_key.apiKey = 'sandbox_ca1opiqad3i6tbvcpd50';
     const finnhubClient = new finnhub.DefaultApi();
@@ -74,13 +73,15 @@ class StockController {
 
   TSLA(req, res, next) {
     const {
-      api_key
+      api_key,
     } = finnhub.ApiClient.instance.authentications;
     api_key.apiKey = 'sandbox_ca1opiqad3i6tbvcpd50';
     const finnhubClient = new finnhub.DefaultApi();
 
-    finnhubClient.quote('TSLA', (error, data, response) => res.json(data));
+    finnhubClient.quote('TSLA', (error, data, response) => {
+      res.json(data);
+    });
   }
 }
 
-module.exports = new StockController();
+module.exports = new StocksController();

@@ -119,17 +119,22 @@ function StockAccordion() {
   return (
     <div>
       {fullStocksENG && fullStocksENG.map((el, index) => {
+        console.log(index)
         return (
           <Accordion
-            expanded={expanded === 'panel1'}
-            onChange={handleChange('panel1')}
+            // expanded={expanded === 'panel1'}
+            expanded={expanded === `panel${el.name}`}
+            // onChange={handleChange('panel1')}
+            onChange={handleChange(`panel${el.name}`)}
             key={index}
           >
             <Badge.Ribbon placement="start" text={el.name} color="red">
               <AccordionSummary
                 expandIcon={<AddTaskOutlinedIcon />}
-                aria-controls="panel1bh-content"
-                id="panel1bh-header"
+                // aria-controls="panel1bh-content"
+                aria-controls={el.name}
+                // id="panel1bh-header"
+                id={el.name}
                 sx={{
                   backgroundColor: `${el.data.d ? 'pink' : 'palegreen'}`,
                   color: `${el.data.d ? 'red' : 'green'}`,
@@ -169,9 +174,6 @@ function StockAccordion() {
           </Accordion>
         )
       })}
-
-
-
 
       {/* <Accordion
         expanded={expanded === 'panel1'}
