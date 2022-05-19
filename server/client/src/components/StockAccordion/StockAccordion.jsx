@@ -8,8 +8,26 @@ import {
 } from '@mui/material';
 import AddTaskOutlinedIcon from '@mui/icons-material/AddTaskOutlined';
 import StraightOutlinedIcon from '@mui/icons-material/StraightOutlined';
+import TextField from '@mui/material/TextField';
+import MenuItem from '@mui/material/MenuItem';
 
 import { Badge } from 'antd';
+
+const currencies = [
+  {
+    value: 'Все',
+    label: 'Все',
+  },
+  {
+    value: 'USD',
+    label: '$',
+  },
+  {
+    value: 'EUR',
+    label: '€',
+  },
+
+];
 
 function StockAccordion() {
   const [stocksData, setStocksData] = useState({
@@ -50,8 +68,13 @@ function StockAccordion() {
 
   let isGrow = diffPrice > 0 ? true : false;
 
+  const [currency, setCurrency] = React.useState('Все');
   const [expanded, setExpanded] = useState(false);
   const [fullStocksENG, setStocksENG] = useState('');
+
+  const moneyChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setCurrency(event.target.value);
+  };
 
   // useEffect(() => {
   //   fetch('https://api.polygon.io/v2/aggs/ticker/AAPL/range/1/day/2020-06-01/2020-06-17?apiKey=MVOp2FJDsLDLqEmq1t6tYy8hXro8YgUh', {
@@ -84,6 +107,22 @@ function StockAccordion() {
   return (
     <div>
       <Button>Получить данные</Button>
+       {/* <div>
+       <TextField
+          id="outlined-select-currency"
+          select
+          label="Валюта"
+          value={currency}
+          onChange={moneyChange}
+          helperText="Выберите фильтр по валюте"
+        >
+          {currencies.map((option) => (
+            <MenuItem key={option.value} value={option.value}>
+              {option.label}
+            </MenuItem>
+          ))}
+        </TextField>
+        </div> */}
       <Accordion
         expanded={expanded === 'panel1'}
         onChange={handleChange('panel1')}
