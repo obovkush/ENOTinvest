@@ -19,8 +19,8 @@ const sidebarNavItems = [
     {
         display: 'Акции',
         icon: <img src={stock} />,
-        to: '/stock',
-        section: 'stock'
+        to: '/stocks',
+        section: 'stocks'
     },
     {
       display: 'Аномалии',
