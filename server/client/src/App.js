@@ -3,11 +3,7 @@ import { useEffect } from 'react';
 
 import AppBar from './components/AppBar/AppBar';
 import AppRouter from './routes/AppRouter';
-<<<<<<< HEAD
-import 'boxicons/css/boxicons.min.css';
-=======
 import 'boxicons/css/boxicons.min.css'
->>>>>>> a68eec3c5b18116e552d929d1a7ac06650ffdda0
 import { Grid } from '@mui/material';
 
 import { checkAuth } from './api/userAPI';
