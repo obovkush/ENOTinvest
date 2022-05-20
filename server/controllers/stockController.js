@@ -8,11 +8,10 @@ const stockService = require('../service/stockservice');
 const ApiError = require('../exceptions/apiError');
 
 class StockController {
-
   async getRuStocksFromMOEX() {
     try {
       const data = await fetch(
-        `https://iss.moex.com/iss/engines/stock/markets/shares/boards/TQBR/securities.json`,
+        'https://iss.moex.com/iss/engines/stock/markets/shares/boards/TQBR/securities.json',
       );
       const stocksData = await data.json();
       stockService.updateStockFromMOEX(stocksData);

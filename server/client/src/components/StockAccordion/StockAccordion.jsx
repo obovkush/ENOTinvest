@@ -32,17 +32,18 @@ const currencies = [
 
 function StockAccordion() {
   const dispatch = useDispatch();
-  const { stocks } = useSelector((state) => state);
+  const stocks = useSelector((state) => state.stocks);
+  // const allStocks = useSelector((state) => state.stocks);
   const [loading, setLoading] = useState(true);
   
   useEffect(() => {
     axios
-      .get(`${process.env.REACT_APP_API_URL}api/stocks/ru`)
+      .get('http://localhost:5000/api/stocks/ru')
       .then(({ data }) => {
         if (data.length) {
           dispatch({ type: 'SET_ALL_STOCKS', payload: data });
           setLoading(false);
-          console.log('==========> allStocks', allStocks);
+          console.log('==========> stocks', stocks);
         }
       });
   }, []);
@@ -68,14 +69,14 @@ function StockAccordion() {
       .catch((err) => console.log('stocks GET =>', err));
   }
 
-  useEffect(() => {
-    fetch(`${process.env.REACT_APP_API_URL}api/stocks/stocksEN`)
-      .then((res) => res.json())
-      .then((data) => {
-        dispatch({ type: 'STOCKS_EN', payload: data })
-      })
-      .catch((err) => console.log('stocks GET =>', err));
-  }, []);
+  // useEffect(() => {
+  //   fetch('http://localhost:5000/api/stocks/stocksEN')
+  //     .then((res) => res.json())
+  //     .then((data) => {
+  //       dispatch({ type: 'STOCKS_EN', payload: data })
+  //     })
+  //     .catch((err) => console.log('stocks GET =>', err));
+  // }, []);
 
   const handleChange = (panel) => (event, isExpanded) => {
     setExpanded(isExpanded ? panel : false)
@@ -84,7 +85,7 @@ function StockAccordion() {
   return (
     <>
       {stocks && stocks.map((el, index) => {
-        console.log(index)
+        {/* console.log(index) */}
         return (
           <Accordion
             expanded={expanded === `panel${el.id}`}
@@ -106,16 +107,19 @@ function StockAccordion() {
                   fontSize="small"
                   sx={{ transform: 'rotate(135deg)' }}
                 />
-                <Typography sx={{ width: '33%', flexShrink: 0 }}>
+                {/* <Typography sx={{ width: '33%', flexShrink: 0 }}>
                   {el.secid}
+                </Typography> */}
+                <Typography sx={{ width: '33%', flexShrink: 0 }}>
+                  {el?.shortName}
                 </Typography>
                 <Typography title="Текущая цена" sx={{ width: '20%' }}>
-                  {el.last}
-                  {/* {el.last.toFixed(2)}$ */}
+                  {/* {el.last} */}
+                  {el.last.toFixed(2)}$
                 </Typography>
                 <Typography title="Дневной прирост" sx={{ width: '20%' }}>
-                  {el.lastchange}$
-                  {/* {el.lastchange.toFixed(2)}$ */}
+                  {/* {el.lastchange}$ */}
+                  {el.lastchange.toFixed(2)}$
                 </Typography>
                 <Typography
                   title="Процент изменения за день"
@@ -124,14 +128,14 @@ function StockAccordion() {
                     color: `${el.lastchange > 0 ? 'green' : 'red'}`,
                   }}
                 >
-                  {el.lastchange > 0 ?
+                  {/* {el.lastchange > 0 ?
                     (<>+{-((el.prevprice - el.last) / el.last * 100)}%</>)
                     : (<>-{((el.prevprice - el.last) / el.last * 100)}%</>)
-                  }
-                  {/* {el.lastchange > 0 ?
+                  } */}
+                  {el.lastchange > 0 ?
                     (<>+{-((el.prevprice - el.last) / el.last * 100).toFixed(2)}%</>)
                     : (<>-{((el.prevprice - el.last) / el.last * 100).toFixed(2)}%</>)
-                  } */}
+                  }
                 </Typography>
               </AccordionSummary>
             </Badge.Ribbon>
@@ -142,7 +146,7 @@ function StockAccordion() {
         )
       })}
 
-      {loading ? (
+      {/* {loading ? (
         <Box sx={{ width: '100%' }}>
           <LinearProgress />
         </Box>
@@ -210,7 +214,7 @@ function StockAccordion() {
         );
       })}
         </>
-      )}
+      )} */}
     </>
   );
 }

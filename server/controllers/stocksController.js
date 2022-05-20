@@ -6,7 +6,7 @@ class StocksController {
   async stocksEN(req, res, next) {
     try {
       const { api_key } = finnhub.ApiClient.instance.authentications;
-      api_key.apiKey = 'sandbox_ca1opiqad3i6tbvcpd50';
+      api_key.apiKey = 'ca28s8iad3iaqnc2om4g';
       const finnhubClient = new finnhub.DefaultApi();
 
       finnhubClient.quote('NFLX', async (error, data, response) => {

@@ -16,12 +16,8 @@ const demoStocks = [
 
 class StockService {
   async updateStockFromMOEX(stocksData) {
-    const marketData = await stocksData.marketdata.data.filter((el) =>
-      demoStocks.includes(el[0]),
-    );
-    const securitiesData = await stocksData.securities.data.filter((el) =>
-      demoStocks.includes(el[0]),
-    );
+    const marketData = await stocksData.marketdata.data.filter((el) => demoStocks.includes(el[0]));
+    const securitiesData = await stocksData.securities.data.filter((el) => demoStocks.includes(el[0]));
 
     demoStocks.forEach(async (tiker, index) => {
       if (marketData[index][12]) {
@@ -30,8 +26,8 @@ class StockService {
         });
         if (stockData) {
           await stockData.update({
-            // shortName: securitiesData[index][2],
-            // secName: securitiesData[index][9],
+            shortName: securitiesData[index][2],
+            secName: securitiesData[index][9],
             open: marketData[index][9],
             low: marketData[index][10],
             high: marketData[index][11],
@@ -40,8 +36,8 @@ class StockService {
               marketData[index][12] - securitiesData[index][3]
             ).toFixed(2),
             lastchangeprcnt: (
-              ((marketData[index][12] - securitiesData[index][3]) * 100) /
-              marketData[index][12]
+              ((marketData[index][12] - securitiesData[index][3]) * 100)
+              / marketData[index][12]
             ).toFixed(2),
             prevprice: securitiesData[index][3],
           });
@@ -58,8 +54,8 @@ class StockService {
               marketData[index][12] - securitiesData[index][3]
             ).toFixed(2),
             lastchangeprcnt: (
-              ((marketData[index][12] - securitiesData[index][3]) * 100) /
-              marketData[index][12]
+              ((marketData[index][12] - securitiesData[index][3]) * 100)
+              / marketData[index][12]
             ).toFixed(2),
             prevprice: securitiesData[index][3],
           });
