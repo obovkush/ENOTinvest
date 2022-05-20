@@ -32,7 +32,7 @@ export default function AllNewsBlock({ spinner, Item }) {
 
     // Получаем данные RSS новостей с сервера и записываем в Redux
     useEffect(() => {
-      axios.get('http://localhost:5000/api/rssnews')
+      axios.get(`${process.env.REACT_APP_API_URL}api/rssnews`)
         .then((listFromRSS) => {
           const { items } = listFromRSS.data
           // console.log('====> RSS новости Finam', items)
