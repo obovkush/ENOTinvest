@@ -1,11 +1,7 @@
 /* eslint-disable class-methods-use-this */
 const fetch = require('node-fetch');
-
 const stockService = require('../service/stockservice');
-
 const ApiError = require('../exceptions/apiError');
-
-
 
 class StockController {
   async getRuStocksFromMOEX() {
@@ -22,7 +18,7 @@ class StockController {
 
   async getAllStocksfromDB(req, res) {
     try {
-
+      
       const allStocks = await stockService.getAllStocksfromDB();
       return res.json(allStocks);
 

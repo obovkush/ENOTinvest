@@ -1,18 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
-
-import {
-  Accordion,
-  AccordionDetails,
-  AccordionSummary,
-  Typography,
-  LinearProgress,
-  Box,
-} from '@mui/material';
+import { Accordion, AccordionDetails, AccordionSummary, Typography, LinearProgress, Box } from '@mui/material';
 import AddTaskOutlinedIcon from '@mui/icons-material/AddTaskOutlined';
 import StraightOutlinedIcon from '@mui/icons-material/StraightOutlined';
-
 import { Badge } from 'antd';
 
 const currencies = [
@@ -51,7 +42,6 @@ function StockAccordion() {
 
   const [currency, setCurrency] = React.useState('Все');
   const [expanded, setExpanded] = useState(false);
-  const [fullStocksENG, setStocksENG] = useState('');
 
   const moneyChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setCurrency(event.target.value);
@@ -101,10 +91,10 @@ function StockAccordion() {
                   {el?.shortName}
                 </Typography>
                 <Typography title="Текущая цена" sx={{ width: '20%' }}>
-                  {el.last.toFixed(2)}$
+                  {el.last}$
                 </Typography>
                 <Typography title="Дневной прирост" sx={{ width: '20%' }}>
-                  {el.lastchange.toFixed(2)}$
+                  {el.lastchange}$
                 </Typography>
                 <Typography
                   title="Процент изменения за день"
@@ -113,10 +103,7 @@ function StockAccordion() {
                     color: `${el.lastchange > 0 ? 'green' : 'red'}`,
                   }}
                 >
-                  {el.lastchange > 0 ?
-                    (<>+{-((el.prevprice - el.last) / el.last * 100).toFixed(2)}%</>)
-                    : (<>-{((el.prevprice - el.last) / el.last * 100).toFixed(2)}%</>)
-                  }
+                  {el.lastchangeprcnt}%
                 </Typography>
               </AccordionSummary>
             </Badge.Ribbon>
