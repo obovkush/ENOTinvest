@@ -3,7 +3,7 @@ const fetch = require('node-fetch');
 
 const finnhub = require('finnhub');
 
-const stockService = require('../service/stockService');
+const stockService = require('../service/stockservice');
 
 const ApiError = require('../exceptions/apiError');
 

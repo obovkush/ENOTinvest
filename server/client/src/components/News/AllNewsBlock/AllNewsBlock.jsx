@@ -14,7 +14,7 @@ export default function AllNewsBlock({ spinner, Item }) {
   const listOfConcatNews = useSelector(store => store.allNews)
 
   
-  // Получаем данные с API YouTube и записываем в Redux
+  //Получаем данные с API YouTube и записываем в Redux
   useEffect(() => {
     // По необходимости нужно добавить различные свойства к запросу, например сортировка.
     axios.get('https://youtube.googleapis.com/youtube/v3/search?part=snippet&channelId=UC-WK8QlQJpAROCrO7dRvqcw&maxResults=3&key=AIzaSyABhJbYlM-GGIKjhaAguyWZKyaRyKCdtVU')
