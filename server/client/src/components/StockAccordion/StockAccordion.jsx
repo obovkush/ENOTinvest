@@ -43,10 +43,10 @@ function StockAccordion() {
         if (data.length) {
           dispatch({ type: 'SET_ALL_STOCKS', payload: data });
           setLoading(false);
-          console.log('==========> stocks', stocks);
         }
       });
-  }, []);
+    }, []);
+    console.log('==========> stocks', stocks);
   // Функция проверки значений (определеяем выросла цена или упала, от этого зависят стили)
   const isGrow = (num) => num > 0;
 
