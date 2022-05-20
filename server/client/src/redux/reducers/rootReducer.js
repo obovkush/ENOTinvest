@@ -1,5 +1,5 @@
 import { combineReducers } from 'redux';
-import { actionsReducer } from './actionsReducer';
+import { stocksReducer } from './stocksReducer';
 import { userReducer } from './userReducer';
 import { userInputsReducer } from './userInputsReducer';
 import { stocksReducer } from './stocksReducer';
@@ -8,7 +8,7 @@ import { newsReducer } from './newsReducer';
 import { allNewsReducer } from './allNewsReducer';
 
 export const rootReducer = combineReducers({
-  actions: actionsReducer,
+  stocks: stocksReducer,
   user: userReducer,
   userInputs: userInputsReducer,
   stocks: stocksReducer,
