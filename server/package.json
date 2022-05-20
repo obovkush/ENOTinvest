@@ -6,7 +6,9 @@
   "scripts": {
     "server": "nodemon server.js",
     "client": "npm run start --prefix client",
-    "dev": "concurrently \"npm run server\" \"npm run client\""
+    "dev": "concurrently \"npm run server\" \"npm run client\"",
+    "db-migrate": "npx sequelize-cli db:migrate:undo:all && npx sequelize-cli db:migrate",
+    "db-seed": "npx sequelize-cli db:seed:undo:all && npx sequelize-cli db:seed:all"
   },
   "keywords": [],
   "author": "",
