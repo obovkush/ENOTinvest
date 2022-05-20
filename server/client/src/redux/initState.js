@@ -1,5 +1,5 @@
 export const initState = {
-  actions: [],
+  stocks: [],
   user: {},
   userInputs: {},
   news: [],
