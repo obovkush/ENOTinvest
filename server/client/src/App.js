@@ -1,13 +1,10 @@
 import './App.css';
 import { useEffect } from 'react';
 
-import AppBar from './components/AppBar/AppBar';
-import AppRouter from './routes/AppRouter';
 import 'boxicons/css/boxicons.min.css'
-import { Grid } from '@mui/material';
-
 import { checkAuth } from './api/userAPI';
 import { useDispatch } from 'react-redux';
+import Drawer from './components/Drawer/Drawer'
 
 function App() {
   const dispatch = useDispatch();
@@ -29,15 +26,7 @@ function App() {
   }, [dispatch]);
 
   return (
-    <Grid container spacing={1}>
-      <Grid item xs={4} md={2}>
-        <AppBar />
-      </Grid>
-      <Grid item xs={10} md={10} pr={2}>
-        <AppRouter />
-      </Grid>
-    </Grid>
-
+    <Drawer />
   );
 }
 
