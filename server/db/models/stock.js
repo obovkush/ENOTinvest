@@ -14,7 +14,7 @@ module.exports = (sequelize, DataTypes) => {
       secid: {
         allowNull: false,
         type: DataTypes.TEXT,
-        unique: true,
+        // unique: true,
       },
       // Тип акция/фонд
       type: {

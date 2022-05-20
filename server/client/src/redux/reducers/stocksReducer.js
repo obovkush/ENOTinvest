@@ -3,6 +3,8 @@ import { initState } from '../initState';
 export const stocksReducer = (state = initState, action) => {
   const { type, payload } = action;
   switch (type) {
+    case 'STOCKS_EN':
+      return payload;
     case 'SET_ALL_STOCKS':
       return payload;
     case 'SET_STOCK':

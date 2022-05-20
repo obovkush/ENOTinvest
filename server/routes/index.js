@@ -3,7 +3,7 @@ const Parser = require('rss-parser');
 
 const parser = new Parser();
 
-const stocksRouter = require('./stockRouter');
+const stocksRouter = require('./stocksRouter');
 const userRouter = require('./userRouter');
 
 router.use('/stocks', stocksRouter);
