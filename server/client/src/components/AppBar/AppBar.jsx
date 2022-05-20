@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useLocation, Outlet } from 'react-router-dom';
-import Sidebar from '../Sidebar1/Sidebar';
+import Sidebar from '../Sidebar/Sidebar';
 
 import { logout } from '../../api/userAPI';
 

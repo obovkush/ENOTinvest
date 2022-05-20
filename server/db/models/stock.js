@@ -14,7 +14,7 @@ module.exports = (sequelize, DataTypes) => {
       secid: {
         allowNull: false,
         type: DataTypes.TEXT,
-        unique: true,
+        // unique: true,
       },
       // Тип акция/фонд
       type: {
@@ -30,31 +30,31 @@ module.exports = (sequelize, DataTypes) => {
       },
       // Цена первой сделки
       open: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.FLOAT,
       },
       // Минимальная цена сделки
       low: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.FLOAT,
       },
       // Максимальная цена сделки
       high: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.FLOAT,
       },
       // Цена последней сделки
       last: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.FLOAT,
       },
       // Изменение цены последней сделки к цене предыдущей сделки, рублей
       lastchange: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.FLOAT,
       },
       // Изменение цены последней сделки к цене предыдущей сделки, %
       lastchangeprcnt: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.FLOAT,
       },
       // Цена предыдущего дня
       prevprice: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.FLOAT,
       },
       createdAt: {
         allowNull: false,

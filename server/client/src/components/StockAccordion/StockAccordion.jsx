@@ -32,10 +32,9 @@ const currencies = [
 
 function StockAccordion() {
   const dispatch = useDispatch();
-  const stocks = useSelector((state) => state.stocks);
-  console.log('stocks', stocks);
+  const { stocks } = useSelector((state) => state);
   const [stocksData, setStocksData] = useState({});
-
+  console.log('useSelector', stocks);
   // useEffect(() => {
   //   !stocksData.securities &&
   //     fetch(
@@ -83,102 +82,28 @@ function StockAccordion() {
 
   const [currency, setCurrency] = React.useState('Все');
   const [expanded, setExpanded] = useState(false);
-  const [fullStocksENG, setStocksENG] = useState([]);
-
-  console.log('allQuotesStocks =>', fullStocksENG);
 
   // const moneyChange = (event: React.ChangeEvent<HTMLInputElement>) => {
   //   setCurrency(event.target.value);
   // };
 
-  // useEffect(() => {
-  //   fetch('https://api.polygon.io/v2/aggs/ticker/AAPL/range/1/day/2020-06-01/2020-06-17?apiKey=MVOp2FJDsLDLqEmq1t6tYy8hXro8YgUh', {
-  //     method: 'GET',
-  //     headers: { 'Content-Type': 'application/json' },
-  //   }).then((res) => res.json())
-  //     .then((data) => {
-  //       console.log(data.results);
-  //     })
-  //     .catch((err) => console.log('stocks GET =>', err));
-  // });
+
+  const informationForTwoYears = () => {
+    fetch('https://api.polygon.io/v2/aggs/ticker/AAPL/range/1/day/2020-06-01/2020-06-17?apiKey=MVOp2FJDsLDLqEmq1t6tYy8hXro8YgUh', {
+      method: 'GET',
+      headers: { 'Content-Type': 'application/json' },
+    }).then((res) => res.json())
+      .then((data) => {
+        console.log(data.results);
+      })
+      .catch((err) => console.log('stocks GET =>', err));
+  }
 
   useEffect(() => {
-    fetch('http://localhost:4000/api/stocks/stocksENG/NFLX')
+    fetch(`${process.env.REACT_APP_API_URL}api/stocks/stocksEN`)
       .then((res) => res.json())
       .then((data) => {
-        fullStocksENG.push({ data, name: 'NFLX' })
-        dispatch({ type: 'ADD_QUOTES', payload: { data, name: 'NFLX' }})
-      })
-      .catch((err) => console.log('stocks GET =>', err));
-  }, []);
-
-  useEffect(() => {
-    fetch('http://localhost:4000/api/stocks/stocksENG/INTC')
-      .then((res) => res.json())
-      .then((data) => {
-        fullStocksENG.push({ data, name: 'INTC' })
-        dispatch({ type: 'ADD_QUOTES', payload: { data, name: 'INTC' }})
-      })
-      .catch((err) => console.log('stocks GET =>', err));
-  }, []);
-  
-  useEffect(() => {
-    fetch('http://localhost:4000/api/stocks/stocksENG/NVDA')
-      .then((res) => res.json())
-      .then((data) => {
-        fullStocksENG.push({ data, name: 'NVDA' })
-        dispatch({ type: 'ADD_QUOTES', payload: { data, name: 'NVDA' }})
-      })
-      .catch((err) => console.log('stocks GET =>', err));
-  }, []);
-
-  
-  useEffect(() => {
-    fetch('http://localhost:4000/api/stocks/stocksENG/AAPL')
-    .then((res) => res.json())
-    .then((data) => {
-      fullStocksENG.push({ data, name: 'AAPL' })
-      dispatch({ type: 'ADD_QUOTES', payload: { data, name: 'AAPL' }})
-    })
-    .catch((err) => console.log('stocks GET =>', err));
-  }, [])
-  
-  useEffect(() => {
-    fetch('http://localhost:4000/api/stocks/stocksENG/TWTR')
-      .then((res) => res.json())
-      .then((data) => {
-        fullStocksENG.push({ data, name: 'TWTR' })
-        dispatch({ type: 'ADD_QUOTES', payload: { data, name: 'TWTR' }})
-      })
-      .catch((err) => console.log('stocks GET =>', err));
-  }, []);
-  
-  useEffect(() => {
-    fetch('http://localhost:4000/api/stocks/stocksENG/DIS')
-      .then((res) => res.json())
-      .then((data) => {
-        fullStocksENG.push({ data, name: 'DIS' })
-        dispatch({ type: 'ADD_QUOTES', payload: { data, name: 'DIS' }})
-      })
-      .catch((err) => console.log('stocks GET =>', err));
-  }, []);
-
-  useEffect(() => {
-    fetch('http://localhost:4000/api/stocks/stocksENG/AMZN')
-      .then((res) => res.json())
-      .then((data) => {
-        fullStocksENG.push({ data, name: 'AMZN' })
-        dispatch({ type: 'ADD_QUOTES', payload: { data, name: 'AMZN' }})
-      })
-      .catch((err) => console.log('stocks GET =>', err));
-  }, []);
-
-  useEffect(() => {
-    fetch('http://localhost:4000/api/stocks/stocksENG/TSLA')
-      .then((res) => res.json())
-      .then((data) => {
-        fullStocksENG.push({ data, name: 'TSLA' })
-        dispatch({ type: 'ADD_QUOTES', payload: { data, name: 'TSLA' }})
+        dispatch({ type: 'STOCKS_EN', payload: data })
       })
       .catch((err) => console.log('stocks GET =>', err));
   }, []);
@@ -189,22 +114,22 @@ function StockAccordion() {
 
   return (
     <div>
-      {fullStocksENG && fullStocksENG.map((el, index) => {
+      {stocks && stocks.map((el, index) => {
         console.log(index)
         return (
           <Accordion
-            expanded={expanded === `panel${el.name}`}
-            onChange={handleChange(`panel${el.name}`)}
+            expanded={expanded === `panel${el.id}`}
+            onChange={handleChange(`panel${el.id}`)}
             key={index}
           >
-            <Badge.Ribbon placement="start" text={el.name} color="red">
+            <Badge.Ribbon placement="start" text={el.secid} color={el.lastchange > 0 ? 'green' : 'red'}>
               <AccordionSummary
                 expandIcon={<AddTaskOutlinedIcon />}
-                aria-controls={el.name}
-                id={el.name}
+                aria-controls={el.id}
+                id={el.id}
                 sx={{
-                  backgroundColor: `${el.data.d ? 'pink' : 'palegreen'}`,
-                  color: `${el.data.d ? 'red' : 'green'}`,
+                  backgroundColor: `${el.lastchange > 0 ? 'palegreen' : 'pink'}`,
+                  color: `${el.lastchange > 0 ? 'green' : 'red'}`,
                   padding: '0 30px 0 70px',
                 }}
               >
@@ -213,25 +138,31 @@ function StockAccordion() {
                   sx={{ transform: 'rotate(135deg)' }}
                 />
                 <Typography sx={{ width: '33%', flexShrink: 0 }}>
-                  {el.name}
+                  {el.secid}
                 </Typography>
                 <Typography title="Текущая цена" sx={{ width: '20%' }}>
-                  {el.data.c}$
+                  {el.last}
+                  {/* {el.last.toFixed(2)}$ */}
                 </Typography>
                 <Typography title="Дневной прирост" sx={{ width: '20%' }}>
-                  {el.data.d}$
+                  {el.lastchange}$
+                  {/* {el.lastchange.toFixed(2)}$ */}
                 </Typography>
                 <Typography
                   title="Процент изменения за день"
                   sx={{
                     width: '20%',
-                    color: 'red',
+                    color: `${el.lastchange > 0 ? 'green' : 'red'}`,
                   }}
                 >
-                  {el.data.d ?
-                    (<>-{((el.data.pc - el.data.c) / el.data.c * 100).toFixed(2)}%</>)
-                    : (<>{((el.data.pc - el.data.c) / el.data.c * 100).toFixed(2)}%</>)
+                  {el.lastchange > 0 ?
+                    (<>+{-((el.prevprice - el.last) / el.last * 100)}%</>)
+                    : (<>-{((el.prevprice - el.last) / el.last * 100)}%</>)
                   }
+                  {/* {el.lastchange > 0 ?
+                    (<>+{-((el.prevprice - el.last) / el.last * 100).toFixed(2)}%</>)
+                    : (<>-{((el.prevprice - el.last) / el.last * 100).toFixed(2)}%</>)
+                  } */}
                 </Typography>
               </AccordionSummary>
             </Badge.Ribbon>
@@ -241,54 +172,8 @@ function StockAccordion() {
           </Accordion>
         )
       })}
-      <Accordion
-        expanded={expanded === 'panel1'}
-        onChange={handleChange('panel1')}
-        >
-        <Badge.Ribbon placement="start" text="AAPL" color="red">
-          <AccordionSummary
-            expandIcon={<AddTaskOutlinedIcon />}
-            aria-controls="panel1bh-content"
-            id="panel1bh-header"
-            sx={{
-              backgroundColor: 'pink',
-              color: 'red',
-              padding: '0 30px 0 70px',
-            }}
-          >
-            <StraightOutlinedIcon
-              fontSize="small"
-              sx={{ transform: 'rotate(135deg)' }}
-            />
-            <Typography sx={{ width: '33%', flexShrink: 0 }}>
-              Apple Inc.
-            </Typography>
-            <Typography title="Текущая цена" sx={{ width: '20%' }}>
-              {fullStocksENG.c}$
-            </Typography>
-            <Typography title="Дневной прирост" sx={{ width: '20%' }}>
-              {fullStocksENG.d}$
-            </Typography>
-            <Typography
-              title="Процент изменения за день"
-              sx={{
-                width: '20%',
-                color: 'red',
-              }}
-            >
-              {fullStocksENG.d ? 
-               (<>-{((fullStocksENG.pc - fullStocksENG.c) / fullStocksENG.c * 100).toFixed(2)}%</>)
-              :(<>{((fullStocksENG.pc - fullStocksENG.c) / fullStocksENG.c * 100).toFixed(2)}%</>)
-            } 
-            </Typography>
-          </AccordionSummary>
-        </Badge.Ribbon>
-        <AccordionDetails>
-          <Typography>Здесь будет график</Typography>
-        </AccordionDetails>
-      </Accordion>
 
-      <Accordion
+      < Accordion
         expanded={expanded === 'panel2'}
         onChange={handleChange('panel2')}
       >
@@ -336,8 +221,8 @@ function StockAccordion() {
       >
         <Badge.Ribbon
           placement="start"
-          // text={tiker}
-          // color={isGrow ? 'green' : 'red'}
+        // text={tiker}
+        // color={isGrow ? 'green' : 'red'}
         >
           <AccordionSummary
             expandIcon={<AddTaskOutlinedIcon />}
@@ -351,7 +236,7 @@ function StockAccordion() {
           >
             <StraightOutlinedIcon
               fontSize="small"
-              // sx={{ transform: isGrow ? 'rotate(45deg)' : 'rotate(135deg)' }}
+            // sx={{ transform: isGrow ? 'rotate(45deg)' : 'rotate(135deg)' }}
             />
             <Typography sx={{ width: '33%', flexShrink: 0 }}>
               {/* {companyName} */}

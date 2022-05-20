@@ -1,68 +1,139 @@
 const finnhub = require('finnhub');
+const { Stock } = require('../db/models');
+const ApiError = require('../exceptions/apiError');
 
 class StocksController {
-  NFLX(req, res, next) {
-    const { api_key } = finnhub.ApiClient.instance.authentications;
-    api_key.apiKey = 'sandbox_ca1opiqad3i6tbvcpd50';
-    const finnhubClient = new finnhub.DefaultApi();
+  async stocksEN(req, res, next) {
+    try {
+      const { api_key } = finnhub.ApiClient.instance.authentications;
+      api_key.apiKey = 'sandbox_ca1opiqad3i6tbvcpd50';
+      const finnhubClient = new finnhub.DefaultApi();
 
-    finnhubClient.quote('NFLX', (error, data, response) => res.json(data));
-  }
+      finnhubClient.quote('NFLX', async (error, data, response) => {
+        const checkStock = await Stock.findOne({ where: { secid: 'NFLX' }, row: true });
+        if (checkStock) {
+          if (data.c !== checkStock.last) {
+            await Stock.update({
+              secid: 'NFLX', type: 'stock', open: data.o, high: data.h, low: data.l, last: data.c, prevprice: data.pc, lastchange: data.d,
+            }, { where: { id: checkStock.id } });
+          }
+        } else {
+          await Stock.create({
+            secid: 'NFLX', type: 'stock', open: data.o, high: data.h, low: data.l, course: data.c, prevprice: data.pc, difference: data.d,
+          });
+        }
+      });
 
-  INTC(req, res, next) {
-    const { api_key } = finnhub.ApiClient.instance.authentications;
-    api_key.apiKey = 'sandbox_ca1opiqad3i6tbvcpd50';
-    const finnhubClient = new finnhub.DefaultApi();
+      finnhubClient.quote('INTC', async (error, data, response) => {
+        const checkStock = await Stock.findOne({ where: { secid: 'INTC' }, row: true });
+        if (checkStock) {
+          if (data.c !== checkStock.last) {
+            await Stock.update({
+              secid: 'INTC', type: 'stock', open: data.o, high: data.h, low: data.l, last: data.c, prevprice: data.pc, lastchange: data.d,
+            }, { where: { id: checkStock.id } });
+          }
+        } else {
+          await Stock.create({
+            secid: 'INTC', type: 'stock', open: data.o, high: data.h, low: data.l, course: data.c, prevprice: data.pc, difference: data.d,
+          });
+        }
+      });
 
-    finnhubClient.quote('INTC', (error, data, response) => res.json(data));
-  }
+      finnhubClient.quote('NVDA', async (error, data, response) => {
+        const checkStock = await Stock.findOne({ where: { secid: 'NVDA' }, row: true });
+        if (checkStock) {
+          if (data.c !== checkStock.last) {
+            await Stock.update({
+              secid: 'NVDA', type: 'stock', open: data.o, high: data.h, low: data.l, last: data.c, prevprice: data.pc, lastchange: data.d,
+            }, { where: { id: checkStock.id } });
+          }
+        } else {
+          await Stock.create({
+            secid: 'NVDA', type: 'stock', open: data.o, high: data.h, low: data.l, course: data.c, prevprice: data.pc, difference: data.d,
+          });
+        }
+      });
 
-  NVDA(req, res, next) {
-    const { api_key } = finnhub.ApiClient.instance.authentications;
-    api_key.apiKey = 'sandbox_ca1opiqad3i6tbvcpd50';
-    const finnhubClient = new finnhub.DefaultApi();
+      finnhubClient.quote('AAPL', async (error, data, response) => {
+        const checkStock = await Stock.findOne({ where: { secid: 'AAPL' }, row: true });
+        if (checkStock) {
+          if (data.c !== checkStock.last) {
+            await Stock.update({
+              secid: 'AAPL', type: 'stock', open: data.o, high: data.h, low: data.l, last: data.c, prevprice: data.pc, lastchange: data.d,
+            }, { where: { id: checkStock.id } });
+          }
+        } else {
+          await Stock.create({
+            secid: 'AAPL', type: 'stock', open: data.o, high: data.h, low: data.l, course: data.c, prevprice: data.pc, difference: data.d,
+          });
+        }
+      });
 
-    finnhubClient.quote('NVDA', (error, data, response) => res.json(data));
-  }
+      finnhubClient.quote('TWTR', async (error, data, response) => {
+        const checkStock = await Stock.findOne({ where: { secid: 'TWTR' }, row: true });
+        if (checkStock) {
+          if (data.c !== checkStock.last) {
+            await Stock.update({
+              secid: 'TWTR', type: 'stock', open: data.o, high: data.h, low: data.l, last: data.c, prevprice: data.pc, lastchange: data.d,
+            }, { where: { id: checkStock.id } });
+          }
+        } else {
+          await Stock.create({
+            secid: 'TWTR', type: 'stock', open: data.o, high: data.h, low: data.l, course: data.c, prevprice: data.pc, difference: data.d,
+          });
+        }
+      });
 
-  AAPL(req, res, next) {
-    const { api_key } = finnhub.ApiClient.instance.authentications;
-    api_key.apiKey = 'sandbox_ca1opiqad3i6tbvcpd50';
-    const finnhubClient = new finnhub.DefaultApi();
+      finnhubClient.quote('DIS', async (error, data, response) => {
+        const checkStock = await Stock.findOne({ where: { secid: 'DIS' }, row: true });
+        if (checkStock) {
+          if (data.c !== checkStock.last) {
+            await Stock.update({
+              secid: 'DIS', type: 'stock', open: data.o, high: data.h, low: data.l, last: data.c, prevprice: data.pc, lastchange: data.d,
+            }, { where: { id: checkStock.id } });
+          }
+        } else {
+          await Stock.create({
+            secid: 'DIS', type: 'stock', open: data.o, high: data.h, low: data.l, course: data.c, prevprice: data.pc, difference: data.d,
+          });
+        }
+      });
 
-    finnhubClient.quote('AAPL', (error, data, response) => res.json(data));
-  }
+      finnhubClient.quote('AMZN', async (error, data, response) => {
+        const checkStock = await Stock.findOne({ where: { secid: 'AMZN' }, row: true });
+        if (checkStock) {
+          if (data.c !== checkStock.last) {
+            await Stock.update({
+              secid: 'AMZN', type: 'stock', open: data.o, high: data.h, low: data.l, last: data.c, prevprice: data.pc, lastchange: data.d,
+            }, { where: { id: checkStock.id } });
+          }
+        } else {
+          await Stock.create({
+            secid: 'AMZN', type: 'stock', open: data.o, high: data.h, low: data.l, course: data.c, prevprice: data.pc, difference: data.d,
+          });
+        }
+      });
 
-  TWTR(req, res, next) {
-    const { api_key } = finnhub.ApiClient.instance.authentications;
-    api_key.apiKey = 'sandbox_ca1opiqad3i6tbvcpd50';
-    const finnhubClient = new finnhub.DefaultApi();
+      finnhubClient.quote('TSLA', async (error, data, response) => {
+        const checkStock = await Stock.findOne({ where: { secid: 'TSLA' }, row: true });
+        if (checkStock) {
+          if (data.c !== checkStock.last) {
+            await Stock.update({
+              secid: 'TSLA', type: 'stock', open: data.o, high: data.h, low: data.l, last: data.c, prevprice: data.pc, lastchange: data.d,
+            }, { where: { id: checkStock.id } });
+          }
+        } else {
+          await Stock.create({
+            secid: 'TSLA', type: 'stock', open: data.o, high: data.h, low: data.l, course: data.c, prevprice: data.pc, difference: data.d,
+          });
+        }
+      });
 
-    finnhubClient.quote('TWTR', (error, data, response) => res.json(data));
-  }
-
-  DIS(req, res, next) {
-    const { api_key } = finnhub.ApiClient.instance.authentications;
-    api_key.apiKey = 'sandbox_ca1opiqad3i6tbvcpd50';
-    const finnhubClient = new finnhub.DefaultApi();
-
-    finnhubClient.quote('DIS', (error, data, response) => res.json(data));
-  }
-
-  AMZN(req, res, next) {
-    const { api_key } = finnhub.ApiClient.instance.authentications;
-    api_key.apiKey = 'sandbox_ca1opiqad3i6tbvcpd50';
-    const finnhubClient = new finnhub.DefaultApi();
-
-    finnhubClient.quote('AMZN', (error, data, response) => res.json(data));
-  }
-
-  TSLA(req, res, next) {
-    const { api_key } = finnhub.ApiClient.instance.authentications;
-    api_key.apiKey = 'sandbox_ca1opiqad3i6tbvcpd50';
-    const finnhubClient = new finnhub.DefaultApi();
-
-    finnhubClient.quote('TSLA', (error, data, response) => res.json(data));
+      const fullInfo = await Stock.findAll();
+      res.json(fullInfo);
+    } catch (error) {
+      console.log(error);
+    }
   }
 }
 
