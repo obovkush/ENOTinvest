@@ -27,31 +27,31 @@ module.exports = {
       },
       // Цена первой сделки
       open: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.FLOAT,
       },
       // Минимальная цена сделки
       low: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.FLOAT,
       },
       // Максимальная цена сделки
       high: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.FLOAT,
       },
       // Цена последней сделки
       last: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.FLOAT,
       },
       // Изменение цены последней сделки к цене предыдущей сделки, рублей
       lastchange: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.FLOAT,
       },
       // Изменение цены последней сделки к цене предыдущей сделки, %
       lastchangeprcnt: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.FLOAT,
       },
       // Цена предыдущего дня
       prevprice: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.FLOAT,
       },
       createdAt: {
         allowNull: false,

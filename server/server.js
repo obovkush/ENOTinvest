@@ -8,7 +8,7 @@ const path = require('path');
 const router = require('./routes/index');
 const errorMiddleware = require('./middlewares/errorMiddleware');
 
-// const stockController = require('./controllers/stockController');
+const stockController = require('./controllers/stockController');
 
 const log = console;
 // Задаем порт подключения к серверу
@@ -56,5 +56,5 @@ const start = async () => {
 start();
 
 // Вызов функции обновления информации по русским акциям/фондам с API в базу
-// const int = setInterval(stockController.ru, 20000);
-// setTimeout(() => clearInterval(int), 5000);
+const int = setInterval(stockController.getRuStocksFromMOEX, 2000);
+setTimeout(() => clearInterval(int), 5000);
