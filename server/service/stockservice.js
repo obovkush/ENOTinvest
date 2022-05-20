@@ -88,7 +88,7 @@ class StockService {
             await Stock.update({ secid: `${el}`, type: 'Акция', open: data.o, high: data.h, low: data.l, last: data.c, prevprice: data.pc, lastchange: data.d }, { where: { id: checkStock.id } });
           }
         } else {
-          await Stock.create({ secid: `${el}`, type: 'stock', open: data.o, high: data.h, low: data.l, course: data.c, prevprice: data.pc, difference: data.d });
+          await Stock.create({ secid: `${el}`, type: 'Акция', open: data.o, high: data.h, low: data.l, course: data.c, prevprice: data.pc, difference: data.d });
         }
       });
     })
