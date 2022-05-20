@@ -85,7 +85,6 @@ function StockAccordion() {
   return (
     <>
       {stocks && stocks.map((el, index) => {
-        {/* console.log(index) */}
         return (
           <Accordion
             expanded={expanded === `panel${el.id}`}
