@@ -31,18 +31,18 @@ export default function AllNewsBlock({ spinner, Item }) {
     }, [])
 
     // Получаем данные RSS новостей с сервера и записываем в Redux
-    // useEffect(() => {
-    //   axios.get('http://localhost:5000/api/rssnews')
-    //     .then((listFromRSS) => {
-    //       const { items } = listFromRSS.data
-    //       // console.log('====> RSS новости Finam', items)
-    //       if (items.length) {
-    //         const sortedArray = sortedByPublishedDate(items)
-    //         dispatch({ type: 'SET_ALL_NEWS', payload: sortedArray })
-    //         setLoading(false)
-    //       }
-    //     })
-    // }, [])
+    useEffect(() => {
+      axios.get('http://localhost:5000/api/rssnews')
+        .then((listFromRSS) => {
+          const { items } = listFromRSS.data
+          // console.log('====> RSS новости Finam', items)
+          if (items.length) {
+            const sortedArray = sortedByPublishedDate(items)
+            dispatch({ type: 'SET_ALL_NEWS', payload: sortedArray })
+            setLoading(false)
+          }
+        })
+    }, [])
     
     // Функция совмещающая и сортирующая два массива
   const combinedAndSortNews = (array1, array2) => {
