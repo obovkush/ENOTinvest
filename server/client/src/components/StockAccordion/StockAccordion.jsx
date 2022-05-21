@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
 import Diagram from '../Diagram/Diagram'
-import { Accordion, AccordionDetails, AccordionSummary, Typography, LinearProgress, Box, Grid, Paper, TableRow } from '@mui/material';
+import { Accordion, AccordionDetails, AccordionSummary, Typography, LinearProgress, Box, Grid } from '@mui/material';
 import AddTaskOutlinedIcon from '@mui/icons-material/AddTaskOutlined';
 import StraightOutlinedIcon from '@mui/icons-material/StraightOutlined';
 import { Badge } from 'antd';
@@ -36,7 +36,7 @@ function StockAccordion() {
           setLoading(false);
         }
       });
-    }, []);
+  }, []);
 
   // Функция проверки значений (определеяем выросла цена или упала, от этого зависят стили)
   const isGrow = (num) => num > 0;
@@ -47,7 +47,7 @@ function StockAccordion() {
   const moneyChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setCurrency(event.target.value);
   };
-  
+
   // данные за 2 года
   // useEffect(() => {
   //   fetch('https://api.polygon.io/v2/aggs/ticker/AAPL/range/1/day/2020-06-01/2020-06-17?apiKey=MVOp2FJDsLDLqEmq1t6tYy8hXro8YgUh', {
@@ -64,6 +64,20 @@ function StockAccordion() {
     setExpanded(isExpanded ? panel : false);
   };
 
+  const wikipediaSearch = (elem) => {
+    axios
+      .post(`${process.env.REACT_APP_API_URL}api/wikipedia`, {
+        secid: elem,
+      })
+      .then((data) => {
+        console.log(data)
+        // if (data.length) {
+        //   dispatch({ type: 'SET_ALL_STOCKS', payload: data });
+        //   setLoading(false);
+        // }
+      });
+  }
+
   return (
     <>
       {stocks && stocks.map((el, index) => {
@@ -71,7 +85,8 @@ function StockAccordion() {
           <Accordion
             expanded={expanded === `panel${el.id}`}
             onChange={handleChange(`panel${el.id}`)}
-            key={index}
+            key={el.secid}
+            onClick={() => wikipediaSearch(el.secid)}
           >
             <Badge.Ribbon placement="start" text={el.secid} color={el.lastchange > 0 ? 'green' : 'red'}>
               <AccordionSummary
@@ -111,34 +126,40 @@ function StockAccordion() {
             <AccordionDetails>
 
               <Grid container spacing={3}>
-                <Grid item xs={6}>
-                  <Grid container spacing={3}>
-                    <Grid item xs={12}>
-                      <Typography>
-                      Некоторая информация: цифры и буквы
-                      </Typography>
-                      <br />
-                      <Typography>
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-                      </Typography>
-                    </Grid>
-                    <Grid item xs={12}>
-                      <Diagram />
-                    </Grid>
-                  </Grid>
+
+                <Grid item xs={12}>
+                  <Typography>
+                    Некоторая информация: цифры и буквы
+                  </Typography>
+                  <br />
+                  <Typography>
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                  </Typography>
                 </Grid>
-                <Grid item xs={6}>
+
+                <Grid item xs={12}>
+                  <Diagram />
+                </Grid>
+
+                <Grid item xs={12}>
+                  <Typography>
+                    Главные новости
+                  </Typography>
+                </Grid>
+
+                <Grid item xs={12}>
                   <Typography>
                     Информация о компании
                   </Typography>
                   <br />
                   <Typography sx={{ fontSize: 12 }}>
-                  ПАО Сберба́нк — российский финансовый конгломерат, крупнейший универсальный банк России и Восточной Европы. По итогам 2019 года у Сбербанка 96,2 миллионов активных частных клиентов и 2,6 миллиона активных корпоративных клиентов. Среди крупнейших банков мира по размеру активов находится в восьмом десятке. Включён Банком России в перечень системно значимых кредитных организаций. Владельцем 50 % плюс 1 акция ПАО «Сбербанк» является Фонд национального благосостояния России, контролируемый Правительством России, остальные акции находятся в публичном обращении. Рыночная капитализация на август 2021 года составляла 7,3 триллиона рублей. В 2021 году ценность бренда Сбербанка выросла до 730,6 миллиардов рублей. С 2017 года Сбербанк удерживает первую позицию в рейтинге наиболее дорогих брендов в России, который составляет компания Brand Finance. Сбербанк — самый востребованный банк среди розничных клиентов, его услугами пользуется большинство жителей России, его объёмы розничного бизнеса в несколько раз больше ближайшего конкурента — «Банка ВТБ».
+                    ПАО Сберба́нк — российский финансовый конгломерат, крупнейший универсальный банк России и Восточной Европы. По итогам 2019 года у Сбербанка 96,2 миллионов активных частных клиентов и 2,6 миллиона активных корпоративных клиентов. Среди крупнейших банков мира по размеру активов находится в восьмом десятке. Включён Банком России в перечень системно значимых кредитных организаций. Владельцем 50 % плюс 1 акция ПАО «Сбербанк» является Фонд национального благосостояния России, контролируемый Правительством России, остальные акции находятся в публичном обращении. Рыночная капитализация на август 2021 года составляла 7,3 триллиона рублей. В 2021 году ценность бренда Сбербанка выросла до 730,6 миллиардов рублей. С 2017 года Сбербанк удерживает первую позицию в рейтинге наиболее дорогих брендов в России, который составляет компания Brand Finance. Сбербанк — самый востребованный банк среди розничных клиентов, его услугами пользуется большинство жителей России, его объёмы розничного бизнеса в несколько раз больше ближайшего конкурента — «Банка ВТБ».
                   </Typography>
                 </Grid>
+
               </Grid>
 
-              
+
             </AccordionDetails>
           </Accordion>
         )
