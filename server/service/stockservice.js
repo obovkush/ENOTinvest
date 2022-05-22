@@ -17,27 +17,29 @@ class StockService {
         const stockData = await Stock.findOne({
           where: { secid: tiker },
         });
-        if (stockData && marketData[index][12] !== stockData.last) {
+        if (stockData) {
           console.log(
             '============> Data differents',
             marketData[index][12] !== stockData.last,
           );
-          await stockData.update({
-            shortName: securitiesData[index][2],
-            secName: securitiesData[index][9],
-            open: marketData[index][9],
-            low: marketData[index][10],
-            high: marketData[index][11],
-            last: marketData[index][12],
-            lastchange: (
-              marketData[index][12] - securitiesData[index][3]
-            ).toFixed(2),
-            lastchangeprcnt: (
-              ((marketData[index][12] - securitiesData[index][3]) * 100) /
-              marketData[index][12]
-            ).toFixed(2),
-            prevprice: securitiesData[index][3],
-          });
+          if (marketData[index][12] !== stockData.last) {
+            await stockData.update({
+              shortName: securitiesData[index][2],
+              secName: securitiesData[index][9],
+              open: marketData[index][9],
+              low: marketData[index][10],
+              high: marketData[index][11],
+              last: marketData[index][12],
+              lastchange: (
+                marketData[index][12] - securitiesData[index][3]
+              ).toFixed(2),
+              lastchangeprcnt: (
+                ((marketData[index][12] - securitiesData[index][3]) * 100) /
+                marketData[index][12]
+              ).toFixed(2),
+              prevprice: securitiesData[index][3],
+            });
+          }
         } else {
           await Stock.create({
             secid: tiker,
@@ -91,7 +93,7 @@ class StockService {
           });
 
           if (checkStock) {
-            if (data.c && data.c !== checkStock.last) {
+            if (data.c !== checkStock.last) {
               await Stock.update(
                 {
                   secid: `${el}`,
