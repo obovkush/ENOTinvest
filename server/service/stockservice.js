@@ -100,38 +100,38 @@ class StockService {
               where: { secid: `${el}` },
               row: true,
             });
-            if (checkStock) {
-              if (data.c !== checkStock.last) {
-                finnhubClient.companyProfile2(
-                  { symbol: `${el}` },
-                  async (error, data, response) => {
-                    await Stock.update(
-                      {
-                        shortName: data.name,
-                      },
-                      { where: { id: checkStock.id } },
-                    );
-                  },
-                );
-                await Stock.update(
-                  {
-                    secid: `${el}`,
-                    type: 'Акция',
-                    open: data.o,
-                    high: data.h,
-                    low: data.l,
-                    last: data.c.toFixed(2),
-                    prevprice: data.pc,
-                    lastchange: data.d.toFixed(2),
-                    lastchangeprcnt: (
-                      ((data.c - data.pc) / data.pc) *
-                      100
-                    ).toFixed(2),
-                  },
-                  { where: { id: checkStock.id } },
-                );
-              }
-            } else {
+            if (checkStock.shortName === el) {
+              finnhubClient.companyProfile2(
+                { symbol: `${el}` },
+                async (error, data, response) => {
+                  await Stock.update(
+                    {
+                      shortName: data.name,
+                    },
+                    { where: { id: checkStock.id } },
+                  );
+                },
+              );
+            }
+            if (checkStock && checkStock.last !== data.c.toFixed(2)) {
+              await Stock.update(
+                {
+                  secid: `${el}`,
+                  type: 'Акция',
+                  open: data.o,
+                  high: data.h,
+                  low: data.l,
+                  last: data.c.toFixed(2),
+                  prevprice: data.pc,
+                  lastchange: data.d.toFixed(2),
+                  lastchangeprcnt: (
+                    ((data.c - data.pc) / data.pc) *
+                    100
+                  ).toFixed(2),
+                },
+                { where: { id: checkStock.id } },
+              );
+            } else if (!checkStock) {
               await Stock.create({
                 secid: `${el}`,
                 type: 'Акция',

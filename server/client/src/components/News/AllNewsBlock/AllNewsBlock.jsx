@@ -34,8 +34,7 @@ export default function AllNewsBlock({ spinner, Item }) {
     useEffect(() => {
       axios.get(`${process.env.REACT_APP_API_URL}api/rssnews`)
         .then((listFromRSS) => {
-          const { items } = listFromRSS.data
-          // console.log('====> RSS новости Finam', items)
+          const { items } = listFromRSS.dat
           if (items.length) {
             const sortedArray = sortedByPublishedDate(items)
             dispatch({ type: 'SET_ALL_NEWS', payload: sortedArray })
@@ -48,7 +47,6 @@ export default function AllNewsBlock({ spinner, Item }) {
   const combinedAndSortNews = (array1, array2) => {
     const concatArray = array1.concat(array2)
     const sortedArray = sortedByPublishedDate(concatArray)
-    // console.log(sortedArray)
     dispatch({ type: 'SET_NEWS_AND_YOUTUBE_TOGETHER', payload: sortedArray })
     setLoading(false)
   }

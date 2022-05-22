@@ -5,7 +5,6 @@ import ReactPlayer from 'react-player/lazy'
 
 export default function YoutubeBlock({ spinner, Item }) {
   const { loading, setLoading } = spinner
-  // Создам стейт для хранения данных, прилетающих с API. 
   const dispatch = useDispatch()
   const listFromChanelInvestFuture = useSelector(store => store.youtube)
 
