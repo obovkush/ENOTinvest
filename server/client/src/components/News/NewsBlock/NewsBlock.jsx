@@ -6,7 +6,6 @@ import { Box } from '@mui/system';
 export default function NewsBlock({ spinner, Item }) {
   
   const { loading, setLoading } = spinner
-  // Создам стейт для хранения данных, прилетающих с RSS ленты. 
   const listFromRSS = useSelector(store => store.news)
 
   return (

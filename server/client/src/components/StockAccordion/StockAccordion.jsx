@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import TextField from '@mui/material/TextField';
 import Checkbox from '@mui/material/Checkbox';
 import Diagram from '../Diagram/Diagram'
-import { Accordion, AccordionDetails, AccordionSummary, Typography, LinearProgress, Box, Grid, Link } from '@mui/material';
+import { Accordion, AccordionDetails, AccordionSummary, Typography, LinearProgress, Box, Grid } from '@mui/material';
 import AddTaskOutlinedIcon from '@mui/icons-material/AddTaskOutlined';
 import StraightOutlinedIcon from '@mui/icons-material/StraightOutlined';
 import { Badge } from 'antd';
@@ -45,16 +45,6 @@ function StockAccordion() {
       });
   }, []);
 
-  // Функция проверки значений (определеяем выросла цена или упала, от этого зависят стили)
-  const isGrow = (num) => num > 0;
-
-  const [currency, setCurrency] = useState('Все');
-  const [expanded, setExpanded] = useState(false);
-
-  const moneyChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setCurrency(event.target.value);
-  };
-
   // данные за 2 года
   // useEffect(() => {
   //   fetch('https://api.polygon.io/v2/aggs/ticker/AAPL/range/1/day/2020-06-01/2020-06-17?apiKey=MVOp2FJDsLDLqEmq1t6tYy8hXro8YgUh', {
@@ -83,7 +73,6 @@ function StockAccordion() {
         }
       });
   }
-
 
   const moneyChange = (event) => {
     setCurrency(event.target.value);
@@ -155,7 +144,7 @@ function StockAccordion() {
             return (
     <Accordion
             expanded={expanded === `panel${el.id}`}
-            onChange={handleChange(`panel${el.id}`)}
+            onChange={AccordionOpen(`panel${el.id}`)}
             key={el.secid}
             onClick={() => wikipediaSearch(el.secid)}
           >
@@ -196,26 +185,7 @@ function StockAccordion() {
                         color: `${el.lastchange > 0 ? 'green' : 'red'}`,
                       }}
                     >
-                      {el.lastchange > 0 ? (
-                        <>
-                          +
-                          {
-                            -(
-                              ((el.prevprice - el.last) / el.last) *
-                              100
-                            ).toFixed(2)
-                          }
-                          %
-                        </>
-                      ) : (
-                        <>
-                          -
-                          {(((el.prevprice - el.last) / el.last) * 100).toFixed(
-                            2,
-                          )}
-                          %
-                        </>
-                      )}
+                      {el.lastchangeprcnt}%
                     </Typography>
                   </AccordionSummary>
                 </Badge.Ribbon>
@@ -252,7 +222,7 @@ function StockAccordion() {
             return (
            <Accordion
             expanded={expanded === `panel${el.id}`}
-            onChange={handleChange(`panel${el.id}`)}
+            onChange={AccordionOpen(`panel${el.id}`)}
             key={el.secid}
             onClick={() => wikipediaSearch(el.secid)}
           >
@@ -293,26 +263,7 @@ function StockAccordion() {
                         color: `${el.lastchange > 0 ? 'green' : 'red'}`,
                       }}
                     >
-                      {el.lastchange > 0 ? (
-                        <>
-                          +
-                          {
-                            -(
-                              ((el.prevprice - el.last) / el.last) *
-                              100
-                            ).toFixed(2)
-                          }
-                          %
-                        </>
-                      ) : (
-                        <>
-                          -
-                          {(((el.prevprice - el.last) / el.last) * 100).toFixed(
-                            2,
-                          )}
-                          %
-                        </>
-                      )}
+                      {el.lastchangeprcnt}%
                     </Typography>
                   </AccordionSummary>
                 </Badge.Ribbon>

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import {
   Accordion,
   AccordionDetails,
@@ -29,6 +29,7 @@ export default function Worst() {
       .then(({ data }) => {  
         const filterStocks = data.sort((a, b) => a.lastchangeprcnt - b.lastchangeprcnt)
         setFilterStocks(filterStocks.slice(0, 5));
+        setLoading(false)
           });
   }, []);
 
@@ -79,18 +80,7 @@ export default function Worst() {
                     color: `${el.lastchange > 0 ? 'green' : 'red'}`,
                   }}
                 >
-                  {el.lastchange > 0 ? (
-                    <>
-                      +
-                      {-(((el.prevprice - el.last) / el.last) * 100).toFixed(2)}
-                      %
-                    </>
-                  ) : (
-                    <>
-                      -{(((el.prevprice - el.last) / el.last) * 100).toFixed(2)}
-                      %
-                    </>
-                  )}
+                  {el.lastchangeprcnt}%
                 </Typography>
               </AccordionSummary>
             </Badge.Ribbon>
