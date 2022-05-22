@@ -48,19 +48,6 @@ function StockAccordion() {
       });
   }, []);
 
-  const onAccordionClick = (tiker) => {
-    const todayOneYearAgo = new Date();
-    console.log(todayOneYearAgo);
-    // axios
-    // .get(`https://iss.moex.com/iss/history/engines/stock/markets/shares/sessions/total/boards/TQBR/securities/SBER.html?sort_order=desc&from=${todayOneYearAgo}`)
-    // .then(({ data }) => {
-    //   if (data.length) {
-    //     dispatch({ type: 'SET_ALL_STOCKS', payload: data });
-    //     setLoading(false);
-    //   }
-    // });
-  };
-
   // Функция проверки значений (определеяем выросла цена или упала, от этого зависят стили)
   const isGrow = (num) => num > 0;
 
@@ -104,7 +91,6 @@ function StockAccordion() {
               >
                 <AccordionSummary
                   expandIcon={<AddTaskOutlinedIcon />}
-                  onClick={onAccordionClick}
                   aria-controls={el.secid}
                   id={el.secid}
                   sx={{

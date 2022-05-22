@@ -1,6 +1,26 @@
-import React, { useState } from "react";
-import { Line } from "react-chartjs-2";
-import { Chart as ChartJS, LinearScale, CategoryScale, PointElement, LineElement } from "chart.js";
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
+import { Line } from 'react-chartjs-2';
+import {
+  Chart as ChartJS,
+  LinearScale,
+  CategoryScale,
+  PointElement,
+  LineElement,
+} from 'chart.js';
+
+function formatDateMinusYear(date) {
+  let month = String(date.getMonth() + 1);
+  let day = String(date.getDate());
+  const year = String(date.getFullYear() - 1); // отнимаем 1 год
+  if (month.length < 2) {
+    month = '0' + month;
+  }
+  if (day.length < 2) {
+    day = '0' + day;
+  }
+  return [year, month, day].join('-');
+}
 
 ChartJS.register(LinearScale, CategoryScale, PointElement, LineElement);
 
@@ -47,7 +67,7 @@ const options = {
       text: 'Chart.js Line Chart - Multi Axis',
     },
     legend: {
-      display: false
+      display: false,
     },
   },
   scales: {
@@ -58,17 +78,34 @@ const options = {
     },
   },
   backgroundColor: [
-    "rgba(75,192,192,1)",
-    "#ecf0f1",
-    "#50AF95",
-    "#f3ba2f",
-    "#2a71d0",
+    'rgba(75,192,192,1)',
+    '#ecf0f1',
+    '#50AF95',
+    '#f3ba2f',
+    '#2a71d0',
   ],
-  borderColor: "black",
+  borderColor: 'black',
   borderWidth: 1,
 };
 
 function Diagram() {
+  useEffect(() => {
+    const today = new Date();
+    const todayOneYearAgo = formatDateMinusYear(today);
+    console.log(todayOneYearAgo);
+    const base_URL = `https://iss.moex.com/iss/history/engines/stock/markets/shares/sessions/total/boards/TQBR/securities/SBER.json?from=${todayOneYearAgo}`;
+    console.log(base_URL);
+    axios
+      .get(base_URL)
+      .then((hystory) => hystory.json())
+      .then((hystory) =>
+        // if (hystory.length) {
+        // dispatch({ type: 'SET_ALL_STOCKS', payload: hystory });
+        // setLoading(false);
+        console.log(hystory),
+      );
+  }, []);
+
   const [userData, setUserData] = useState({
     labels: stockData.map((data) => data.date),
     datasets: [
@@ -84,7 +121,7 @@ function Diagram() {
         <Line options={options} data={userData} />
       </div>
     </>
-  )
+  );
 }
 
 export default Diagram;
