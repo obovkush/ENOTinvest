@@ -3,6 +3,19 @@
 const finnhub = require('finnhub');
 const { Stock } = require('../db/models');
 
+// задаем массив выборки акций
+const demoStocks = [
+  'ABRD',
+  'ALRS',
+  'GMKN',
+  'MTSS',
+  'OZON',
+  'SBER',
+  'SIBN',
+  'VKCO',
+  'YNDX',
+];
+
 class StockService {
   async updateStockFromMOEX(stocksData, securities, type = 'Акция') {
     const marketData = await stocksData.marketdata.data.filter((el) =>
