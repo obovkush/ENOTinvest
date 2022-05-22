@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 /* eslint-disable class-methods-use-this */
 const finnhub = require('finnhub');
 const { Stock } = require('../db/models');
@@ -60,58 +61,46 @@ class StockService {
       }
     });
 
-    const stocks = [
-      'NFLX',
-      'INTC',
-      'NVDA',
-      'AAPL',
-      'TWTR',
-      'DIS',
-      'AMZN',
-      'TSLA',
-    ];
+    try {
+      // Список акций за которыми будем следить
+      const stocks = [
+        'NFLX',
+        'INTC',
+        'NVDA',
+        'AAPL',
+        'TWTR',
+        'DIS',
+        'AMZN',
+        'TSLA',
+      ];
 
-    const { api_key } = finnhub.ApiClient.instance.authentications;
-    api_key.apiKey = 'ca28s8iad3iaqnc2om4g';
-    const finnhubClient = new finnhub.DefaultApi();
+      const { api_key } = finnhub.ApiClient.instance.authentications;
 
-    stocks.forEach((el) => {
-      finnhubClient.quote(`${el}`, async (error, data, response) => {
-        const checkStock = await Stock.findOne({
-          where: { secid: `${el}` },
-          row: true,
-        });
+      api_key.apiKey = 'ca28s8iad3iaqnc2om4g';
+      const finnhubClient = new finnhub.DefaultApi();
 
-        if (checkStock) {
-          if (data.c && data.c !== checkStock.last) {
-            await Stock.update(
-              {
-                secid: `${el}`,
-                type: 'Акция',
-                open: data.o,
-                high: data.h,
-                low: data.l,
-                last: data.c,
-                prevprice: data.pc,
-                lastchange: data.d,
-              },
-              { where: { id: checkStock.id } },
-            );
+  // finnhubClient.companyProfile2({'symbol': 'AAPL'}, (error, data, response) => {
+  //   console.log('🚨', data)
+  // });
+
+      stocks.forEach((el) => {
+        finnhubClient.quote(`${el}`, async (error, data) => {
+
+          const checkStock = await Stock.findOne({where: {secid: `${el}`},row: true});
+
+          if (checkStock) {
+            if (data.c !== checkStock.last) {
+              await Stock.update({ secid: `${el}`, type: 'Акция', open: data.o, high: data.h, low: data.l, last: data.c.toFixed(2),
+              prevprice: data.pc, lastchange: data.d.toFixed(2), lastchangeprcnt: ((data.c -  data.pc) /  data.pc * 100).toFixed(2) }, { where: { id: checkStock.id } });
+            }
+          } else {
+            await Stock.create({ secid: `${el}`, type: 'Акция', open: data.o, high: data.h, low: data.l, last: data.c.toFixed(2), prevprice: data.pc, lastchange: data.d.toFixed(2), lastchangeprcnt: ((data.c -  data.pc) /  data.pc * 100).toFixed(2) });
           }
-        } else {
-          await Stock.create({
-            secid: `${el}`,
-            type: 'Акция',
-            open: data.o,
-            high: data.h,
-            low: data.l,
-            course: data.c,
-            prevprice: data.pc,
-            difference: data.d,
-          });
-        }
-      });
-    });
+        });
+      })
+    } catch (error) {
+      console.log('stockservice =>', error);
+    }
   }
 
   async getAllStocksfromDB() {

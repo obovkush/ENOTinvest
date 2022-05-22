@@ -1,8 +1,6 @@
 /* eslint-disable class-methods-use-this */
 const fetch = require('node-fetch');
-
 const stockService = require('../service/stockservice');
-
 const ApiError = require('../exceptions/apiError');
 
 // задаем массив выборки русских акций
