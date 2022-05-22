@@ -2,30 +2,25 @@
 const finnhub = require('finnhub');
 const { Stock } = require('../db/models');
 
-// задаем массив выборки акций
-const demoStocks = [
-  'ABRD',
-  'ALRS',
-  'GMKN',
-  'OZON',
-  'SBER',
-  'SIBN',
-  'VKCO',
-  'MTSS',
-  'YNDX',
-];
-
 class StockService {
-  async updateStockFromMOEX(stocksData) {
-    const marketData = await stocksData.marketdata.data.filter((el) => demoStocks.includes(el[0]));
-    const securitiesData = await stocksData.securities.data.filter((el) => demoStocks.includes(el[0]));
+  async updateStockFromMOEX(stocksData, securities, type = 'Акция') {
+    const marketData = await stocksData.marketdata.data.filter((el) =>
+      securities.includes(el[0]),
+    );
+    const securitiesData = await stocksData.securities.data.filter((el) =>
+      securities.includes(el[0]),
+    );
 
-    demoStocks.forEach(async (tiker, index) => {
+    securities.forEach(async (tiker, index) => {
       if (marketData[index][12]) {
         const stockData = await Stock.findOne({
           where: { secid: tiker },
         });
-        if (stockData) {
+        if (stockData && marketData[index][12] !== stockData.last) {
+          console.log(
+            '============> Data differents',
+            marketData[index][12] !== stockData.last,
+          );
           await stockData.update({
             shortName: securitiesData[index][2],
             secName: securitiesData[index][9],
@@ -37,14 +32,15 @@ class StockService {
               marketData[index][12] - securitiesData[index][3]
             ).toFixed(2),
             lastchangeprcnt: (
-              ((marketData[index][12] - securitiesData[index][3]) * 100)
-              / marketData[index][12]
+              ((marketData[index][12] - securitiesData[index][3]) * 100) /
+              marketData[index][12]
             ).toFixed(2),
             prevprice: securitiesData[index][3],
           });
         } else {
-          await stockData.create({
+          await Stock.create({
             secid: tiker,
+            type,
             shortName: securitiesData[index][2],
             secName: securitiesData[index][9],
             open: marketData[index][9],
@@ -55,8 +51,8 @@ class StockService {
               marketData[index][12] - securitiesData[index][3]
             ).toFixed(2),
             lastchangeprcnt: (
-              ((marketData[index][12] - securitiesData[index][3]) * 100)
-              / marketData[index][12]
+              ((marketData[index][12] - securitiesData[index][3]) * 100) /
+              marketData[index][12]
             ).toFixed(2),
             prevprice: securitiesData[index][3],
           });
@@ -81,18 +77,41 @@ class StockService {
 
     stocks.forEach((el) => {
       finnhubClient.quote(`${el}`, async (error, data, response) => {
-        const checkStock = await Stock.findOne({where: {secid: `${el}`},row: true});
+        const checkStock = await Stock.findOne({
+          where: { secid: `${el}` },
+          row: true,
+        });
 
         if (checkStock) {
-          if (data.c !== checkStock.last) {
-            await Stock.update({ secid: `${el}`, type: 'Акция', open: data.o, high: data.h, low: data.l, last: data.c, prevprice: data.pc, lastchange: data.d }, { where: { id: checkStock.id } });
+          if (data.c && data.c !== checkStock.last) {
+            await Stock.update(
+              {
+                secid: `${el}`,
+                type: 'Акция',
+                open: data.o,
+                high: data.h,
+                low: data.l,
+                last: data.c,
+                prevprice: data.pc,
+                lastchange: data.d,
+              },
+              { where: { id: checkStock.id } },
+            );
           }
         } else {
-          await Stock.create({ secid: `${el}`, type: 'Акция', open: data.o, high: data.h, low: data.l, course: data.c, prevprice: data.pc, difference: data.d });
+          await Stock.create({
+            secid: `${el}`,
+            type: 'Акция',
+            open: data.o,
+            high: data.h,
+            low: data.l,
+            course: data.c,
+            prevprice: data.pc,
+            difference: data.d,
+          });
         }
       });
-    })
-
+    });
   }
 
   async getAllStocksfromDB() {
