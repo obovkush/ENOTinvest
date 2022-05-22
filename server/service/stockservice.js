@@ -105,7 +105,7 @@ class StockService {
               }
             } else {
               await Stock.create({
-                secid: `${el}`, type: 'Акция', open: data.o, high: data.h, low: data.l, last: data.c.toFixed(2), prevprice: data.pc, lastchange: data.d.toFixed(2), lastchangeprcnt: ((data.c - data.pc) / data.pc * 100).toFixed(2),
+                secid: `${el}`, type: 'Акция', shortName: `${el}`, open: data.o, high: data.h, low: data.l, last: data.c.toFixed(2), prevprice: data.pc, lastchange: data.d.toFixed(2), lastchangeprcnt: ((data.c - data.pc) / data.pc * 100).toFixed(2),
               });
             }
           });
