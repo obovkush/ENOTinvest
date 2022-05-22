@@ -95,15 +95,13 @@ function Diagram() {
     console.log(todayOneYearAgo);
     const base_URL = `https://iss.moex.com/iss/history/engines/stock/markets/shares/sessions/total/boards/TQBR/securities/SBER.json?from=${todayOneYearAgo}`;
     console.log(base_URL);
-    axios
-      .get(base_URL)
-      .then((hystory) => hystory.json())
-      .then((hystory) =>
-        // if (hystory.length) {
-        // dispatch({ type: 'SET_ALL_STOCKS', payload: hystory });
-        // setLoading(false);
-        console.log(hystory),
-      );
+    axios.get(base_URL).then((hystory) => hystory.json());
+    // .then((hystory) =>
+    // if (hystory.length) {
+    // dispatch({ type: 'SET_ALL_STOCKS', payload: hystory });
+    // setLoading(false);
+    //   console.log(hystory),
+    // );
   }, []);
 
   const [userData, setUserData] = useState({
