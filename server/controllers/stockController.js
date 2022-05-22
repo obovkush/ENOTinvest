@@ -5,8 +5,6 @@ const stockService = require('../service/stockservice');
 
 const ApiError = require('../exceptions/apiError');
 
-
-
 class StockController {
   async getRuStocksFromMOEX() {
     try {

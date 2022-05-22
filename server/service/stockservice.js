@@ -7,11 +7,11 @@ const demoStocks = [
   'ABRD',
   'ALRS',
   'GMKN',
+  'MTSS',
   'OZON',
   'SBER',
   'SIBN',
   'VKCO',
-  'MTSS',
   'YNDX',
 ];
 
