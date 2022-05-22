@@ -3,49 +3,47 @@
 const finnhub = require('finnhub');
 const { Stock } = require('../db/models');
 
-// задаем массив выборки акций
-const demoStocks = [
-  'ABRD',
-  'ALRS',
-  'GMKN',
-  'OZON',
-  'SBER',
-  'SIBN',
-  'VKCO',
-  'MTSS',
-  'YNDX',
-];
-
 class StockService {
-  async updateStockFromMOEX(stocksData) {
-    const marketData = await stocksData.marketdata.data.filter((el) => demoStocks.includes(el[0]));
-    const securitiesData = await stocksData.securities.data.filter((el) => demoStocks.includes(el[0]));
+  async updateStockFromMOEX(stocksData, securities, type = 'Акция') {
+    const marketData = await stocksData.marketdata.data.filter((el) =>
+      securities.includes(el[0]),
+    );
+    const securitiesData = await stocksData.securities.data.filter((el) =>
+      securities.includes(el[0]),
+    );
 
-    demoStocks.forEach(async (tiker, index) => {
+    securities.forEach(async (tiker, index) => {
       if (marketData[index][12]) {
         const stockData = await Stock.findOne({
           where: { secid: tiker },
         });
         if (stockData) {
-          await stockData.update({
-            shortName: securitiesData[index][2],
-            secName: securitiesData[index][9],
-            open: marketData[index][9],
-            low: marketData[index][10],
-            high: marketData[index][11],
-            last: marketData[index][12],
-            lastchange: (
-              marketData[index][12] - securitiesData[index][3]
-            ).toFixed(2),
-            lastchangeprcnt: (
-              ((marketData[index][12] - securitiesData[index][3]) * 100)
-              / marketData[index][12]
-            ).toFixed(2),
-            prevprice: securitiesData[index][3],
-          });
+          console.log(
+            '============> Data differents',
+            marketData[index][12] !== stockData.last,
+          );
+          if (marketData[index][12] !== stockData.last) {
+            await stockData.update({
+              shortName: securitiesData[index][2],
+              secName: securitiesData[index][9],
+              open: marketData[index][9],
+              low: marketData[index][10],
+              high: marketData[index][11],
+              last: marketData[index][12],
+              lastchange: (
+                marketData[index][12] - securitiesData[index][3]
+              ).toFixed(2),
+              lastchangeprcnt: (
+                ((marketData[index][12] - securitiesData[index][3]) * 100) /
+                marketData[index][12]
+              ).toFixed(2),
+              prevprice: securitiesData[index][3],
+            });
+          }
         } else {
-          await stockData.create({
+          await Stock.create({
             secid: tiker,
+            type,
             shortName: securitiesData[index][2],
             secName: securitiesData[index][9],
             open: marketData[index][9],
@@ -56,8 +54,8 @@ class StockService {
               marketData[index][12] - securitiesData[index][3]
             ).toFixed(2),
             lastchangeprcnt: (
-              ((marketData[index][12] - securitiesData[index][3]) * 100)
-              / marketData[index][12]
+              ((marketData[index][12] - securitiesData[index][3]) * 100) /
+              marketData[index][12]
             ).toFixed(2),
             prevprice: securitiesData[index][3],
           });
@@ -83,25 +81,54 @@ class StockService {
       api_key.apiKey = 'ca28s8iad3iaqnc2om4g';
       const finnhubClient = new finnhub.DefaultApi();
 
-  // finnhubClient.companyProfile2({'symbol': 'AAPL'}, (error, data, response) => {
-  //   console.log('🚨', data)
-  // });
-  
+      // finnhubClient.companyProfile2({'symbol': 'AAPL'}, (error, data, response) => {
+      //   console.log('🚨', data)
+      // });
+
       stocks.forEach((el) => {
         finnhubClient.quote(`${el}`, async (error, data) => {
+          const checkStock = await Stock.findOne({
+            where: { secid: `${el}` },
+            row: true,
+          });
 
-          const checkStock = await Stock.findOne({where: {secid: `${el}`},row: true});
-  
           if (checkStock) {
             if (data.c !== checkStock.last) {
-              await Stock.update({ secid: `${el}`, type: 'Акция', open: data.o, high: data.h, low: data.l, last: data.c.toFixed(2), 
-              prevprice: data.pc, lastchange: data.d.toFixed(2), lastchangeprcnt: ((data.c -  data.pc) /  data.pc * 100).toFixed(2) }, { where: { id: checkStock.id } });
+              await Stock.update(
+                {
+                  secid: `${el}`,
+                  type: 'Акция',
+                  open: data.o,
+                  high: data.h,
+                  low: data.l,
+                  last: data.c.toFixed(2),
+                  prevprice: data.pc,
+                  lastchange: data.d.toFixed(2),
+                  lastchangeprcnt: (
+                    ((data.c - data.pc) / data.pc) *
+                    100
+                  ).toFixed(2),
+                },
+                { where: { id: checkStock.id } },
+              );
             }
           } else {
-            await Stock.create({ secid: `${el}`, type: 'Акция', open: data.o, high: data.h, low: data.l, last: data.c.toFixed(2), prevprice: data.pc, lastchange: data.d.toFixed(2), lastchangeprcnt: ((data.c -  data.pc) /  data.pc * 100).toFixed(2) });
-          } 
+            await Stock.create({
+              secid: `${el}`,
+              type: 'Акция',
+              open: data.o,
+              high: data.h,
+              low: data.l,
+              last: data.c.toFixed(2),
+              prevprice: data.pc,
+              lastchange: data.d.toFixed(2),
+              lastchangeprcnt: (((data.c - data.pc) / data.pc) * 100).toFixed(
+                2,
+              ),
+            });
+          }
         });
-      })
+      });
     } catch (error) {
       console.log('stockservice =>', error);
     }

@@ -3,6 +3,22 @@ const fetch = require('node-fetch');
 const stockService = require('../service/stockservice');
 const ApiError = require('../exceptions/apiError');
 
+// задаем массив выборки русских акций
+const demoStocks = [
+  'ABRD',
+  'ALRS',
+  'GMKN',
+  'MTSS',
+  'OZON',
+  'SBER',
+  'SIBN',
+  'VKCO',
+  'YNDX',
+];
+
+// задаем массив выборки фондов
+const demoFunds = ['TBIO', 'TGLD', 'TMOS'];
+
 class StockController {
   async getRuStocksFromMOEX() {
     try {
@@ -10,7 +26,19 @@ class StockController {
         'https://iss.moex.com/iss/engines/stock/markets/shares/boards/TQBR/securities.json',
       );
       const stocksData = await data.json();
-      stockService.updateStockFromMOEX(stocksData);
+      stockService.updateStockFromMOEX(stocksData, demoStocks);
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  async getRuFundsFromMOEX() {
+    try {
+      const data = await fetch(
+        'https://iss.moex.com/iss/engines/stock/markets/shares/boards/TQTF/securities.json',
+      );
+      const fundsData = await data.json();
+      stockService.updateStockFromMOEX(fundsData, demoFunds, 'Фонд');
     } catch (err) {
       console.log(err);
     }
@@ -18,10 +46,8 @@ class StockController {
 
   async getAllStocksfromDB(req, res) {
     try {
-      
       const allStocks = await stockService.getAllStocksfromDB();
       return res.json(allStocks);
-
     } catch (err) {
       if (err instanceof ApiError) {
         return res.status(err.status).send({
