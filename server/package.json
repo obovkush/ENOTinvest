@@ -22,6 +22,7 @@
     "express": "^4.17.3",
     "express-validator": "^6.14.0",
     "finnhub": "^1.2.14",
+    "google-it": "^1.6.2",
     "jsonwebtoken": "^8.5.1",
     "jwt-decode": "^3.1.2",
     "node-fetch": "^2.6.1",
@@ -31,7 +32,8 @@
     "rss-parser": "^3.12.0",
     "rss-to-json": "^2.0.2",
     "sequelize": "^6.17.0",
-    "uuid": "^8.3.2"
+    "uuid": "^8.3.2",
+    "wikijs": "^6.3.3"
   },
   "devDependencies": {
     "concurrently": "^7.1.0",

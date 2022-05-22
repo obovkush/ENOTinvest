@@ -5,4 +5,5 @@ export const initState = {
   news: [],
   youtube: [],
   allNews: [],
+  wikipediaUrl: '',
 };

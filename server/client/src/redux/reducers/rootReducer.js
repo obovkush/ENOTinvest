@@ -5,6 +5,7 @@ import { userInputsReducer } from './userInputsReducer';
 import { youtubeReducer } from './youtubeReducer';
 import { newsReducer } from './newsReducer';
 import { allNewsReducer } from './allNewsReducer';
+import { wikipediaUrlReducer } from './wikipediaUrlReducer'
 
 export const rootReducer = combineReducers({
   stocks: stocksReducer,
@@ -13,4 +14,5 @@ export const rootReducer = combineReducers({
   youtube: youtubeReducer,
   news: newsReducer,
   allNews: allNewsReducer,
+  wikipediaUrl: wikipediaUrlReducer,
 });
