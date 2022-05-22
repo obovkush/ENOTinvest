@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
 import Diagram from '../Diagram/Diagram'
-import { Accordion, AccordionDetails, AccordionSummary, Typography, LinearProgress, Box, Grid } from '@mui/material';
+import { Accordion, AccordionDetails, AccordionSummary, Typography, LinearProgress, Box, Grid, Link } from '@mui/material';
 import AddTaskOutlinedIcon from '@mui/icons-material/AddTaskOutlined';
 import StraightOutlinedIcon from '@mui/icons-material/StraightOutlined';
 import { Badge } from 'antd';
@@ -25,6 +25,7 @@ const currencies = [
 function StockAccordion() {
   const dispatch = useDispatch();
   const stocks = useSelector((state) => state.stocks);
+  const wikiLink = useSelector((state) => state.wikipediaUrl)
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -41,7 +42,7 @@ function StockAccordion() {
   // Функция проверки значений (определеяем выросла цена или упала, от этого зависят стили)
   const isGrow = (num) => num > 0;
 
-  const [currency, setCurrency] = React.useState('Все');
+  const [currency, setCurrency] = useState('Все');
   const [expanded, setExpanded] = useState(false);
 
   const moneyChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -70,11 +71,10 @@ function StockAccordion() {
         secid: elem,
       })
       .then((data) => {
-        console.log(data)
-        // if (data.length) {
-        //   dispatch({ type: 'SET_ALL_STOCKS', payload: data });
-        //   setLoading(false);
-        // }
+        if (data.data) {
+          dispatch({ type: 'SET_LINK_OF_WIKIPEDIA', payload: data.data });
+          setLoading(false);
+        }
       });
   }
 
@@ -149,11 +149,7 @@ function StockAccordion() {
 
                 <Grid item xs={12}>
                   <Typography>
-                    Информация о компании
-                  </Typography>
-                  <br />
-                  <Typography sx={{ fontSize: 12 }}>
-                    ПАО Сберба́нк — российский финансовый конгломерат, крупнейший универсальный банк России и Восточной Европы. По итогам 2019 года у Сбербанка 96,2 миллионов активных частных клиентов и 2,6 миллиона активных корпоративных клиентов. Среди крупнейших банков мира по размеру активов находится в восьмом десятке. Включён Банком России в перечень системно значимых кредитных организаций. Владельцем 50 % плюс 1 акция ПАО «Сбербанк» является Фонд национального благосостояния России, контролируемый Правительством России, остальные акции находятся в публичном обращении. Рыночная капитализация на август 2021 года составляла 7,3 триллиона рублей. В 2021 году ценность бренда Сбербанка выросла до 730,6 миллиардов рублей. С 2017 года Сбербанк удерживает первую позицию в рейтинге наиболее дорогих брендов в России, который составляет компания Brand Finance. Сбербанк — самый востребованный банк среди розничных клиентов, его услугами пользуется большинство жителей России, его объёмы розничного бизнеса в несколько раз больше ближайшего конкурента — «Банка ВТБ».
+                    <a href={wikiLink}>Информация о компании на Wikipedia</a>
                   </Typography>
                 </Grid>
 

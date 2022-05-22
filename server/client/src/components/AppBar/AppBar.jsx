@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useLocation, Outlet } from 'react-router-dom';
-import Sidebar from '../Sidebar/Sidebar';
 
 import { logout } from '../../api/userAPI';
 import { HOME_ROUTE, SIGNIN_ROUTE, SIGNUP_ROUTE } from '../../utils/consts';
@@ -48,7 +47,6 @@ export default function MenuAppBar() {
 
   return (
     <>
-      <Sidebar/>
       <Outlet/>
     </>
   );
