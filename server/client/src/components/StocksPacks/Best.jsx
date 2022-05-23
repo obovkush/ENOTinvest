@@ -12,6 +12,7 @@ import AddTaskOutlinedIcon from '@mui/icons-material/AddTaskOutlined';
 import StraightOutlinedIcon from '@mui/icons-material/StraightOutlined';
 import { Badge } from 'antd';
 import axios from 'axios';
+import DetailsOfAccordion from '../StockAccordion/DetailsOfAccordion';
 
 export default function Best() {
   const [loading, setLoading] = useState(true);
@@ -84,9 +85,7 @@ export default function Best() {
                 </Typography>
               </AccordionSummary>
             </Badge.Ribbon>
-            <AccordionDetails>
-              <Typography>Здесь будет график</Typography>
-            </AccordionDetails>
+            <DetailsOfAccordion />
           </Accordion>
         );
       })}
