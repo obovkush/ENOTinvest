@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import axios from 'axios';
 import { Box } from '@mui/system';
 import ReactPlayer from 'react-player';
+import logo from '/home/falcon/elbrus/final/ENOTinvest/server/client/src/components/Drawer/logo.png'
 
 export default function AllNewsBlock({ spinner, Item }) {
 
@@ -116,7 +117,7 @@ export default function AllNewsBlock({ spinner, Item }) {
                   <a href={elem.link} className="elem-link" style={{ marginRight: 5 }} target="_blank" rel="noopener noreferrer">
                     {elem.title}
                   </a>
-                  <img src={elem.enclosure?.url} style={{ width: 120, objectFit: 'contain' }} alt="" />
+                  <img src={elem.enclosure?.url || logo } style={{ width: 120, objectFit: 'contain' }} alt="" />
                 </Item>
                 )
               } else {

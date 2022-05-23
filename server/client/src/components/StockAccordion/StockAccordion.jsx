@@ -37,6 +37,7 @@ const currencies = [
 function StockAccordion() {
   const dispatch = useDispatch();
   const stocks = useSelector((state) => state.stocks);
+  const allNews = useSelector((state) => state.allNews)
   const [filterStocks, setFilterStocks] = useState(stocks);
   const [loading, setLoading] = useState(true);
   const [checked, setChecked] = useState(false);
@@ -89,6 +90,16 @@ function StockAccordion() {
         }
       });
   };
+
+  const newsContentSearch = (elemName) => {
+    const splitName = elemName.split(' ')[0]
+    const lowerCaseName = splitName.toLowerCase();
+    const upperCaseName = splitName.toUpperCase();
+    const arrayOfNews = [...allNews]
+    const companyNews = arrayOfNews.filter((elem) => elem.title.includes(splitName || lowerCaseName || upperCaseName) || elem.content?.includes(splitName || lowerCaseName || upperCaseName));
+    console.log(companyNews)
+    dispatch({ type: 'NEWS_OF_CURRENT_COMPANY', payload: companyNews });
+  }
 
   const moneyChange = (event) => {
     setCurrency(event.target.value);
@@ -211,7 +222,7 @@ function StockAccordion() {
     },
     [diagramLoading, dispatch],
   );
-  console.log('==========> diagramLoading', diagramLoading);
+  // console.log('==========> diagramLoading', diagramLoading);
   // console.log('==========> history', history);
 
   return (
@@ -259,6 +270,7 @@ function StockAccordion() {
                 onClick={() => {
                   wikipediaSearch(el.secid);
                   hystoriCal(el.secid);
+                  newsContentSearch(el.shortName);
                   historicalData(el.secid, el.currency);
                 }}
               >

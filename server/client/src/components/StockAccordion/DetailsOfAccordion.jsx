@@ -2,6 +2,7 @@ import { AccordionDetails, Grid, Typography } from '@mui/material'
 import React from 'react'
 import { useSelector } from 'react-redux';
 import Diagram from '../Diagram/Diagram';
+import OneCompanyNews from './OneCompanyNews/OneCompanyNews';
 
 export default function DetailsOfAccordion() {
 
@@ -25,7 +26,8 @@ export default function DetailsOfAccordion() {
           <Diagram />
         </Grid>
         <Grid item xs={12}>
-          <Typography>Главные новости</Typography>
+          <Typography>Новости компании:</Typography>
+          <OneCompanyNews />
         </Grid>
         <Grid item xs={12}>
           <Typography>
