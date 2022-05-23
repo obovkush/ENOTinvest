@@ -18,6 +18,7 @@ import StraightOutlinedIcon from '@mui/icons-material/StraightOutlined';
 import { Badge } from 'antd';
 import DetailsOfAccordion from './DetailsOfAccordion';
 
+
 const currencies = [
   {
     value: 'Все',
@@ -42,6 +43,23 @@ function StockAccordion() {
   const [currency, setCurrency] = useState('Все');
   const [expanded, setExpanded] = useState(false);
 
+  const historicalData = (key, currency) => {
+    if (currency === "USD") {
+      console.log('Здесь будет api/stocks/USD history');
+      // fetch(`https://api.polygon.io/v2/aggs/ticker/${key}/range/1/day/2020-05-20/2022-05-20?apiKey=MVOp2FJDsLDLqEmq1t6tYy8hXro8YgUh`, {
+      //   method: 'GET',
+      //   headers: { 'Content-Type': 'application/json' },
+      // }).then((res) => res.json())
+      //   .then((data) => {
+      //     dispatch({ type: 'HISTORY_USD', payload: data.results });
+      //   })
+      //   .catch((err) => console.log('stocks GET =>', err));
+    } else {
+      console.log('Здесь будет api/stocks/RU history');
+    }
+}
+
+
   useEffect(() => {
     axios
       .get(`${process.env.REACT_APP_API_URL}api/stocks/ru`)
@@ -52,18 +70,6 @@ function StockAccordion() {
         }
       });
   }, []);
-
-  // данные за 2 года
-  // useEffect(() => {
-  //   fetch('https://api.polygon.io/v2/aggs/ticker/AAPL/range/1/day/2020-06-01/2020-06-17?apiKey=MVOp2FJDsLDLqEmq1t6tYy8hXro8YgUh', {
-  //     method: 'GET',
-  //     headers: { 'Content-Type': 'application/json' },
-  //   }).then((res) => res.json())
-  //     .then((data) => {
-  //       console.log(data.results);
-  //     })
-  //     .catch((err) => console.log('stocks GET =>', err));
-  // });
 
   const AccordionOpen = (panel) => (event, isExpanded) => {
     setExpanded(isExpanded ? panel : false);
@@ -251,6 +257,7 @@ function StockAccordion() {
                 onClick={() => {
                   wikipediaSearch(el.secid);
                   hystoriCal(el.secid);
+                  historicalData(el.secid, el.currency);
                 }}
               >
                 <Badge.Ribbon
@@ -305,6 +312,7 @@ function StockAccordion() {
                 onClick={() => {
                   wikipediaSearch(el.secid);
                   hystoriCal(el.secid);
+                  historicalData(el.secid, el.currency);
                 }}
               >
                 <Badge.Ribbon
