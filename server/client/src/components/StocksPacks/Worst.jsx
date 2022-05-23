@@ -29,7 +29,7 @@ export default function Worst() {
       .then(({ data }) => {  
         const filterStocks = data.sort((a, b) => a.lastchangeprcnt - b.lastchangeprcnt)
         setFilterStocks(filterStocks.slice(0, 5));
-        setLoading(false)
+        setLoading(false);
           });
   }, []);
 
