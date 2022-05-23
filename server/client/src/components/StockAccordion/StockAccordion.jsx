@@ -36,6 +36,7 @@ const currencies = [
 function StockAccordion() {
   const dispatch = useDispatch();
   const stocks = useSelector((state) => state.stocks);
+  const allNews = useSelector((state) => state.allNews)
   const [filterStocks, setFilterStocks] = useState(stocks);
   const [loading, setLoading] = useState(true);
   const [checked, setChecked] = useState(false);
@@ -81,6 +82,16 @@ function StockAccordion() {
         }
       });
   };
+
+  const newsContentSearch = (elemName) => {
+    const splitName = elemName.split(' ')[0]
+    const lowerCaseName = splitName.toLowerCase();
+    const upperCaseName = splitName.toUpperCase();
+    const arrayOfNews = [...allNews]
+    const companyNews = arrayOfNews.filter((elem) => elem.title.includes(splitName || lowerCaseName || upperCaseName) || elem.content?.includes(splitName || lowerCaseName || upperCaseName));
+    console.log(companyNews)
+    dispatch({ type: 'NEWS_OF_CURRENT_COMPANY', payload: companyNews });
+  }
 
   const moneyChange = (event) => {
     setCurrency(event.target.value);
@@ -134,9 +145,9 @@ function StockAccordion() {
       if (!diagramLoading) {
         const today = new Date();
         const todayOneYearAgo = formatDateMinusYear(today);
-        console.log('==========> todayOneYearAgo', todayOneYearAgo);
+        // console.log('==========> todayOneYearAgo', todayOneYearAgo);
         const base_URL = `https://iss.moex.com/iss/history/engines/stock/markets/shares/sessions/total/boards/TQBR/securities/${key}.json?from=${todayOneYearAgo}`;
-        console.log(base_URL);
+        // console.log(base_URL);
         axios
           .get(base_URL)
           .then((history) => {
@@ -160,7 +171,7 @@ function StockAccordion() {
     },
     [diagramLoading, dispatch],
   );
-  console.log('==========> diagramLoading', diagramLoading);
+  // console.log('==========> diagramLoading', diagramLoading);
   // console.log('==========> history', history);
   return (
     <>
@@ -207,6 +218,7 @@ function StockAccordion() {
                 onClick={() => {
                   wikipediaSearch(el.secid);
                   hystoriCal(el.secid);
+                  newsContentSearch(el.shortName);
                 }}
               >
                 <Badge.Ribbon

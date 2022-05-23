@@ -7,4 +7,5 @@ export const initState = {
   youtube: [],
   allNews: [],
   wikipediaUrl: '',
+  companyNews: [],
 };

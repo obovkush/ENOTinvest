@@ -98,7 +98,7 @@ export default function FullWidthTabs() {
         id="custom_scroll"
         sx={{
           bgcolor: 'background.paper',
-          height: '93%',
+          height: '95%',
           overflowY: 'auto',
         }}
       >

@@ -86,7 +86,7 @@ const options = {
 
 function Diagram() {
   const stockData = useSelector((store) => store.history);
-  console.log('==========> history', stockData);
+  // console.log('==========> history', stockData);
   const userData = {
     labels: stockData.map((data) => data.date),
     datasets: [

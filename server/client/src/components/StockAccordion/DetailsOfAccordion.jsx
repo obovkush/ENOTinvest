@@ -26,7 +26,7 @@ export default function DetailsOfAccordion() {
           <Diagram />
         </Grid>
         <Grid item xs={12}>
-          <Typography>Главные новости</Typography>
+          <Typography>Новости компании:</Typography>
           <OneCompanyNews />
         </Grid>
         <Grid item xs={12}>
