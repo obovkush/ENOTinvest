@@ -18,6 +18,7 @@ import StraightOutlinedIcon from '@mui/icons-material/StraightOutlined';
 import { Badge } from 'antd';
 import DetailsOfAccordion from './DetailsOfAccordion';
 
+
 const currencies = [
   {
     value: 'Все',
