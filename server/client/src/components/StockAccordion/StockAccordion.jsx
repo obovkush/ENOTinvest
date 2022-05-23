@@ -44,16 +44,18 @@ function StockAccordion() {
   const [expanded, setExpanded] = useState(false);
 
   const historicalData = (key, currency) => {
-    if (currency === "USD") {
-      console.log('Здесь будет api/stocks/USD history');
-      // fetch(`https://api.polygon.io/v2/aggs/ticker/${key}/range/1/day/2020-05-20/2022-05-20?apiKey=MVOp2FJDsLDLqEmq1t6tYy8hXro8YgUh`, {
-      //   method: 'GET',
-      //   headers: { 'Content-Type': 'application/json' },
-      // }).then((res) => res.json())
-      //   .then((data) => {
-      //     dispatch({ type: 'HISTORY_USD', payload: data.results });
-      //   })
-      //   .catch((err) => console.log('stocks GET =>', err));
+    if (currency === 'USD') {
+      // setTimeout(() => {
+      //   console.log('Здесь будет api/stocks/USD history');
+      //   fetch(`https://api.polygon.io/v2/aggs/ticker/${key}/range/1/day/2020-05-20/2022-05-20?apiKey=MVOp2FJDsLDLqEmq1t6tYy8hXro8YgUh`, {
+      //     method: 'GET',
+      //     headers: { 'Content-Type': 'application/json' },
+      //   }).then((res) => res.json())
+      //     .then((data) => {
+      //       dispatch({ type: 'HISTORY_USD', payload: data.results });
+      //     })
+      //     .catch((err) => console.log('stocks GET =>', err));
+      // }, 10000);
     } else {
       console.log('Здесь будет api/stocks/RU history');
     }
