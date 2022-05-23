@@ -84,7 +84,6 @@ class StockService {
       const finnhubClient = new finnhub.DefaultApi();
 
       setInterval(() => {
-        // console.log('🚨');
         stocks.forEach((el) => {
           finnhubClient.quote(`${el}`, async (error, data, response) => {
             const checkStock = await Stock.findOne({ where: { secid: `${el}` }, row: true });
@@ -104,6 +103,7 @@ class StockService {
                 },
                 { where: { id: checkStock.id } },
               );
+              }
             } else {
               await Stock.create({
                 secid: `${el}`,
@@ -120,9 +120,9 @@ class StockService {
                 await Stock.update({ shortName: data.name, currency: data.currency }, { where: { shortName: `${el}` } });
               });
             }
-        }});
         });
-      }, 600 * 1000);
+        });
+      }, 30 * 1000);
     } catch (error) {
       console.log('stockservice ENG =>', error);
     }
