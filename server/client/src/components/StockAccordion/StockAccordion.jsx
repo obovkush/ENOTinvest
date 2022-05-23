@@ -1,16 +1,20 @@
 import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import { useDispatch, useSelector } from 'react-redux';
+import TextField from '@mui/material/TextField';
+import Checkbox from '@mui/material/Checkbox';
+import Diagram from '../Diagram/Diagram';
 import {
   Accordion,
   AccordionDetails,
   AccordionSummary,
   Typography,
-  Button,
+  LinearProgress,
+  Box,
+  Grid,
 } from '@mui/material';
 import AddTaskOutlinedIcon from '@mui/icons-material/AddTaskOutlined';
 import StraightOutlinedIcon from '@mui/icons-material/StraightOutlined';
-import TextField from '@mui/material/TextField';
-import MenuItem from '@mui/material/MenuItem';
-
 import { Badge } from 'antd';
 
 const currencies = [
@@ -26,66 +30,30 @@ const currencies = [
     value: 'EUR',
     label: '€',
   },
-
 ];
 
 function StockAccordion() {
-  const [stocksData, setStocksData] = useState({});
-
-  // useEffect(() => {
-  //   !stocksData.securities &&
-  //     fetch(
-  //       `https://iss.moex.com/iss/engines/stock/markets/shares/boards/TQBR/securities.json`,
-  //     )
-  //       .then((data) => data.json())
-  //       .then((data) => setStocksData(data));
-  // }, [stocksData]);
-  useEffect(() => {
-    fetch(`http://localhost:5000/api/stocks/stocksRU`, {
-      method: 'GET',
-      withCredentials: true,
-      headers: { 'Content-Type': 'application/json' },
-    })
-      .then((data) => data.json())
-      .then((data) => setStocksData(data));
-  }, []);
-  console.log(stocksData);
-
-  // let filterMarketData;
-  // if (stocksData.marketdata) {
-  //   filterMarketData = stocksData.marketdata.data.filter((el) =>
-  //     demoStocks.includes(el[0]),
-  //   );
-  // }
-  // let filterSecurities;
-  // if (stocksData.securities) {
-  //   filterSecurities = stocksData.securities.data.filter((el) =>
-  //     demoStocks.includes(el[0]),
-  //   );
-  // }
-  // console.log(filterMarketData);
-  // console.log(filterSecurities);
-
-  // const oneStockMarketData = filterMarketData[0] || [];
-  // const oneStockSecurities = stocksData?.securities?.data[0] || [];
-  // const tiker = oneStockSecurities[0] || 'нет данных';
-  // const companyName = oneStockSecurities[2] || 'нет данных';
-  // const currentPrice = oneStockMarketData[12] || 'нет данных';
-  // const prevPrice = oneStockSecurities[3] || 'нет данных';
-  // const diffPrice = Number(currentPrice) - Number(prevPrice) || 'нет данных';
-  // const diffPercent =
-  //   ((diffPrice / prevPrice) * 100).toFixed(2) || 'нет данных';
-
-  // let isGrow = diffPrice > 0 ? true : false;
-
-  const [currency, setCurrency] = React.useState('Все');
+  const dispatch = useDispatch();
+  const stocks = useSelector((state) => state.stocks);
+  const [filterStocks, setFilterStocks] = useState(stocks);
+  const wikiLink = useSelector((state) => state.wikipediaUrl);
+  const [loading, setLoading] = useState(true);
+  const [checked, setChecked] = useState(false);
+  const [currency, setCurrency] = useState('Все');
   const [expanded, setExpanded] = useState(false);
-  const [fullStocksENG, setStocksENG] = useState('');
 
-  const moneyChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setCurrency(event.target.value);
-  };
+  useEffect(() => {
+    axios
+      .get(`${process.env.REACT_APP_API_URL}api/stocks/ru`)
+      .then(({ data }) => {
+        if (data.length) {
+          dispatch({ type: 'SET_ALL_STOCKS', payload: data });
+          setLoading(false);
+        }
+      });
+  }, []);
 
+  // данные за 2 года
   // useEffect(() => {
   //   fetch('https://api.polygon.io/v2/aggs/ticker/AAPL/range/1/day/2020-06-01/2020-06-17?apiKey=MVOp2FJDsLDLqEmq1t6tYy8hXro8YgUh', {
   //     method: 'GET',
@@ -97,223 +65,306 @@ function StockAccordion() {
   //     .catch((err) => console.log('stocks GET =>', err));
   // });
 
-  useEffect(() => {
-    fetch('http://localhost:5000/api/stocks/stocksENG', {
-      method: 'GET',
-      // withCredentials: true,
-      headers: { 'Content-Type': 'application/json' },
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        console.log(data);
-        setStocksENG(data);
-      })
-      .catch((err) => console.log('stocks GET =>', err));
-  }, []);
-
-  const handleChange = (panel) => (event, isExpanded) => {
+  const AccordionOpen = (panel) => (event, isExpanded) => {
     setExpanded(isExpanded ? panel : false);
   };
 
+  const wikipediaSearch = (elem) => {
+    axios
+      .post(`${process.env.REACT_APP_API_URL}api/wikipedia`, {
+        secid: elem,
+      })
+      .then((data) => {
+        if (data.data) {
+          dispatch({ type: 'SET_LINK_OF_WIKIPEDIA', payload: data.data });
+          setLoading(false);
+        }
+      });
+  };
+
+  const moneyChange = (event) => {
+    setCurrency(event.target.value);
+    if (currency === '$' || currency === '€') {
+      const filtrstocks = stocks.filter((el) => el.value === currency);
+      setFilterStocks(filtrstocks);
+    } else {
+      setFilterStocks(stocks);
+    }
+  };
+
+  const searchStock = (event) => {
+    const filtrstocks = stocks.filter(
+      (el) =>
+        el.secid.slice(0, event.target.value.length) ===
+          event.target.value.toUpperCase() ||
+        el.shortName.slice(0, event.target.value.length).toLowerCase() ===
+          event.target.value.toLowerCase(),
+    );
+    setFilterStocks(filtrstocks);
+  };
+
+  const FondsCheck = (event) => {
+    setChecked(event.target.checked);
+    if (checked === false) {
+      const filtrstocks = stocks.filter((el) => el.type === 'Фонд');
+      setFilterStocks(filtrstocks);
+    } else {
+      setFilterStocks(stocks);
+    }
+  };
+  function formatDateMinusYear(date) {
+    let month = String(date.getMonth() + 1);
+    let day = String(date.getDate());
+    const year = String(date.getFullYear() - 1); // отнимаем 1 год
+    if (month.length < 2) {
+      month = '0' + month;
+    }
+    if (day.length < 2) {
+      day = '0' + day;
+    }
+    return [year, month, day].join('-');
+  }
+
+  const [diagramLoading, setDiagramLoading] = useState(false);
+  const history = useSelector((store) => store.history);
+
+  const hystoriCal = React.useCallback(
+    (key) => {
+      setDiagramLoading(!diagramLoading);
+      if (!diagramLoading) {
+        const today = new Date();
+        const todayOneYearAgo = formatDateMinusYear(today);
+        console.log('==========> todayOneYearAgo', todayOneYearAgo);
+        const base_URL = `https://iss.moex.com/iss/history/engines/stock/markets/shares/sessions/total/boards/TQBR/securities/${key}.json?from=${todayOneYearAgo}`;
+        console.log(base_URL);
+        axios
+          .get(base_URL)
+          .then((history) => {
+            return history.data.history.data.map((el, i) => {
+              return {
+                id: i + 1,
+                shortName: el[2],
+                date: el[1],
+                price: el[11],
+              };
+            });
+          })
+          .then((history) => {
+            dispatch({
+              type: 'SET_HISTORY',
+              payload: history,
+            });
+          })
+          .then(() => setDiagramLoading(false));
+      }
+    },
+    [diagramLoading, dispatch],
+  );
+  console.log('==========> diagramLoading', diagramLoading);
+  // console.log('==========> history', history);
   return (
-    <div>
-      <Button>Получить данные</Button>
-       {/* <div>
-       <TextField
-          id="outlined-select-currency"
-          select
-          label="Валюта"
-          value={currency}
-          onChange={moneyChange}
-          helperText="Выберите фильтр по валюте"
-        >
-          {currencies.map((option) => (
-            <MenuItem key={option.value} value={option.value}>
-              {option.label}
-            </MenuItem>
-          ))}
-        </TextField>
-        </div> */}
-      <Accordion
-        expanded={expanded === 'panel1'}
-        onChange={handleChange('panel1')}
+    <>
+      <TextField
+        onChange={(value) => searchStock(value)}
+        sx={{ width: '180px', paddingBottom: '20px' }}
+        id="filled-basic"
+        label="Поиск по акциям"
+        variant="filled"
+      />
+
+      <TextField
+        id="standard-select-currency-native"
+        sx={{ width: '180px', paddingLeft: '20px', paddingTop: '24px' }}
+        select
+        value={currency}
+        onChange={moneyChange}
+        SelectProps={{
+          native: true,
+        }}
+        variant="standard"
       >
-        <Badge.Ribbon placement="start" text="AAPL" color="red">
-          <AccordionSummary
-            expandIcon={<AddTaskOutlinedIcon />}
-            aria-controls="panel1bh-content"
-            id="panel1bh-header"
-            sx={{
-              backgroundColor: 'pink',
-              color: 'red',
-              padding: '0 30px 0 70px',
-            }}
-          >
-            <StraightOutlinedIcon
-              fontSize="small"
-              sx={{ transform: 'rotate(135deg)' }}
-            />
-            <Typography sx={{ width: '33%', flexShrink: 0 }}>
-              Apple Inc.
-            </Typography>
-            <Typography title="Текущая цена" sx={{ width: '20%' }}>
-              {fullStocksENG.c}$
-            </Typography>
-            <Typography title="Дневной прирост" sx={{ width: '20%' }}>
-              -2,67$
-            </Typography>
-            <Typography
-              title="Процент изменения за день"
-              sx={{
-                width: '20%',
-                color: 'red',
-              }}
-            >
-              -1,23%
-            </Typography>
-          </AccordionSummary>
-        </Badge.Ribbon>
-        <AccordionDetails>
-          <Typography>Здесь будет график</Typography>
-        </AccordionDetails>
-      </Accordion>
-      <Accordion
-        expanded={expanded === 'panel2'}
-        onChange={handleChange('panel2')}
-      >
-        <Badge.Ribbon placement="start" text="SBER" color="green">
-          <AccordionSummary
-            expandIcon={<AddTaskOutlinedIcon />}
-            aria-controls="panel1bh-content"
-            id="panel1bh-header"
-            sx={{
-              backgroundColor: 'palegreen',
-              color: 'green',
-              padding: '0 30px 0 70px',
-            }}
-          >
-            <StraightOutlinedIcon
-              fontSize="small"
-              sx={{ transform: 'rotate(45deg)' }}
-            />
-            <Typography sx={{ width: '33%', flexShrink: 0 }}>
-              Сбербанк ПАО
-            </Typography>
-            <Typography title="Текущая цена" sx={{ width: '20%' }}>
-              153.70&#8381;
-            </Typography>
-            <Typography title="Дневной прирост" sx={{ width: '20%' }}>
-              +4&#8381;
-            </Typography>
-            <Typography
-              title="Процент изменения за день"
-              sx={{
-                width: '20%',
-              }}
-            >
-              +3.5%
-            </Typography>
-          </AccordionSummary>
-        </Badge.Ribbon>
-        <AccordionDetails>
-          <Typography>Здесь будет график</Typography>
-        </AccordionDetails>
-      </Accordion>
-      <Accordion
-        expanded={expanded === 'panel3'}
-        onChange={handleChange('panel3')}
-      >
-        <Badge.Ribbon
-          placement="start"
-          // text={tiker}
-          // color={isGrow ? 'green' : 'red'}
-        >
-          <AccordionSummary
-            expandIcon={<AddTaskOutlinedIcon />}
-            aria-controls="panel3bh-content"
-            id="panel3Sbh-header"
-            sx={{
-              // backgroundColor: isGrow ? 'palegreen' : 'pink',
-              // color: isGrow ? 'green' : 'red',
-              padding: '0 30px 0 70px',
-            }}
-          >
-            <StraightOutlinedIcon
-              fontSize="small"
-              // sx={{ transform: isGrow ? 'rotate(45deg)' : 'rotate(135deg)' }}
-            />
-            <Typography sx={{ width: '33%', flexShrink: 0 }}>
-              {/* {companyName} */}
-            </Typography>
-            <Typography title="Текущая цена" sx={{ width: '20%' }}>
-              {/* {currentPrice}&#8381; */}
-            </Typography>
-            <Typography title="Дневной прирост" sx={{ width: '20%' }}>
-              {/* {diffPrice}&#8381; */}
-            </Typography>
-            <Typography
-              title="Процент изменения за день"
-              sx={{
-                width: '20%',
-              }}
-            >
-              {/* {diffPercent}% */}
-            </Typography>
-          </AccordionSummary>
-        </Badge.Ribbon>
-        <AccordionDetails>
-          <Typography>
-            Nunc vitae orci ultricies, auctor nunc in, volutpat nisl. Integer
-            sit amet egestas eros, vitae egestas augue. Duis vel est augue.
-          </Typography>
-        </AccordionDetails>
-      </Accordion>
-      <Accordion
-        expanded={expanded === 'panel4'}
-        onChange={handleChange('panel4')}
-      >
-        <Badge.Ribbon placement="start" text="AAPL">
-          <AccordionSummary
-            expandIcon={<AddTaskOutlinedIcon />}
-            aria-controls="panel1bh-content"
-            id="panel1bh-header"
-            sx={{ padding: '0 30px 0 70px' }}
-          >
-            <StraightOutlinedIcon fontSize="small" />
-            <Typography sx={{ width: '33%', flexShrink: 0 }}>
-              Apple Inc.
-            </Typography>
-            <Typography
-              title="Текущая цена"
-              sx={{ width: '20%', color: 'text.secondary' }}
-            >
-              34$
-            </Typography>
-            <Typography
-              title="Дневной прирост"
-              sx={{ width: '20%', color: 'text.primary' }}
-            >
-              +4$
-            </Typography>
-            <Typography
-              title="Процент изменения за день"
-              sx={{
-                width: '20%',
-                color: 'text.primary',
-              }}
-            >
-              2%
-            </Typography>
-          </AccordionSummary>
-        </Badge.Ribbon>
-        <AccordionDetails>
-          <Typography>
-            Nunc vitae orci ultricies, auctor nunc in, volutpat nisl. Integer
-            sit amet egestas eros, vitae egestas augue. Duis vel est augue.
-          </Typography>
-        </AccordionDetails>
-      </Accordion>
-    </div>
+        {currencies.map((option) => (
+          <option key={option.value} value={option.value}>
+            {option.label}
+          </option>
+        ))}
+      </TextField>
+
+      <Checkbox
+        checked={checked}
+        sx={{ paddingLeft: '20px', paddingTop: '24px' }}
+        onChange={FondsCheck}
+        inputProps={{ 'aria-label': 'controlled' }}
+      />
+
+      {filterStocks.length > 0
+        ? filterStocks.map((el, index) => {
+            return (
+              <Accordion
+                expanded={expanded === `panel${el.id}`}
+                onChange={AccordionOpen(`panel${el.id}`)}
+                key={el.secid}
+                onClick={() => {
+                  wikipediaSearch(el.secid);
+                  hystoriCal(el.secid);
+                }}
+              >
+                <Badge.Ribbon
+                  placement="start"
+                  text={el.secid}
+                  color={el.lastchange > 0 ? 'green' : 'red'}
+                >
+                  <AccordionSummary
+                    expandIcon={<AddTaskOutlinedIcon />}
+                    aria-controls={el.id}
+                    id={el.id}
+                    sx={{
+                      padding: '0 30px 0 70px',
+                    }}
+                  >
+                    <StraightOutlinedIcon
+                      fontSize="small"
+                      sx={{ transform: 'rotate(135deg)' }}
+                    />
+                    <Typography sx={{ width: '33%', flexShrink: 0 }}>
+                      {el?.shortName}
+                    </Typography>
+                    <Typography title="Текущая цена" sx={{ width: '20%' }}>
+                      {el.last.toFixed(2)}$
+                    </Typography>
+                    <Typography title="Дневной прирост" sx={{ width: '20%' }}>
+                      {el.lastchange.toFixed(2)}$
+                    </Typography>
+                    <Typography
+                      title="Процент изменения за день"
+                      sx={{
+                        width: '20%',
+                        color: `${el.lastchange > 0 ? 'green' : 'red'}`,
+                      }}
+                    >
+                      {el.lastchangeprcnt}%
+                    </Typography>
+                  </AccordionSummary>
+                </Badge.Ribbon>
+                <AccordionDetails>
+                  <Grid container spacing={3}>
+                    <Grid item xs={12}>
+                      <Typography>
+                        Некоторая информация: цифры и буквы
+                      </Typography>
+                      <br />
+                      <Typography>
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit,
+                        sed do eiusmod tempor incididunt ut labore et dolore
+                        magna aliqua.
+                      </Typography>
+                    </Grid>
+                    <Grid item xs={12}>
+                      <Diagram />
+                    </Grid>
+                    <Grid item xs={12}>
+                      <Typography>Главные новости</Typography>
+                    </Grid>
+                    <Grid item xs={12}>
+                      <Typography>
+                        <a href={wikiLink}>
+                          Информация о компании на Wikipedia
+                        </a>
+                      </Typography>
+                    </Grid>
+                  </Grid>
+                </AccordionDetails>
+              </Accordion>
+            );
+          })
+        : stocks.map((el, index) => {
+            return (
+              <Accordion
+                expanded={expanded === `panel${el.id}`}
+                onChange={AccordionOpen(`panel${el.id}`)}
+                key={el.secid}
+                onClick={() => {
+                  wikipediaSearch(el.secid);
+                  hystoriCal(el.secid);
+                }}
+              >
+                <Badge.Ribbon
+                  placement="start"
+                  text={el.secid}
+                  color={el.lastchange > 0 ? 'green' : 'red'}
+                >
+                  <AccordionSummary
+                    expandIcon={<AddTaskOutlinedIcon />}
+                    aria-controls={el.id}
+                    id={el.id}
+                    sx={{
+                      padding: '0 30px 0 70px',
+                    }}
+                  >
+                    <StraightOutlinedIcon
+                      fontSize="small"
+                      sx={{ transform: 'rotate(135deg)' }}
+                    />
+                    <Typography sx={{ width: '33%', flexShrink: 0 }}>
+                      {el?.shortName}
+                    </Typography>
+                    <Typography title="Текущая цена" sx={{ width: '20%' }}>
+                      {el.last.toFixed(2)}$
+                    </Typography>
+                    <Typography title="Дневной прирост" sx={{ width: '20%' }}>
+                      {el.lastchange.toFixed(2)}$
+                    </Typography>
+                    <Typography
+                      title="Процент изменения за день"
+                      sx={{
+                        width: '20%',
+                        color: `${el.lastchange > 0 ? 'green' : 'red'}`,
+                      }}
+                    >
+                      {el.lastchangeprcnt}%
+                    </Typography>
+                  </AccordionSummary>
+                </Badge.Ribbon>
+                <AccordionDetails>
+                  <Grid container spacing={3}>
+                    <Grid item xs={12}>
+                      <Typography>
+                        Некоторая информация: цифры и буквы
+                      </Typography>
+                      <br />
+                      <Typography>
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit,
+                        sed do eiusmod tempor incididunt ut labore et dolore
+                        magna aliqua.
+                      </Typography>
+                    </Grid>
+                    <Grid item xs={12}>
+                      <Diagram />
+                    </Grid>
+                    <Grid item xs={12}>
+                      <Typography>Главные новости</Typography>
+                    </Grid>
+                    <Grid item xs={12}>
+                      <Typography>
+                        <a href={wikiLink}>
+                          Информация о компании на Wikipedia
+                        </a>
+                      </Typography>
+                    </Grid>
+                  </Grid>
+                </AccordionDetails>
+              </Accordion>
+            );
+          })}
+      {}
+      {loading ? (
+        <Box sx={{ width: '100%' }}>
+          <LinearProgress />
+        </Box>
+      ) : (
+        <></>
+      )}
+    </>
   );
 }
 

@@ -1,12 +1,8 @@
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
-
 import { registration } from '../../api/userAPI';
-
 import { HOME_ROUTE, SIGNIN_ROUTE } from '../../utils/consts';
-
-// material-ui
 import {
   Box,
   Button,
@@ -23,8 +19,6 @@ import {
   Typography,
 } from '@mui/material';
 import AssignmentIndOutlinedIcon from '@mui/icons-material/AssignmentIndOutlined';
-
-// formik
 import * as Yup from 'yup';
 import { Formik } from 'formik';
 

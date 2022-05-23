@@ -22,18 +22,9 @@ export const logout = async () => {
   return data;
 };
 
-// export const check = async () => {
-//   const { data } = await $authHost.get('api/user/auth');
-//   localStorage.setItem('token', data.accessToken);
-//   return jwt_decode(data.accessToken);
-// };
-
 export const checkAuth = async () => {
   const { data } = await $authHost.get(`api/user/refresh`);
   console.log(data);
   localStorage.setItem('token', data.accessToken);
   return jwt_decode(data.accessToken);
-  // finally {
-  //   this.setLoading(false);
-  // }
 };
