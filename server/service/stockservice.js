@@ -67,8 +67,8 @@ class StockService {
               marketData[index][12] - securitiesData[index][3]
             ).toFixed(2),
             lastchangeprcnt: (
-              ((marketData[index][12] - securitiesData[index][3]) * 100)
-          / marketData[index][12]
+              ((marketData[index][12] - securitiesData[index][3]) * 100) /
+              marketData[index][12]
             ).toFixed(2),
             prevprice: securitiesData[index][3],
           });
@@ -96,15 +96,26 @@ class StockService {
       setInterval(() => {
         stocks.forEach((el) => {
           finnhubClient.quote(`${el}`, async (error, data, response) => {
-            const checkStock = await Stock.findOne({ where: { secid: `${el}` }, row: true });
-            if (checkStock) {
-              if (data.c !== checkStock.last) {
-                finnhubClient.companyProfile2({ symbol: `${el}` }, async (error, data, response) => {
-                  await Stock.update({
-                    shortName: data.name,
-                  }, { where: { id: checkStock.id } });
-                });
-                await Stock.update({
+            const checkStock = await Stock.findOne({
+              where: { secid: `${el}` },
+              row: true,
+            });
+            if (checkStock.shortName === el) {
+              finnhubClient.companyProfile2(
+                { symbol: `${el}` },
+                async (error, data, response) => {
+                  await Stock.update(
+                    {
+                      shortName: data.name,
+                    },
+                    { where: { id: checkStock.id } },
+                  );
+                },
+              );
+            }
+            if (checkStock && checkStock.last !== data.c.toFixed(2)) {
+              await Stock.update(
+                {
                   secid: `${el}`,
                   type: 'Акция',
                   open: data.o,
@@ -113,12 +124,27 @@ class StockService {
                   last: data.c.toFixed(2),
                   prevprice: data.pc,
                   lastchange: data.d.toFixed(2),
-                  lastchangeprcnt: ((data.c - data.pc) / data.pc * 100).toFixed(2),
-                }, { where: { id: checkStock.id } });
-              }
-            } else {
+                  lastchangeprcnt: (
+                    ((data.c - data.pc) / data.pc) *
+                    100
+                  ).toFixed(2),
+                },
+                { where: { id: checkStock.id } },
+              );
+            } else if (!checkStock) {
               await Stock.create({
-                secid: `${el}`, type: 'Акция', shortName: `${el}`, open: data.o, high: data.h, low: data.l, last: data.c.toFixed(2), prevprice: data.pc, lastchange: data.d.toFixed(2), lastchangeprcnt: ((data.c - data.pc) / data.pc * 100).toFixed(2),
+                secid: `${el}`,
+                type: 'Акция',
+                shortName: `${el}`,
+                open: data.o,
+                high: data.h,
+                low: data.l,
+                last: data.c.toFixed(2),
+                prevprice: data.pc,
+                lastchange: data.d.toFixed(2),
+                lastchangeprcnt: (((data.c - data.pc) / data.pc) * 100).toFixed(
+                  2,
+                ),
               });
             }
           });

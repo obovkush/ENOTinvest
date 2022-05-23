@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import {
   Accordion,
   AccordionDetails,
@@ -80,18 +80,7 @@ export default function Best() {
                     color: `${el.lastchange > 0 ? 'green' : 'red'}`,
                   }}
                 >
-                  {el.lastchange > 0 ? (
-                    <>
-                      +
-                      {-(((el.prevprice - el.last) / el.last) * 100).toFixed(2)}
-                      %
-                    </>
-                  ) : (
-                    <>
-                      -{(((el.prevprice - el.last) / el.last) * 100).toFixed(2)}
-                      %
-                    </>
-                  )}
+                  {el.lastchangeprcnt}%
                 </Typography>
               </AccordionSummary>
             </Badge.Ribbon>

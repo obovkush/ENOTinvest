@@ -1,12 +1,8 @@
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
-
 import { login } from '../../api/userAPI';
-
 import { HOME_ROUTE, SIGNUP_ROUTE } from '../../utils/consts';
-
-// material-ui
 import {
   Button,
   Checkbox,
@@ -23,10 +19,8 @@ import {
   Divider,
 } from '@mui/material';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
-// formik
 import * as Yup from 'yup';
 import { Formik } from 'formik';
-// assets
 import { EyeOutlined, EyeInvisibleOutlined } from '@ant-design/icons';
 
 const labelSX = { mb: -2 };
