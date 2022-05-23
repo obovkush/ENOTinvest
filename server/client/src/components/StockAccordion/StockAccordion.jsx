@@ -3,8 +3,16 @@ import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
 import TextField from '@mui/material/TextField';
 import Checkbox from '@mui/material/Checkbox';
-import Diagram from '../Diagram/Diagram'
-import { Accordion, AccordionDetails, AccordionSummary, Typography, LinearProgress, Box, Grid } from '@mui/material';
+import Diagram from '../Diagram/Diagram';
+import {
+  Accordion,
+  AccordionDetails,
+  AccordionSummary,
+  Typography,
+  LinearProgress,
+  Box,
+  Grid,
+} from '@mui/material';
 import AddTaskOutlinedIcon from '@mui/icons-material/AddTaskOutlined';
 import StraightOutlinedIcon from '@mui/icons-material/StraightOutlined';
 import { Badge } from 'antd';
@@ -28,7 +36,7 @@ function StockAccordion() {
   const dispatch = useDispatch();
   const stocks = useSelector((state) => state.stocks);
   const [filterStocks, setFilterStocks] = useState(stocks);
-  const wikiLink = useSelector((state) => state.wikipediaUrl)
+  const wikiLink = useSelector((state) => state.wikipediaUrl);
   const [loading, setLoading] = useState(true);
   const [checked, setChecked] = useState(false);
   const [currency, setCurrency] = useState('Все');
@@ -44,9 +52,6 @@ function StockAccordion() {
         }
       });
   }, []);
-
-  // Функция проверки значений (определеяем выросла цена или упала, от этого зависят стили)
-  const isGrow = (num) => num > 0;
 
   // данные за 2 года
   // useEffect(() => {
@@ -75,7 +80,7 @@ function StockAccordion() {
           setLoading(false);
         }
       });
-  }
+  };
 
   const moneyChange = (event) => {
     setCurrency(event.target.value);
@@ -91,8 +96,9 @@ function StockAccordion() {
     const filtrstocks = stocks.filter(
       (el) =>
         el.secid.slice(0, event.target.value.length) ===
-        event.target.value.toUpperCase() || el.shortName.slice(0, event.target.value.length).toLowerCase() ===
-        event.target.value.toLowerCase()
+          event.target.value.toUpperCase() ||
+        el.shortName.slice(0, event.target.value.length).toLowerCase() ===
+          event.target.value.toLowerCase(),
     );
     setFilterStocks(filtrstocks);
   };
@@ -106,7 +112,56 @@ function StockAccordion() {
       setFilterStocks(stocks);
     }
   };
+  function formatDateMinusYear(date) {
+    let month = String(date.getMonth() + 1);
+    let day = String(date.getDate());
+    const year = String(date.getFullYear() - 1); // отнимаем 1 год
+    if (month.length < 2) {
+      month = '0' + month;
+    }
+    if (day.length < 2) {
+      day = '0' + day;
+    }
+    return [year, month, day].join('-');
+  }
 
+  const [diagramLoading, setDiagramLoading] = useState(false);
+  const history = useSelector((store) => store.history);
+
+  const hystoriCal = React.useCallback(
+    (key) => {
+      setDiagramLoading(!diagramLoading);
+      if (!diagramLoading) {
+        const today = new Date();
+        const todayOneYearAgo = formatDateMinusYear(today);
+        console.log('==========> todayOneYearAgo', todayOneYearAgo);
+        const base_URL = `https://iss.moex.com/iss/history/engines/stock/markets/shares/sessions/total/boards/TQBR/securities/${key}.json?from=${todayOneYearAgo}`;
+        console.log(base_URL);
+        axios
+          .get(base_URL)
+          .then((history) => {
+            return history.data.history.data.map((el, i) => {
+              return {
+                id: i + 1,
+                shortName: el[2],
+                date: el[1],
+                price: el[11],
+              };
+            });
+          })
+          .then((history) => {
+            dispatch({
+              type: 'SET_HISTORY',
+              payload: history,
+            });
+          })
+          .then(() => setDiagramLoading(false));
+      }
+    },
+    [diagramLoading, dispatch],
+  );
+  console.log('==========> diagramLoading', diagramLoading);
+  // console.log('==========> history', history);
   return (
     <>
       <TextField
@@ -144,198 +199,164 @@ function StockAccordion() {
 
       {filterStocks.length > 0
         ? filterStocks.map((el, index) => {
-          return (
-            <Accordion
-              expanded={expanded === `panel${el.id}`}
-              onChange={AccordionOpen(`panel${el.id}`)}
-              key={el.secid}
-              onClick={() => wikipediaSearch(el.secid)}
-            >
-              <Badge.Ribbon
-                placement="start"
-                text={el.secid}
-                color={el.lastchange > 0 ? 'green' : 'red'}
+            return (
+              <Accordion
+                expanded={expanded === `panel${el.id}`}
+                onChange={AccordionOpen(`panel${el.id}`)}
+                key={el.secid}
+                onClick={() => {
+                  wikipediaSearch(el.secid);
+                  hystoriCal(el.secid);
+                }}
               >
-                <AccordionSummary
-                  expandIcon={<AddTaskOutlinedIcon />}
-                  aria-controls={el.id}
-                  id={el.id}
-                  sx={{
-                    backgroundColor: `${el.lastchange > 0 ? 'palegreen' : 'pink'
-                      }`,
-                    color: `${el.lastchange > 0 ? 'green' : 'red'}`,
-                    padding: '0 30px 0 70px',
-                  }}
+                <Badge.Ribbon
+                  placement="start"
+                  text={el.secid}
+                  color={el.lastchange > 0 ? 'green' : 'red'}
                 >
-                  <StraightOutlinedIcon
-                    fontSize="small"
-                    sx={{ transform: 'rotate(135deg)' }}
-                  />
-                  <Typography sx={{ width: '33%', flexShrink: 0 }}>
-                    {el?.shortName}
-                  </Typography>
-                  <Typography title="Текущая цена" sx={{ width: '20%' }}>
-                    {el.last.toFixed(2)}$
-                  </Typography>
-                  <Typography title="Дневной прирост" sx={{ width: '20%' }}>
-                    {el.lastchange.toFixed(2)}$
-                  </Typography>
-                  <Typography
-                    title="Процент изменения за день"
+                  <AccordionSummary
+                    expandIcon={<AddTaskOutlinedIcon />}
+                    aria-controls={el.id}
+                    id={el.id}
                     sx={{
-                      width: '20%',
-                      color: `${el.lastchange > 0 ? 'green' : 'red'}`,
+                      padding: '0 30px 0 70px',
                     }}
                   >
-                    {el.lastchange > 0 ? (
-                      <>
-                        +
-                        {
-                          -(
-                            ((el.prevprice - el.last) / el.last) *
-                            100
-                          ).toFixed(2)
-                        }
-                        %
-                      </>
-                    ) : (
-                      <>
-                        -
-                        {(((el.prevprice - el.last) / el.last) * 100).toFixed(
-                          2,
-                        )}
-                        %
-                      </>
-                    )}
-                  </Typography>
-                </AccordionSummary>
-              </Badge.Ribbon>
-              <AccordionDetails>
-                <Grid container spacing={3}>
-                  <Grid item xs={12}>
-                    <Typography>
-                      Некоторая информация: цифры и буквы
+                    <StraightOutlinedIcon
+                      fontSize="small"
+                      sx={{ transform: 'rotate(135deg)' }}
+                    />
+                    <Typography sx={{ width: '33%', flexShrink: 0 }}>
+                      {el?.shortName}
                     </Typography>
-                    <br />
-                    <Typography>
-                      Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                    <Typography title="Текущая цена" sx={{ width: '20%' }}>
+                      {el.last.toFixed(2)}$
                     </Typography>
-                  </Grid>
-                  <Grid item xs={12}>
-                    <Diagram />
-                  </Grid>
-                  <Grid item xs={12}>
-                    <Typography>
-                      Главные новости
+                    <Typography title="Дневной прирост" sx={{ width: '20%' }}>
+                      {el.lastchange.toFixed(2)}$
                     </Typography>
-                  </Grid>
-                  <Grid item xs={12}>
-                    <Typography>
-                      <a href={wikiLink}>Информация о компании на Wikipedia</a>
+                    <Typography
+                      title="Процент изменения за день"
+                      sx={{
+                        width: '20%',
+                        color: `${el.lastchange > 0 ? 'green' : 'red'}`,
+                      }}
+                    >
+                      {el.lastchangeprcnt}%
                     </Typography>
+                  </AccordionSummary>
+                </Badge.Ribbon>
+                <AccordionDetails>
+                  <Grid container spacing={3}>
+                    <Grid item xs={12}>
+                      <Typography>
+                        Некоторая информация: цифры и буквы
+                      </Typography>
+                      <br />
+                      <Typography>
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit,
+                        sed do eiusmod tempor incididunt ut labore et dolore
+                        magna aliqua.
+                      </Typography>
+                    </Grid>
+                    <Grid item xs={12}>
+                      <Diagram />
+                    </Grid>
+                    <Grid item xs={12}>
+                      <Typography>Главные новости</Typography>
+                    </Grid>
+                    <Grid item xs={12}>
+                      <Typography>
+                        <a href={wikiLink}>
+                          Информация о компании на Wikipedia
+                        </a>
+                      </Typography>
+                    </Grid>
                   </Grid>
-                </Grid>
-              </AccordionDetails>
-            </Accordion>
-          );
-        })
+                </AccordionDetails>
+              </Accordion>
+            );
+          })
         : stocks.map((el, index) => {
-          return (
-            <Accordion
-              expanded={expanded === `panel${el.id}`}
-              onChange={AccordionOpen(`panel${el.id}`)}
-              key={el.secid}
-              onClick={() => wikipediaSearch(el.secid)}
-            >
-              <Badge.Ribbon
-                placement="start"
-                text={el.secid}
-                color={el.lastchange > 0 ? 'green' : 'red'}
+            return (
+              <Accordion
+                expanded={expanded === `panel${el.id}`}
+                onChange={AccordionOpen(`panel${el.id}`)}
+                key={el.secid}
+                onClick={() => {
+                  wikipediaSearch(el.secid);
+                  hystoriCal(el.secid);
+                }}
               >
-                <AccordionSummary
-                  expandIcon={<AddTaskOutlinedIcon />}
-                  aria-controls={el.id}
-                  id={el.id}
-                  sx={{
-                    backgroundColor: `${el.lastchange > 0 ? 'palegreen' : 'pink'
-                      }`,
-                    color: `${el.lastchange > 0 ? 'green' : 'red'}`,
-                    padding: '0 30px 0 70px',
-                  }}
+                <Badge.Ribbon
+                  placement="start"
+                  text={el.secid}
+                  color={el.lastchange > 0 ? 'green' : 'red'}
                 >
-                  <StraightOutlinedIcon
-                    fontSize="small"
-                    sx={{ transform: 'rotate(135deg)' }}
-                  />
-                  <Typography sx={{ width: '33%', flexShrink: 0 }}>
-                    {el?.shortName}
-                  </Typography>
-                  <Typography title="Текущая цена" sx={{ width: '20%' }}>
-                    {el.last.toFixed(2)}$
-                  </Typography>
-                  <Typography title="Дневной прирост" sx={{ width: '20%' }}>
-                    {el.lastchange.toFixed(2)}$
-                  </Typography>
-                  <Typography
-                    title="Процент изменения за день"
+                  <AccordionSummary
+                    expandIcon={<AddTaskOutlinedIcon />}
+                    aria-controls={el.id}
+                    id={el.id}
                     sx={{
-                      width: '20%',
-                      color: `${el.lastchange > 0 ? 'green' : 'red'}`,
+                      padding: '0 30px 0 70px',
                     }}
                   >
-                    {el.lastchange > 0 ? (
-                      <>
-                        +
-                        {
-                          -(
-                            ((el.prevprice - el.last) / el.last) *
-                            100
-                          ).toFixed(2)
-                        }
-                        %
-                      </>
-                    ) : (
-                      <>
-                        -
-                        {(((el.prevprice - el.last) / el.last) * 100).toFixed(
-                          2,
-                        )}
-                        %
-                      </>
-                    )}
-                  </Typography>
-                </AccordionSummary>
-              </Badge.Ribbon>
-              <AccordionDetails>
-                <Grid container spacing={3}>
-                  <Grid item xs={12}>
-                    <Typography>
-                      Некоторая информация: цифры и буквы
+                    <StraightOutlinedIcon
+                      fontSize="small"
+                      sx={{ transform: 'rotate(135deg)' }}
+                    />
+                    <Typography sx={{ width: '33%', flexShrink: 0 }}>
+                      {el?.shortName}
                     </Typography>
-                    <br />
-                    <Typography>
-                      Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                    <Typography title="Текущая цена" sx={{ width: '20%' }}>
+                      {el.last.toFixed(2)}$
                     </Typography>
-                  </Grid>
-                  <Grid item xs={12}>
-                    <Diagram />
-                  </Grid>
-                  <Grid item xs={12}>
-                    <Typography>
-                      Главные новости
+                    <Typography title="Дневной прирост" sx={{ width: '20%' }}>
+                      {el.lastchange.toFixed(2)}$
                     </Typography>
-                  </Grid>
-                  <Grid item xs={12}>
-                    <Typography>
-                      <a href={wikiLink}>Информация о компании на Wikipedia</a>
+                    <Typography
+                      title="Процент изменения за день"
+                      sx={{
+                        width: '20%',
+                        color: `${el.lastchange > 0 ? 'green' : 'red'}`,
+                      }}
+                    >
+                      {el.lastchangeprcnt}%
                     </Typography>
+                  </AccordionSummary>
+                </Badge.Ribbon>
+                <AccordionDetails>
+                  <Grid container spacing={3}>
+                    <Grid item xs={12}>
+                      <Typography>
+                        Некоторая информация: цифры и буквы
+                      </Typography>
+                      <br />
+                      <Typography>
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit,
+                        sed do eiusmod tempor incididunt ut labore et dolore
+                        magna aliqua.
+                      </Typography>
+                    </Grid>
+                    <Grid item xs={12}>
+                      <Diagram />
+                    </Grid>
+                    <Grid item xs={12}>
+                      <Typography>Главные новости</Typography>
+                    </Grid>
+                    <Grid item xs={12}>
+                      <Typography>
+                        <a href={wikiLink}>
+                          Информация о компании на Wikipedia
+                        </a>
+                      </Typography>
+                    </Grid>
                   </Grid>
-                </Grid>
-              </AccordionDetails>
-            </Accordion>
-          );
-        })}
-      { }
+                </AccordionDetails>
+              </Accordion>
+            );
+          })}
+      {}
       {loading ? (
         <Box sx={{ width: '100%' }}>
           <LinearProgress />
