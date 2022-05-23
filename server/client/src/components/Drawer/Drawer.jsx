@@ -83,12 +83,12 @@ function ResponsiveDrawer(props) {
 
   const drawer = (
     <div>
-      <Toolbar>
+      <Toolbar sx={{ maxHeight: '64px' }}>
         <div className="sidebar__logo">
           <img src={logo} style={{ height: 100 }} alt="logo" />
         </div>
       </Toolbar>
-      <Divider />
+      <Divider sx={{ borderColor: 'white' }}/>
       <Toolbar sx={{ justifyContent: 'center' }}>
         <div className="sidebar__menu__item" style={{ fontSize: '17px' }}>
           USD: {usd}
@@ -96,13 +96,13 @@ function ResponsiveDrawer(props) {
           EUR: {eur}
         </div>
       </Toolbar>
-      <Divider />
+      <Divider sx={{ borderColor: 'white' }}/>
       <List>
         {sidebarNavItems.map((item, index) => (
           <NavLink to={item.to} key={index}>
             <ListItem key={item.display} disablePadding>
               <ListItemButton>
-                <ListItemIcon>{item.icon}</ListItemIcon>
+                <ListItemIcon sx={{ filter: 'invert(1)' }}>{item.icon}</ListItemIcon>
                 <ListItemText primary={item.display} />
               </ListItemButton>
             </ListItem>
@@ -125,12 +125,14 @@ function ResponsiveDrawer(props) {
           width: { sm: `calc(100% - ${drawerWidth}px)` },
           ml: { sm: `${drawerWidth}px` },
           justifyContent: 'space-between',
-          backgroundColor: '#1d2327',
+          backgroundColor: '#4d5357',
         }}
       >
-        <Toolbar
+
+        {/* <Toolbar
           sx={{
             justifyContent: 'space-between',
+            borderLeft: '1px solid white',
           }}
         >
           <IconButton
@@ -142,11 +144,9 @@ function ResponsiveDrawer(props) {
           >
             <MenuIcon />
           </IconButton>
-          <Typography variant="h6" noWrap component="div">
-            {/* Какой-нибудь текст или нет */}
-          </Typography>
           <AccountMenu />
-        </Toolbar>
+        </Toolbar> */}
+
       </AppBar>
       <Box
         component="nav"
@@ -167,7 +167,7 @@ function ResponsiveDrawer(props) {
             '& .MuiDrawer-paper': {
               boxSizing: 'border-box',
               width: drawerWidth,
-              backgroundColor: '#1d2327',
+              backgroundColor: '#4d5357',
               color: 'white',
             },
           }}
@@ -181,7 +181,7 @@ function ResponsiveDrawer(props) {
             '& .MuiDrawer-paper': {
               boxSizing: 'border-box',
               width: drawerWidth,
-              backgroundColor: '#1d2327',
+              backgroundColor: '#4d5357',
               color: 'white',
             },
           }}
@@ -200,7 +200,16 @@ function ResponsiveDrawer(props) {
           width: { sm: `calc(100% - ${drawerWidth}px)` },
         }}
       >
-        <Toolbar />
+        <IconButton
+            color="default"
+            aria-label="open drawer"
+            edge="start"
+            onClick={handleDrawerToggle}
+            sx={{ mr: 2, mt: 2, display: { sm: 'none' } }}
+          >
+            <MenuIcon />
+          </IconButton>
+        {/* <Toolbar /> */}
         <AppRouter />
       </Box>
     </Box>

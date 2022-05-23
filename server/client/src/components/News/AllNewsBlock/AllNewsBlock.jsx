@@ -114,10 +114,10 @@ export default function AllNewsBlock({ spinner, Item }) {
                     alignItems: 'center',
                   }}
                 >
-                  <a href={elem.link} className="elem-link" style={{ marginRight: 5 }} target="_blank" rel="noopener noreferrer">
+                  <img src={elem.enclosure?.url || logo } style={{ width: 120, objectFit: 'contain' }} alt="" />
+                  <a href={elem.link} className="elem-link" style={{ marginLeft: 10, textAlign: 'start' }} target="_blank" rel="noopener noreferrer">
                     {elem.title}
                   </a>
-                  <img src={elem.enclosure?.url || logo } style={{ width: 120, objectFit: 'contain' }} alt="" />
                 </Item>
                 )
               } else {

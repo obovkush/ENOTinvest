@@ -69,7 +69,7 @@ export default function FullWidthTabs() {
   };
 
   return (
-    <Paper
+    <Box
       sx={{
         bgcolor: 'background.paper',
         height: '87vh',
@@ -112,6 +112,6 @@ export default function FullWidthTabs() {
           <YoutubeBlock spinner={{loading, setLoading}} Item={Item} />
         </TabPanel>
       </Box>
-    </Paper>
+    </Box>
   );
 }
