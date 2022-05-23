@@ -21,7 +21,7 @@ import Dns from '@mui/icons-material/Dns';
 import Public from '@mui/icons-material/Public';
 import Home from '@mui/icons-material/Home';
 import { NavLink } from 'react-router-dom';
-import logo from './logo.png'
+import logo from './logo.png';
 import axios from 'axios';
 import AccountMenu from './AccountMenu/AccountMenu';
 
@@ -31,17 +31,18 @@ function ResponsiveDrawer(props) {
   const { window } = props;
   const [mobileOpen, setMobileOpen] = React.useState(false);
 
-  const [usd, setUsd] = useState(0)
-  const [eur, setEur] = useState(0)
+  const [usd, setUsd] = useState(0);
+  const [eur, setEur] = useState(0);
 
   useEffect(() => {
-    axios.get('https://www.cbr-xml-daily.ru/daily_json.js')
+    axios
+      .get('https://www.cbr-xml-daily.ru/daily_json.js')
       .then((data) => {
-        setUsd(data.data.Valute.USD.Value)
-        setEur(data.data.Valute.EUR.Value)
+        setUsd(data.data.Valute.USD.Value);
+        setEur(data.data.Valute.EUR.Value);
       })
-      .catch(error => console.log(error))
-  }, [])
+      .catch((error) => console.log(error));
+  }, []);
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
@@ -52,44 +53,44 @@ function ResponsiveDrawer(props) {
       display: 'Главная',
       to: '/',
       section: '',
-      icon: <Home />
+      icon: <Home />,
     },
     {
       display: 'Акции',
       to: '/stocks',
       section: 'stocks',
-      icon: <Dns />
+      icon: <Dns />,
     },
     {
       display: 'Аномалии',
       to: '/anomaly',
       section: 'anomaly',
-      icon: <Public />
+      icon: <Public />,
     },
     {
       display: 'Логин',
       to: '/signin',
       section: 'signin',
-      icon: <People />
+      icon: <People />,
     },
     {
       display: 'Регистрация',
       to: '/signup',
       section: 'signup',
-      icon: <People />
-    }
-  ]
+      icon: <People />,
+    },
+  ];
 
   const drawer = (
     <div>
       <Toolbar>
         <div className="sidebar__logo">
-          <img src={logo} style={{ height: 100 }} alt='logo' />
+          <img src={logo} style={{ height: 100 }} alt="logo" />
         </div>
       </Toolbar>
       <Divider />
       <Toolbar sx={{ justifyContent: 'center' }}>
-        <div className='sidebar__menu__item' style={{ fontSize: '17px' }}>
+        <div className="sidebar__menu__item" style={{ fontSize: '17px' }}>
           USD: {usd}
           <br />
           EUR: {eur}
@@ -97,27 +98,23 @@ function ResponsiveDrawer(props) {
       </Toolbar>
       <Divider />
       <List>
-        {
-          sidebarNavItems.map((item, index) => (
-            <NavLink to={item.to} key={index}>
-              <ListItem key={item.display} disablePadding>
-                <ListItemButton>
-                  <ListItemIcon>
-                    {item.icon}
-                  </ListItemIcon>
-                  <ListItemText primary={item.display} />
-                </ListItemButton>
-              </ListItem>
-            </NavLink>
-          ))
-        }
+        {sidebarNavItems.map((item, index) => (
+          <NavLink to={item.to} key={index}>
+            <ListItem key={item.display} disablePadding>
+              <ListItemButton>
+                <ListItemIcon>{item.icon}</ListItemIcon>
+                <ListItemText primary={item.display} />
+              </ListItemButton>
+            </ListItem>
+          </NavLink>
+        ))}
       </List>
       {/* <Divider /> */}
-
     </div>
   );
 
-  const container = window !== undefined ? () => window().document.body : undefined;
+  const container =
+    window !== undefined ? () => window().document.body : undefined;
 
   return (
     <Box sx={{ display: 'flex' }}>
@@ -127,26 +124,26 @@ function ResponsiveDrawer(props) {
         sx={{
           width: { sm: `calc(100% - ${drawerWidth}px)` },
           ml: { sm: `${drawerWidth}px` },
-          justifyContent: 'space-between'
+          justifyContent: 'space-between',
+          backgroundColor: '#1d2327',
         }}
       >
-        <Toolbar sx={{
-          justifyContent: 'space-between'
-        }}>
+        <Toolbar
+          sx={{
+            justifyContent: 'space-between',
+          }}
+        >
           <IconButton
             color="inherit"
             aria-label="open drawer"
             edge="start"
             onClick={handleDrawerToggle}
             sx={{ mr: 2, display: { sm: 'none' } }}
-
           >
             <MenuIcon />
           </IconButton>
           <Typography variant="h6" noWrap component="div">
-
             {/* Какой-нибудь текст или нет */}
-
           </Typography>
           <AccountMenu />
         </Toolbar>
@@ -167,7 +164,12 @@ function ResponsiveDrawer(props) {
           }}
           sx={{
             display: { xs: 'block', sm: 'none' },
-            '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth },
+            '& .MuiDrawer-paper': {
+              boxSizing: 'border-box',
+              width: drawerWidth,
+              backgroundColor: '#1d2327',
+              color: 'white',
+            },
           }}
         >
           {drawer}
@@ -176,7 +178,12 @@ function ResponsiveDrawer(props) {
           variant="permanent"
           sx={{
             display: { xs: 'none', sm: 'block' },
-            '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth },
+            '& .MuiDrawer-paper': {
+              boxSizing: 'border-box',
+              width: drawerWidth,
+              backgroundColor: '#1d2327',
+              color: 'white',
+            },
           }}
           open
         >
@@ -186,12 +193,16 @@ function ResponsiveDrawer(props) {
       {/* Блок ниже это основная область сайта!!! */}
       <Box
         component="main"
-        sx={{ flexGrow: 1, p: 4, pt: 0, width: { sm: `calc(100% - ${drawerWidth}px)` } }}
+        sx={{
+          flexGrow: 1,
+          p: 4,
+          pt: 0,
+          width: { sm: `calc(100% - ${drawerWidth}px)` },
+        }}
       >
         <Toolbar />
         <AppRouter />
       </Box>
-
     </Box>
   );
 }

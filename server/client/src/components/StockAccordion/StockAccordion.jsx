@@ -212,7 +212,7 @@ function StockAccordion() {
                 <Badge.Ribbon
                   placement="start"
                   text={el.secid}
-                  color={el.lastchange > 0 ? 'green' : 'red'}
+                  color={el.lastchange > 0 ? '#004d40' : '#ad1457'}
                 >
                   <AccordionSummary
                     expandIcon={<AddTaskOutlinedIcon />}
@@ -220,6 +220,8 @@ function StockAccordion() {
                     id={el.id}
                     sx={{
                       padding: '0 30px 0 70px',
+                      backgroundColor: '#1d2327',
+                      color: 'white',
                     }}
                   >
                     <StraightOutlinedIcon
@@ -264,7 +266,7 @@ function StockAccordion() {
                 <Badge.Ribbon
                   placement="start"
                   text={el.secid}
-                  color={el.lastchange > 0 ? 'green' : 'red'}
+                  color={el.lastchange > 0 ? '#004d40' : '#ad1457'}
                 >
                   <AccordionSummary
                     expandIcon={<AddTaskOutlinedIcon />}
