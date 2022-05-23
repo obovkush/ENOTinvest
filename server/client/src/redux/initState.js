@@ -1,4 +1,5 @@
 export const initState = {
+  history: [],
   stocks: [],
   user: {},
   userInputs: {},

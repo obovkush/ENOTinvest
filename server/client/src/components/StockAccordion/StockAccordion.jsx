@@ -3,8 +3,16 @@ import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
 import TextField from '@mui/material/TextField';
 import Checkbox from '@mui/material/Checkbox';
-import Diagram from '../Diagram/Diagram'
-import { Accordion, AccordionDetails, AccordionSummary, Typography, LinearProgress, Box, Grid } from '@mui/material';
+import Diagram from '../Diagram/Diagram';
+import {
+  Accordion,
+  AccordionDetails,
+  AccordionSummary,
+  Typography,
+  LinearProgress,
+  Box,
+  Grid,
+} from '@mui/material';
 import AddTaskOutlinedIcon from '@mui/icons-material/AddTaskOutlined';
 import StraightOutlinedIcon from '@mui/icons-material/StraightOutlined';
 import { Badge } from 'antd';
@@ -28,7 +36,7 @@ function StockAccordion() {
   const dispatch = useDispatch();
   const stocks = useSelector((state) => state.stocks);
   const [filterStocks, setFilterStocks] = useState(stocks);
-  const wikiLink = useSelector((state) => state.wikipediaUrl)
+  const wikiLink = useSelector((state) => state.wikipediaUrl);
   const [loading, setLoading] = useState(true);
   const [checked, setChecked] = useState(false);
   const [currency, setCurrency] = useState('Все');
@@ -61,7 +69,7 @@ function StockAccordion() {
     setExpanded(isExpanded ? panel : false);
   };
 
-    const wikipediaSearch = (elem) => {
+  const wikipediaSearch = (elem) => {
     axios
       .post(`${process.env.REACT_APP_API_URL}api/wikipedia`, {
         secid: elem,
@@ -72,7 +80,7 @@ function StockAccordion() {
           setLoading(false);
         }
       });
-  }
+  };
 
   const moneyChange = (event) => {
     setCurrency(event.target.value);
@@ -88,8 +96,9 @@ function StockAccordion() {
     const filtrstocks = stocks.filter(
       (el) =>
         el.secid.slice(0, event.target.value.length) ===
-        event.target.value.toUpperCase() ||  el.shortName.slice(0, event.target.value.length).toLowerCase() ===
-        event.target.value.toLowerCase()
+          event.target.value.toUpperCase() ||
+        el.shortName.slice(0, event.target.value.length).toLowerCase() ===
+          event.target.value.toLowerCase(),
     );
     setFilterStocks(filtrstocks);
   };
@@ -103,12 +112,61 @@ function StockAccordion() {
       setFilterStocks(stocks);
     }
   };
+  function formatDateMinusYear(date) {
+    let month = String(date.getMonth() + 1);
+    let day = String(date.getDate());
+    const year = String(date.getFullYear() - 1); // отнимаем 1 год
+    if (month.length < 2) {
+      month = '0' + month;
+    }
+    if (day.length < 2) {
+      day = '0' + day;
+    }
+    return [year, month, day].join('-');
+  }
 
+  const [diagramLoading, setDiagramLoading] = useState(false);
+  const history = useSelector((store) => store.history);
+
+  const hystoriCal = React.useCallback(
+    (key) => {
+      setDiagramLoading(!diagramLoading);
+      if (!diagramLoading) {
+        const today = new Date();
+        const todayOneYearAgo = formatDateMinusYear(today);
+        console.log('==========> todayOneYearAgo', todayOneYearAgo);
+        const base_URL = `https://iss.moex.com/iss/history/engines/stock/markets/shares/sessions/total/boards/TQBR/securities/${key}.json?from=${todayOneYearAgo}`;
+        console.log(base_URL);
+        axios
+          .get(base_URL)
+          .then((history) => {
+            return history.data.history.data.map((el, i) => {
+              return {
+                id: i + 1,
+                shortName: el[2],
+                date: el[1],
+                price: el[11],
+              };
+            });
+          })
+          .then((history) => {
+            dispatch({
+              type: 'SET_HISTORY',
+              payload: history,
+            });
+          })
+          .then(() => setDiagramLoading(false));
+      }
+    },
+    [diagramLoading, dispatch],
+  );
+  console.log('==========> diagramLoading', diagramLoading);
+  // console.log('==========> history', history);
   return (
     <>
       <TextField
         onChange={(value) => searchStock(value)}
-        sx={{ width: '180px', paddingBottom: '20px'}}
+        sx={{ width: '180px', paddingBottom: '20px' }}
         id="filled-basic"
         label="Поиск по акциям"
         variant="filled"
@@ -116,7 +174,7 @@ function StockAccordion() {
 
       <TextField
         id="standard-select-currency-native"
-        sx={{ width: '180px', paddingLeft: '20px', paddingTop: '24px'}}
+        sx={{ width: '180px', paddingLeft: '20px', paddingTop: '24px' }}
         select
         value={currency}
         onChange={moneyChange}
@@ -134,7 +192,7 @@ function StockAccordion() {
 
       <Checkbox
         checked={checked}
-        sx={{ paddingLeft: '20px', paddingTop: '24px'}}
+        sx={{ paddingLeft: '20px', paddingTop: '24px' }}
         onChange={FondsCheck}
         inputProps={{ 'aria-label': 'controlled' }}
       />
@@ -142,12 +200,15 @@ function StockAccordion() {
       {filterStocks.length > 0
         ? filterStocks.map((el, index) => {
             return (
-    <Accordion
-            expanded={expanded === `panel${el.id}`}
-            onChange={AccordionOpen(`panel${el.id}`)}
-            key={el.secid}
-            onClick={() => wikipediaSearch(el.secid)}
-          >
+              <Accordion
+                expanded={expanded === `panel${el.id}`}
+                onChange={AccordionOpen(`panel${el.id}`)}
+                key={el.secid}
+                onClick={() => {
+                  wikipediaSearch(el.secid);
+                  hystoriCal(el.secid);
+                }}
+              >
                 <Badge.Ribbon
                   placement="start"
                   text={el.secid}
@@ -158,10 +219,6 @@ function StockAccordion() {
                     aria-controls={el.id}
                     id={el.id}
                     sx={{
-                      backgroundColor: `${
-                        el.lastchange > 0 ? 'palegreen' : 'pink'
-                      }`,
-                      color: `${el.lastchange > 0 ? 'green' : 'red'}`,
                       padding: '0 30px 0 70px',
                     }}
                   >
@@ -189,43 +246,48 @@ function StockAccordion() {
                     </Typography>
                   </AccordionSummary>
                 </Badge.Ribbon>
-         <AccordionDetails>
-              <Grid container spacing={3}>
-                <Grid item xs={12}>
-                  <Typography>
-                    Некоторая информация: цифры и буквы
-                  </Typography>
-                  <br />
-                  <Typography>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-                  </Typography>
-                </Grid>
-                <Grid item xs={12}>
-                  <Diagram />
-                </Grid>
-                <Grid item xs={12}>
-                  <Typography>
-                    Главные новости
-                  </Typography>
-                </Grid>
-                <Grid item xs={12}>
-                  <Typography>
-                    <a href={wikiLink}>Информация о компании на Wikipedia</a>
-                  </Typography>
-                </Grid>
-              </Grid>
-            </AccordionDetails>
+                <AccordionDetails>
+                  <Grid container spacing={3}>
+                    <Grid item xs={12}>
+                      <Typography>
+                        Некоторая информация: цифры и буквы
+                      </Typography>
+                      <br />
+                      <Typography>
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit,
+                        sed do eiusmod tempor incididunt ut labore et dolore
+                        magna aliqua.
+                      </Typography>
+                    </Grid>
+                    <Grid item xs={12}>
+                      <Diagram />
+                    </Grid>
+                    <Grid item xs={12}>
+                      <Typography>Главные новости</Typography>
+                    </Grid>
+                    <Grid item xs={12}>
+                      <Typography>
+                        <a href={wikiLink}>
+                          Информация о компании на Wikipedia
+                        </a>
+                      </Typography>
+                    </Grid>
+                  </Grid>
+                </AccordionDetails>
               </Accordion>
             );
           })
         : stocks.map((el, index) => {
             return (
-           <Accordion
-            expanded={expanded === `panel${el.id}`}
-            onChange={AccordionOpen(`panel${el.id}`)}
-            key={el.secid}
-            onClick={() => wikipediaSearch(el.secid)}
-          >
+              <Accordion
+                expanded={expanded === `panel${el.id}`}
+                onChange={AccordionOpen(`panel${el.id}`)}
+                key={el.secid}
+                onClick={() => {
+                  wikipediaSearch(el.secid);
+                  hystoriCal(el.secid);
+                }}
+              >
                 <Badge.Ribbon
                   placement="start"
                   text={el.secid}
@@ -236,10 +298,6 @@ function StockAccordion() {
                     aria-controls={el.id}
                     id={el.id}
                     sx={{
-                      backgroundColor: `${
-                        el.lastchange > 0 ? 'palegreen' : 'pink'
-                      }`,
-                      color: `${el.lastchange > 0 ? 'green' : 'red'}`,
                       padding: '0 30px 0 70px',
                     }}
                   >
@@ -267,32 +325,34 @@ function StockAccordion() {
                     </Typography>
                   </AccordionSummary>
                 </Badge.Ribbon>
-            <AccordionDetails>
-              <Grid container spacing={3}>
-                <Grid item xs={12}>
-                  <Typography>
-                    Некоторая информация: цифры и буквы
-                  </Typography>
-                  <br />
-                  <Typography>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-                  </Typography>
-                </Grid>
-                <Grid item xs={12}>
-                  <Diagram />
-                </Grid>
-                <Grid item xs={12}>
-                  <Typography>
-                    Главные новости
-                  </Typography>
-                </Grid>
-                <Grid item xs={12}>
-                  <Typography>
-                    <a href={wikiLink}>Информация о компании на Wikipedia</a>
-                  </Typography>
-                </Grid>
-              </Grid>
-            </AccordionDetails>
+                <AccordionDetails>
+                  <Grid container spacing={3}>
+                    <Grid item xs={12}>
+                      <Typography>
+                        Некоторая информация: цифры и буквы
+                      </Typography>
+                      <br />
+                      <Typography>
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit,
+                        sed do eiusmod tempor incididunt ut labore et dolore
+                        magna aliqua.
+                      </Typography>
+                    </Grid>
+                    <Grid item xs={12}>
+                      <Diagram />
+                    </Grid>
+                    <Grid item xs={12}>
+                      <Typography>Главные новости</Typography>
+                    </Grid>
+                    <Grid item xs={12}>
+                      <Typography>
+                        <a href={wikiLink}>
+                          Информация о компании на Wikipedia
+                        </a>
+                      </Typography>
+                    </Grid>
+                  </Grid>
+                </AccordionDetails>
               </Accordion>
             );
           })}
