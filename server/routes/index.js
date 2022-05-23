@@ -19,19 +19,24 @@ router.get('/', (req, res) => {
 router.post('/wikipedia', (req, res) => {
   const { secid } = req.body;
   // Ищем в гугле по secid и выводим ссылку с первого сайта
-  googleIt({ query: `${secid} компания википедия` }).then((results) => {
-    const link = results.filter((el) => el.link.match(/ru.wikipedia.org/gm));
-    res.json(link[0]?.link);
+  googleIt({ query: `${secid} компания википедия` })
+    .then((results) => {
+      const link = results.filter((el) => el.link.match(/ru.wikipedia.org/gm));
+      res.json(link[0]?.link);
 
-    // wiki({ apiUrl: 'https://ru.wikipedia.org/w/api.php' })
-    //   .page(secid)
-    //   .then(page => {
-    //     page.summary().then(info => console.log(info))
-    //     // res.json(info)
-    //   })
-  }).catch((error) => {
-    res.json({ message: 'Не удалось получить данные из Wikipedia', error: error.message });
-  });
+      // wiki({ apiUrl: 'https://ru.wikipedia.org/w/api.php' })
+      //   .page(secid)
+      //   .then(page => {
+      //     page.summary().then(info => console.log(info))
+      //     // res.json(info)
+      //   })
+    })
+    .catch((error) => {
+      res.json({
+        message: 'Не удалось получить данные из Wikipedia',
+        error: error.message,
+      });
+    });
 });
 
 // Ручка на получение RSS новостей

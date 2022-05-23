@@ -18,6 +18,7 @@ import StraightOutlinedIcon from '@mui/icons-material/StraightOutlined';
 import { Badge } from 'antd';
 import DetailsOfAccordion from './DetailsOfAccordion';
 
+
 const currencies = [
   {
     value: 'Все',
@@ -43,6 +44,25 @@ function StockAccordion() {
   const [currency, setCurrency] = useState('Все');
   const [expanded, setExpanded] = useState(false);
 
+  const historicalData = (key, currency) => {
+    if (currency === 'USD') {
+      // setTimeout(() => {
+      //   console.log('Здесь будет api/stocks/USD history');
+      //   fetch(`https://api.polygon.io/v2/aggs/ticker/${key}/range/1/day/2020-05-20/2022-05-20?apiKey=MVOp2FJDsLDLqEmq1t6tYy8hXro8YgUh`, {
+      //     method: 'GET',
+      //     headers: { 'Content-Type': 'application/json' },
+      //   }).then((res) => res.json())
+      //     .then((data) => {
+      //       dispatch({ type: 'HISTORY_USD', payload: data.results });
+      //     })
+      //     .catch((err) => console.log('stocks GET =>', err));
+      // }, 10000);
+    } else {
+      console.log('Здесь будет api/stocks/RU history');
+    }
+}
+
+
   useEffect(() => {
     axios
       .get(`${process.env.REACT_APP_API_URL}api/stocks/ru`)
@@ -53,18 +73,6 @@ function StockAccordion() {
         }
       });
   }, []);
-
-  // данные за 2 года
-  // useEffect(() => {
-  //   fetch('https://api.polygon.io/v2/aggs/ticker/AAPL/range/1/day/2020-06-01/2020-06-17?apiKey=MVOp2FJDsLDLqEmq1t6tYy8hXro8YgUh', {
-  //     method: 'GET',
-  //     headers: { 'Content-Type': 'application/json' },
-  //   }).then((res) => res.json())
-  //     .then((data) => {
-  //       console.log(data.results);
-  //     })
-  //     .catch((err) => console.log('stocks GET =>', err));
-  // });
 
   const AccordionOpen = (panel) => (event, isExpanded) => {
     setExpanded(isExpanded ? panel : false);
@@ -142,21 +150,64 @@ function StockAccordion() {
   const hystoriCal = React.useCallback(
     (key) => {
       setDiagramLoading(!diagramLoading);
+      dispatch({
+        type: 'REMOVE_HISTORY',
+        payload: [],
+      });
       if (!diagramLoading) {
         const today = new Date();
         const todayOneYearAgo = formatDateMinusYear(today);
-        // console.log('==========> todayOneYearAgo', todayOneYearAgo);
-        const base_URL = `https://iss.moex.com/iss/history/engines/stock/markets/shares/sessions/total/boards/TQBR/securities/${key}.json?from=${todayOneYearAgo}`;
-        // console.log(base_URL);
+        console.log('==========> todayOneYearAgo', todayOneYearAgo);
+        const base_URL = [
+          `https://iss.moex.com/iss/history/engines/stock/markets/shares/sessions/total/boards/TQBR/securities/${key}.json?from=${todayOneYearAgo}&start=0`,
+          `https://iss.moex.com/iss/history/engines/stock/markets/shares/sessions/total/boards/TQBR/securities/${key}.json?from=${todayOneYearAgo}&start=100`,
+          `https://iss.moex.com/iss/history/engines/stock/markets/shares/sessions/total/boards/TQBR/securities/${key}.json?from=${todayOneYearAgo}&start=200`,
+        ]; //2022-01-01 // ${todayOneYearAgo}
+        console.log(base_URL);
+
         axios
-          .get(base_URL)
+          .get(base_URL[0])
           .then((history) => {
             return history.data.history.data.map((el, i) => {
               return {
                 id: i + 1,
                 shortName: el[2],
                 date: el[1],
-                price: el[11],
+                price: el[9],
+              };
+            });
+          })
+          .then((history) => {
+            dispatch({
+              type: 'SET_HISTORY',
+              payload: history,
+            });
+          })
+          .then(() => axios.get(base_URL[1]))
+          .then((history) => {
+            return history.data.history.data.map((el, i) => {
+              return {
+                id: i + 1,
+                shortName: el[2],
+                date: el[1],
+                price: el[9],
+              };
+            });
+          })
+          .then((history) => {
+            dispatch({
+              type: 'SET_HISTORY',
+              payload: history,
+            });
+          })
+          .then(() => axios.get(base_URL[2]))
+          .then((history) => {
+            return history.data.history.data.map((el, i) => {
+              return {
+                id: i + 1,
+                shortName: el[2],
+                date: el[1],
+                price: el[9],
               };
             });
           })
@@ -173,6 +224,7 @@ function StockAccordion() {
   );
   // console.log('==========> diagramLoading', diagramLoading);
   // console.log('==========> history', history);
+
   return (
     <>
       <TextField
@@ -208,7 +260,7 @@ function StockAccordion() {
         inputProps={{ 'aria-label': 'controlled' }}
       />
 
-      {filterStocks.length > 0
+      {filterStocks.length
         ? filterStocks.map((el, index) => {
             return (
               <Accordion
@@ -219,12 +271,13 @@ function StockAccordion() {
                   wikipediaSearch(el.secid);
                   hystoriCal(el.secid);
                   newsContentSearch(el.shortName);
+                  historicalData(el.secid, el.currency);
                 }}
               >
                 <Badge.Ribbon
                   placement="start"
                   text={el.secid}
-                  color={el.lastchange > 0 ? 'green' : 'red'}
+                  color={el.lastchange > 0 ? '#004d40' : '#ad1457'}
                 >
                   <AccordionSummary
                     expandIcon={<AddTaskOutlinedIcon />}
@@ -232,6 +285,8 @@ function StockAccordion() {
                     id={el.id}
                     sx={{
                       padding: '0 30px 0 70px',
+                      backgroundColor: 'DarkSlateGrey',
+                      color: 'white',
                     }}
                   >
                     <StraightOutlinedIcon
@@ -271,12 +326,13 @@ function StockAccordion() {
                 onClick={() => {
                   wikipediaSearch(el.secid);
                   hystoriCal(el.secid);
+                  historicalData(el.secid, el.currency);
                 }}
               >
                 <Badge.Ribbon
                   placement="start"
                   text={el.secid}
-                  color={el.lastchange > 0 ? 'green' : 'red'}
+                  color={el.lastchange > 0 ? '#004d40' : '#ad1457'}
                 >
                   <AccordionSummary
                     expandIcon={<AddTaskOutlinedIcon />}

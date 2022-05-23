@@ -53,6 +53,9 @@ module.exports = {
       prevprice: {
         type: Sequelize.FLOAT,
       },
+      currency: {
+        type: Sequelize.TEXT,
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,
