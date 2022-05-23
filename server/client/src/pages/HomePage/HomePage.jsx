@@ -2,31 +2,29 @@ import React from 'react';
 import { Grid } from '@mui/material';
 import SliderForNewsAndYouTube from '../../components/SliderForNewsAndYouTube/SliderForNewsAndYouTube';
 import StockAccordion from '../../components/StockAccordion/StockAccordion';
+import Best from '../../components/StocksPacks/Best';
+import Worst from '../../components/StocksPacks/Worst';
 
 function HomePage() {
   return (
     <>
       <Grid container spacing={2} pt={2} >
-        <Grid item xs={8} md={9}>
+        <Grid item xs={12} sm={12} md={12} lg={7} xl={8}>
           <h1>
-            Лучший рост за сегодня
+            Лучшие акции за сегодня
           </h1>
-        <StockAccordion />
-        <h1>
+          <Best />
+          <h1>
             Лучшее падение за сегодня
           </h1>
-          <StockAccordion />
-          <h1>
-            Акции за которыми следит твоя мама
-          </h1>
-          <StockAccordion />
-          
+          <Worst />
+  
         </Grid>
-        <Grid item xs={4} md={3} >
+        <Grid item xs={12} sm={12} md={7} lg={5} xl={4}>
           <SliderForNewsAndYouTube />
         </Grid>
       </Grid>
-      
+
     </>
   );
 }

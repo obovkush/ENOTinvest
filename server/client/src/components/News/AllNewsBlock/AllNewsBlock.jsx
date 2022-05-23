@@ -14,25 +14,25 @@ export default function AllNewsBlock({ spinner, Item }) {
   const listOfConcatNews = useSelector(store => store.allNews)
 
   
-  // Получаем данные с API YouTube и записываем в Redux
-  useEffect(() => {
-    // По необходимости нужно добавить различные свойства к запросу, например сортировка.
-    axios.get('https://youtube.googleapis.com/youtube/v3/search?part=snippet&channelId=UC-WK8QlQJpAROCrO7dRvqcw&maxResults=3&key=AIzaSyABhJbYlM-GGIKjhaAguyWZKyaRyKCdtVU')
-    .then((listFromChanelInvestFuture) => {
-      const { items } = listFromChanelInvestFuture.data
-      // console.log('====> Видео с канала InvestFuture', items);
-        if (items.length) {
-          const sortedArray = sortedByPublishedDate(items)
-          dispatch({ type: 'SET_ALL_YOUTUBE_VIDEO', payload: sortedArray })
-          setLoading(false)
-        }
-      })
-      .catch(error => console.log(error))
-    }, [])
+  //Получаем данные с API YouTube и записываем в Redux
+  // useEffect(() => {
+  //   // По необходимости нужно добавить различные свойства к запросу, например сортировка.
+  //   axios.get('https://youtube.googleapis.com/youtube/v3/search?part=snippet&channelId=UC-WK8QlQJpAROCrO7dRvqcw&maxResults=3&key=AIzaSyABhJbYlM-GGIKjhaAguyWZKyaRyKCdtVU')
+  //   .then((listFromChanelInvestFuture) => {
+  //     const { items } = listFromChanelInvestFuture.data
+  //     // console.log('====> Видео с канала InvestFuture', items);
+  //       if (items.length) {
+  //         const sortedArray = sortedByPublishedDate(items)
+  //         dispatch({ type: 'SET_ALL_YOUTUBE_VIDEO', payload: sortedArray })
+  //         setLoading(false)
+  //       }
+  //     })
+  //     .catch(error => console.log(error))
+  //   }, [])
 
     // Получаем данные RSS новостей с сервера и записываем в Redux
     useEffect(() => {
-      axios.get('http://localhost:5000/api/rssnews')
+      axios.get(`${process.env.REACT_APP_API_URL}api/rssnews`)
         .then((listFromRSS) => {
           const { data } = listFromRSS
           if (data.length) {
@@ -47,7 +47,6 @@ export default function AllNewsBlock({ spinner, Item }) {
   const combinedAndSortNews = (array1, array2) => {
     const concatArray = array1.concat(array2)
     const sortedArray = sortedByPublishedDate(concatArray)
-    // console.log(sortedArray)
     dispatch({ type: 'SET_NEWS_AND_YOUTUBE_TOGETHER', payload: sortedArray })
     setLoading(false)
   }

@@ -1,39 +1,66 @@
 /* eslint-disable class-methods-use-this */
 const fetch = require('node-fetch');
+const stockService = require('../service/stockservice');
+const ApiError = require('../exceptions/apiError');
 
-const finnhub = require('finnhub');
-
-// задаем массив выборки акций
+// задаем массив выборки русских акций
 const demoStocks = [
   'ABRD',
   'ALRS',
   'GMKN',
+  'MTSS',
   'OZON',
   'SBER',
   'SIBN',
   'VKCO',
-  'VNC',
   'YNDX',
 ];
 
-class StockController {
-  eng(req, res, next) {
-    const { api_key } = finnhub.ApiClient.instance.authentications;
-    api_key.apiKey = 'sandbox_ca1opiqad3i6tbvcpd50'; // Replace this
-    const finnhubClient = new finnhub.DefaultApi();
+// задаем массив выборки фондов
+const demoFunds = ['TBIO', 'TGLD', 'TMOS'];
 
-    finnhubClient.quote('AAPL', (error, data, response) => {
-      res.json(data);
-    });
+class StockController {
+  async getRuStocksFromMOEX() {
+    try {
+      const data = await fetch(
+        'https://iss.moex.com/iss/engines/stock/markets/shares/boards/TQBR/securities.json',
+      );
+      const stocksData = await data.json();
+      stockService.updateStockFromMOEX(stocksData, demoStocks);
+    } catch (err) {
+      console.log(err);
+    }
   }
 
-  async ru(req, res) {
-    const data = await fetch(
-      `https://iss.moex.com/iss/engines/stock/markets/shares/boards/TQBR/securities.json`,
-    );
-    const datajson = await data.json();
-    console.log(datajson.marketdata);
-    // res.send(datajson);
+  async getRuFundsFromMOEX() {
+    try {
+      const data = await fetch(
+        'https://iss.moex.com/iss/engines/stock/markets/shares/boards/TQTF/securities.json',
+      );
+      const fundsData = await data.json();
+      stockService.updateStockFromMOEX(fundsData, demoFunds, 'Фонд');
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  async getAllStocksfromDB(req, res) {
+    try {
+      const allStocks = await stockService.getAllStocksfromDB();
+      return res.json(allStocks);
+    } catch (err) {
+      if (err instanceof ApiError) {
+        return res.status(err.status).send({
+          error: err.code,
+          description: err.message,
+        });
+      }
+      console.log('error', err);
+      return res.status(500).send({
+        error: 'GENERIC',
+        description: 'Что-то пошло не так',
+      });
+    }
   }
 }
 

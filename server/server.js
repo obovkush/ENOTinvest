@@ -8,7 +8,7 @@ const path = require('path');
 const router = require('./routes/index');
 const errorMiddleware = require('./middlewares/errorMiddleware');
 
-// const stockController = require('./controllers/stockController');
+const stockController = require('./controllers/stockController');
 
 const log = console;
 // Задаем порт подключения к серверу
@@ -24,8 +24,12 @@ app.use((req, res, next) => {
   const origin = req.get('origin');
   if (accessList.includes(origin)) {
     res.header('Access-Control-Allow-Origin', origin);
-    res.header('Access-Control-Allow-Headers', 'Content-type');
     res.header('Access-Control-Allow-Credentials', true);
+    res.header('Access-Control-Allow-Methods', 'GET, HEAD, OPTIONS, POST, PUT');
+    res.header(
+      'Access-Control-Allow-Headers',
+      'Origin, X-Requested-With, Content-Type, Accept, Authorization',
+    );
   }
   next();
 });
@@ -55,6 +59,8 @@ const start = async () => {
 
 start();
 
-// Вызов функции обновления информации по русским акциям/фондам с API в базу
-// const int = setInterval(stockController.ru, 20000);
-// setTimeout(() => clearInterval(int), 5000);
+// Вызов функций обновления информации по русским акциям/фондам с API в базу
+const intFetchRuStocks = setInterval(stockController.getRuStocksFromMOEX, 2000);
+setTimeout(() => clearInterval(intFetchRuStocks), 3000);
+const intFetchRuFunds = setInterval(stockController.getRuFundsFromMOEX, 1000);
+setTimeout(() => clearInterval(intFetchRuFunds), 1500);

@@ -1,8 +1,10 @@
 export const initState = {
-  actions: [],
+  history: [],
+  stocks: [],
   user: {},
   userInputs: {},
   news: [],
   youtube: [],
   allNews: [],
+  wikipediaUrl: '',
 };

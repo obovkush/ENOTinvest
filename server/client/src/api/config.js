@@ -30,7 +30,9 @@ $authHost.interceptors.response.use(
     ) {
       originalRequest._isRetry = true;
       try {
-        const data = await $authHost.get(`api/user/refresh`);
+        const data = await axios.get(`api/user/refresh`, {
+          withCredentials: true,
+        });
         localStorage.setItem('token', data.accessToken);
         return $authHost.request(originalRequest);
       } catch (error) {

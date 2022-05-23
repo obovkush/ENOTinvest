@@ -3,13 +3,13 @@ const Parser = require('rss-parser');
 const wiki = require('wikijs').default;
 const googleIt = require('google-it');
 
+
 const parser = new Parser();
 
 const stocksRouter = require('./stockRouter');
 const userRouter = require('./userRouter');
 
 router.use('/stocks', stocksRouter);
-
 router.use('/user', userRouter);
 
 router.get('/', (req, res) => {
@@ -18,6 +18,7 @@ router.get('/', (req, res) => {
 
 // Ручка на получение инфы с Википедии
 router.post('/wikipedia', (req, res) => {
+
   const { secid } = req.body;
   // Ищем в гугле по secid и выводим ссылку с первого сайта
   googleIt({ query: `${secid} компания википедия` }).then((results) => {
