@@ -72,7 +72,7 @@ export default function FullWidthTabs() {
     <Paper
       sx={{
         bgcolor: 'background.paper',
-        height: 920,
+        height: '87vh',
         overflowY: 'hidden',
       }}
 
@@ -98,7 +98,7 @@ export default function FullWidthTabs() {
         id="custom_scroll"
         sx={{
           bgcolor: 'background.paper',
-          height: 920,
+          height: '93%',
           overflowY: 'auto',
         }}
       >
