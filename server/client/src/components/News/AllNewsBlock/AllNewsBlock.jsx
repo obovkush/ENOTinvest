@@ -34,10 +34,9 @@ export default function AllNewsBlock({ spinner, Item }) {
     useEffect(() => {
       axios.get('http://localhost:5000/api/rssnews')
         .then((listFromRSS) => {
-          const { items } = listFromRSS.data
-          // console.log('====> RSS новости Finam', items)
-          if (items.length) {
-            const sortedArray = sortedByPublishedDate(items)
+          const { data } = listFromRSS
+          if (data.length) {
+            const sortedArray = sortedByPublishedDate(data)
             dispatch({ type: 'SET_ALL_NEWS', payload: sortedArray })
             setLoading(false)
           }
