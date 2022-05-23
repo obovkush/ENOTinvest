@@ -29,6 +29,7 @@ export default function Best() {
       .then(({ data }) => {  
         const filterStocks = data.sort((a, b) => b.lastchangeprcnt - a.lastchangeprcnt)
         setFilterStocks(filterStocks.slice(0, 5));
+        setLoading(false);
           });
   }, []);
 
