@@ -16,6 +16,7 @@ import {
 import AddTaskOutlinedIcon from '@mui/icons-material/AddTaskOutlined';
 import StraightOutlinedIcon from '@mui/icons-material/StraightOutlined';
 import { Badge } from 'antd';
+import DetailsOfAccordion from './DetailsOfAccordion';
 
 const currencies = [
   {
@@ -36,7 +37,6 @@ function StockAccordion() {
   const dispatch = useDispatch();
   const stocks = useSelector((state) => state.stocks);
   const [filterStocks, setFilterStocks] = useState(stocks);
-  const wikiLink = useSelector((state) => state.wikipediaUrl);
   const [loading, setLoading] = useState(true);
   const [checked, setChecked] = useState(false);
   const [currency, setCurrency] = useState('Все');
@@ -246,34 +246,7 @@ function StockAccordion() {
                     </Typography>
                   </AccordionSummary>
                 </Badge.Ribbon>
-                <AccordionDetails>
-                  <Grid container spacing={3}>
-                    <Grid item xs={12}>
-                      <Typography>
-                        Некоторая информация: цифры и буквы
-                      </Typography>
-                      <br />
-                      <Typography>
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit,
-                        sed do eiusmod tempor incididunt ut labore et dolore
-                        magna aliqua.
-                      </Typography>
-                    </Grid>
-                    <Grid item xs={12}>
-                      <Diagram />
-                    </Grid>
-                    <Grid item xs={12}>
-                      <Typography>Главные новости</Typography>
-                    </Grid>
-                    <Grid item xs={12}>
-                      <Typography>
-                        <a href={wikiLink}>
-                          Информация о компании на Wikipedia
-                        </a>
-                      </Typography>
-                    </Grid>
-                  </Grid>
-                </AccordionDetails>
+                <DetailsOfAccordion />
               </Accordion>
             );
           })
@@ -325,34 +298,7 @@ function StockAccordion() {
                     </Typography>
                   </AccordionSummary>
                 </Badge.Ribbon>
-                <AccordionDetails>
-                  <Grid container spacing={3}>
-                    <Grid item xs={12}>
-                      <Typography>
-                        Некоторая информация: цифры и буквы
-                      </Typography>
-                      <br />
-                      <Typography>
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit,
-                        sed do eiusmod tempor incididunt ut labore et dolore
-                        magna aliqua.
-                      </Typography>
-                    </Grid>
-                    <Grid item xs={12}>
-                      <Diagram />
-                    </Grid>
-                    <Grid item xs={12}>
-                      <Typography>Главные новости</Typography>
-                    </Grid>
-                    <Grid item xs={12}>
-                      <Typography>
-                        <a href={wikiLink}>
-                          Информация о компании на Wikipedia
-                        </a>
-                      </Typography>
-                    </Grid>
-                  </Grid>
-                </AccordionDetails>
+                <DetailsOfAccordion />
               </Accordion>
             );
           })}
