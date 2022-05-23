@@ -19,8 +19,11 @@ class StockService {
         });
         if (stockData) {
           console.log(
-            '============> Data differents',
-            marketData[index][12] !== stockData.last,
+            `============> Рыночные данные "${securitiesData[index][2]}" ${
+              marketData[index][12] !== stockData.last
+                ? 'обновились'
+                : 'не изменились'
+            }`,
           );
           if (marketData[index][12] !== stockData.last) {
             await stockData.update({
@@ -119,7 +122,7 @@ class StockService {
             }
         }});
         });
-      }, 60 * 1000);
+      }, 600 * 1000);
     } catch (error) {
       console.log('stockservice ENG =>', error);
     }

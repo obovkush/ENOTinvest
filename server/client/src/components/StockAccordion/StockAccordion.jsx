@@ -137,21 +137,64 @@ function StockAccordion() {
   const hystoriCal = React.useCallback(
     (key) => {
       setDiagramLoading(!diagramLoading);
+      dispatch({
+        type: 'REMOVE_HISTORY',
+        payload: [],
+      });
       if (!diagramLoading) {
         const today = new Date();
         const todayOneYearAgo = formatDateMinusYear(today);
         console.log('==========> todayOneYearAgo', todayOneYearAgo);
-        const base_URL = `https://iss.moex.com/iss/history/engines/stock/markets/shares/sessions/total/boards/TQBR/securities/${key}.json?from=${todayOneYearAgo}`;
+        const base_URL = [
+          `https://iss.moex.com/iss/history/engines/stock/markets/shares/sessions/total/boards/TQBR/securities/${key}.json?from=${todayOneYearAgo}&start=0`,
+          `https://iss.moex.com/iss/history/engines/stock/markets/shares/sessions/total/boards/TQBR/securities/${key}.json?from=${todayOneYearAgo}&start=100`,
+          `https://iss.moex.com/iss/history/engines/stock/markets/shares/sessions/total/boards/TQBR/securities/${key}.json?from=${todayOneYearAgo}&start=200`,
+        ]; //2022-01-01 // ${todayOneYearAgo}
         console.log(base_URL);
+
         axios
-          .get(base_URL)
+          .get(base_URL[0])
           .then((history) => {
             return history.data.history.data.map((el, i) => {
               return {
                 id: i + 1,
                 shortName: el[2],
                 date: el[1],
-                price: el[11],
+                price: el[9],
+              };
+            });
+          })
+          .then((history) => {
+            dispatch({
+              type: 'SET_HISTORY',
+              payload: history,
+            });
+          })
+          .then(() => axios.get(base_URL[1]))
+          .then((history) => {
+            return history.data.history.data.map((el, i) => {
+              return {
+                id: i + 1,
+                shortName: el[2],
+                date: el[1],
+                price: el[9],
+              };
+            });
+          })
+          .then((history) => {
+            dispatch({
+              type: 'SET_HISTORY',
+              payload: history,
+            });
+          })
+          .then(() => axios.get(base_URL[2]))
+          .then((history) => {
+            return history.data.history.data.map((el, i) => {
+              return {
+                id: i + 1,
+                shortName: el[2],
+                date: el[1],
+                price: el[9],
               };
             });
           })
@@ -168,6 +211,7 @@ function StockAccordion() {
   );
   console.log('==========> diagramLoading', diagramLoading);
   // console.log('==========> history', history);
+
   return (
     <>
       <TextField
@@ -203,7 +247,7 @@ function StockAccordion() {
         inputProps={{ 'aria-label': 'controlled' }}
       />
 
-      {filterStocks.length > 0
+      {filterStocks.length
         ? filterStocks.map((el, index) => {
             return (
               <Accordion
@@ -227,7 +271,7 @@ function StockAccordion() {
                     id={el.id}
                     sx={{
                       padding: '0 30px 0 70px',
-                      backgroundColor: '#1d2327',
+                      backgroundColor: 'DarkSlateGrey',
                       color: 'white',
                     }}
                   >
