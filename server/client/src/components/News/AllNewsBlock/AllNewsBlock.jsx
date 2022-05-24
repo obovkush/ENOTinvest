@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import axios from 'axios';
 import { Box } from '@mui/system';
 import ReactPlayer from 'react-player';
-import logo from '/home/falcon/elbrus/final/ENOTinvest/server/client/src/components/Drawer/logo.png'
+import logo from '../../Drawer/logo.png'
 
 export default function AllNewsBlock({ spinner, Item }) {
 
