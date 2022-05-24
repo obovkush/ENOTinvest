@@ -2,10 +2,10 @@ import { LinearProgress, Stack } from '@mui/material'
 import React from 'react'
 import { useSelector } from 'react-redux'
 import { Box } from '@mui/system';
-import logo from '../../Drawer/logo.png'
+import logo from '../../Drawer/logo.png';
 
 export default function NewsBlock({ spinner, Item }) {
-  
+
   const { loading, setLoading } = spinner
   const listFromRSS = useSelector(store => store.news)
 
