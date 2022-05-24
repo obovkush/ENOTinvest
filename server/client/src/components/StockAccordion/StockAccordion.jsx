@@ -75,7 +75,7 @@ const currencies = [
   },
   {
     value: 'USD',
-    label: '$',
+    label: 'USD',
   },
   {
     value: 'EUR',
@@ -95,17 +95,14 @@ function StockAccordion() {
 
   const historicalData = (key, currency) => {
     if (currency === 'USD') {
-      // setTimeout(() => {
-      //   console.log('Здесь будет api/stocks/USD history');
-      //   fetch(`https://api.polygon.io/v2/aggs/ticker/${key}/range/1/day/2020-05-20/2022-05-20?apiKey=MVOp2FJDsLDLqEmq1t6tYy8hXro8YgUh`, {
-      //     method: 'GET',
-      //     headers: { 'Content-Type': 'application/json' },
-      //   }).then((res) => res.json())
-      //     .then((data) => {
-      //       dispatch({ type: 'HISTORY_USD', payload: data.results });
-      //     })
-      //     .catch((err) => console.log('stocks GET =>', err));
-      // }, 10000);
+        fetch(`https://api.polygon.io/v2/aggs/ticker/${key}/range/1/day/2021-05-20/2022-05-20?apiKey=MVOp2FJDsLDLqEmq1t6tYy8hXro8YgUh`, {
+          method: 'GET',
+          headers: { 'Content-Type': 'application/json' },
+        }).then((res) => res.json())
+          .then((data) => {
+              dispatch({ type: 'SET_HISTORY', payload: data.results.map((el, i) => { return { id: i, price: el.c, date: new Date(el.t).toLocaleDateString("sma-SE")}}) });
+          })
+          .catch((err) => console.log('stocks API history =>', err));
     } else {
       console.log('Здесь будет api/stocks/RU history');
     }
@@ -161,7 +158,7 @@ function StockAccordion() {
 
   const moneyChange = (event) => {
     setCurrency(event.target.value);
-    if (currency === '$' || currency === '€') {
+    if (currency === 'USD' || currency === '€') {
       const filtrstocks = stocks.filter((el) => el.value === currency);
       setFilterStocks(filtrstocks);
     } else {

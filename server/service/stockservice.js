@@ -86,12 +86,9 @@ class StockService {
       setInterval(() => {
         stocks.forEach((el) => {
           finnhubClient.quote(`${el}`, async (error, data, response) => {
-            const checkStock = await Stock.findOne({
-              where: { secid: `${el}` },
-              row: true,
-            });
+            const checkStock = await Stock.findOne({ where: { secid: `${el}` }, row: true });
             if (checkStock) {
-              if (data.c.toFixed(2) !== checkStock.last) {
+              if (data?.c?.toFixed(2) !== checkStock.last) {
                 await Stock.update(
                   {
                     open: data.o,
@@ -107,6 +104,7 @@ class StockService {
                   },
                   { where: { id: checkStock.id } },
                 );
+              }
               } else {
                 await Stock.create({
                   secid: `${el}`,
@@ -118,25 +116,16 @@ class StockService {
                   last: data.c.toFixed(2),
                   prevprice: data.pc,
                   lastchange: data.d.toFixed(2),
-                  lastchangeprcnt: (
-                    ((data.c - data.pc) / data.pc) *
-                    100
-                  ).toFixed(2),
+                  lastchangeprcnt: (((data.c - data.pc) / data.pc) * 100 ).toFixed(2),
                 });
-                finnhubClient.companyProfile2(
-                  { symbol: `${el}` },
-                  async (error, data, response) => {
-                    await Stock.update(
-                      { shortName: data.name, currency: data.currency },
-                      { where: { shortName: `${el}` } },
-                    );
-                  },
-                );
+                finnhubClient.companyProfile2( { symbol: `${el}` }, async (error, data, response) => { 
+                  await Stock.update( { shortName: data.name, currency: data.currency }, { where: { shortName: `${el}` } } );
+                  });
               }
+          })
             }
-          });
-        });
-      }, 30 * 1000);
+            );
+      }, 2 * 60 * 1000);
     } catch (error) {
       console.log('stockservice ENG =>', error);
     }

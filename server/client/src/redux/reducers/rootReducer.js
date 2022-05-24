@@ -9,6 +9,7 @@ import { wikipediaUrlReducer } from './wikipediaUrlReducer';
 import { historyReducer } from './historyReducer';
 import { companyNewsReducer } from './companyNewsReducer';
 import { companyInfoReducer } from './companyInfoReducer'
+import { historyUSDReducer } from './historyENGReducer';
 
 export const rootReducer = combineReducers({
   history: historyReducer,
@@ -21,4 +22,5 @@ export const rootReducer = combineReducers({
   companyNews: companyNewsReducer,
   wikipediaUrl: wikipediaUrlReducer,
   companyInfo: companyInfoReducer,
+  historyUSD: historyUSDReducer,
 });
