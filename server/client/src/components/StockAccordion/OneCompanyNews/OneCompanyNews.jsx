@@ -14,6 +14,7 @@ export default function OneCompanyNews() {
           return (
             <Grid
               container
+              key={elem.link}
               spacing={2}
               id="custom_scroll"
               sx={{ textAlign: 'center', height: 180, overflow: 'auto' }}
