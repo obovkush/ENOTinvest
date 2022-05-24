@@ -111,10 +111,10 @@ function ResponsiveDrawer(props) {
       icon: <Dns sx={{ fill: '#e65100' }} />,
     },
     {
-      display: 'Аномалии',
-      to: '/anomaly',
-      section: 'anomaly',
-      icon: <Public sx={{ fill: '#e65100' }} />,
+      display: 'Портфель',
+      to: '/profile',
+      section: 'profile',
+      icon: <Public />,
     },
     {
       display: 'Логин',

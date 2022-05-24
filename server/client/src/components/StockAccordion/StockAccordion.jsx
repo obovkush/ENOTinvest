@@ -219,7 +219,6 @@ function StockAccordion() {
           `https://iss.moex.com/iss/history/engines/stock/markets/shares/sessions/total/boards/TQBR/securities/${key}.json?from=${todayOneYearAgo}&start=200`,
         ]; //2022-01-01 // ${todayOneYearAgo}
         console.log(base_URL);
-
         axios
           .get(base_URL[0])
           .then((history) => {
@@ -277,6 +276,7 @@ function StockAccordion() {
     },
     [diagramLoading, dispatch],
   );
+
   // console.log('==========> diagramLoading', diagramLoading);
   // console.log('==========> history', history);
   const labelCheckBox = { inputProps: { 'aria-label': 'controlled' } };
