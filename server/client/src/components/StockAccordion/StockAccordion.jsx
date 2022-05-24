@@ -11,11 +11,10 @@ import {
   Typography,
   LinearProgress,
   Box,
-  Grid,
 } from '@mui/material';
 import InputAdornment from '@mui/material/InputAdornment';
 import SearchIcon from '@mui/icons-material/Search';
-import AddTaskOutlinedIcon from '@mui/icons-material/AddTaskOutlined';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import StraightOutlinedIcon from '@mui/icons-material/StraightOutlined';
 import { styled, alpha } from '@mui/material/styles';
 import InputBase from '@mui/material/InputBase';
@@ -101,11 +100,22 @@ function StockAccordion() {
         fetch(`https://api.polygon.io/v2/aggs/ticker/${key}/range/1/day/${year -1}-0${month}-${day}/${year}-0${month}-${day}?apiKey=MVOp2FJDsLDLqEmq1t6tYy8hXro8YgUh`, {
           method: 'GET',
           headers: { 'Content-Type': 'application/json' },
-        }).then((res) => res.json())
-          .then((data) => {
-              dispatch({ type: 'SET_HISTORY', payload: data.results.map((el, i) => { return { id: i, price: el.c, date: new Date(el.t).toLocaleDateString("sma-SE")}}) });
-          })
-          .catch((err) => console.log('stocks API history =>', err));
+        },
+      )
+        .then((res) => res.json())
+        .then((data) => {
+          dispatch({
+            type: 'SET_HISTORY',
+            payload: data.results.map((el, i) => {
+              return {
+                id: i,
+                price: el.c,
+                date: new Date(el.t).toLocaleDateString('sma-SE'),
+              };
+            }),
+          });
+        })
+        .catch((err) => console.log('stocks API history =>', err));
     } else {
       console.log('Здесь будет api/stocks/RU history');
     }
@@ -141,14 +151,17 @@ function StockAccordion() {
   };
 
   const companyInfoSearch = (secid) => {
-    const stocksCopy = [...stocks]
-    const info = stocksCopy.filter(el => el.secid === secid )
+    const stocksCopy = [...stocks];
+    const info = stocksCopy.filter((el) => el.secid === secid);
     if (info.length === 1) {
-      dispatch({ type: 'SET_CURRENT_COMPANY_INFO', payload: info[0].companyinfo });
+      dispatch({
+        type: 'SET_CURRENT_COMPANY_INFO',
+        payload: info[0].companyinfo,
+      });
     } else {
-      console.log('Отфильтровалось 0 или более 1 компании')
+      console.log('Отфильтровалось 0 или более 1 компании');
     }
-  }
+  };
 
   const newsContentSearch = (elemName) => {
     const splitName = elemName.split(' ')[0];
@@ -378,7 +391,7 @@ function StockAccordion() {
                   color={el.lastchange > 0 ? '#004d40' : '#ad1457'}
                 >
                   <AccordionSummary
-                    expandIcon={<AddTaskOutlinedIcon />}
+                    expandIcon={<ExpandMoreIcon />}
                     aria-controls={el.id}
                     id={el.id}
                     sx={{
@@ -434,7 +447,7 @@ function StockAccordion() {
                   color={el.lastchange > 0 ? '#004d40' : '#ad1457'}
                 >
                   <AccordionSummary
-                    expandIcon={<AddTaskOutlinedIcon />}
+                    expandIcon={<ExpandMoreIcon />}
                     aria-controls={el.id}
                     id={el.id}
                     sx={{
