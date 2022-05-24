@@ -27,6 +27,9 @@ module.exports = {
       activationLink: {
         type: Sequelize.TEXT,
       },
+      tinkToken: {
+        type: Sequelize.TEXT,
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,
