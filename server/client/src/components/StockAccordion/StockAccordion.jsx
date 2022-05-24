@@ -13,10 +13,60 @@ import {
   Box,
   Grid,
 } from '@mui/material';
+import InputAdornment from '@mui/material/InputAdornment';
+import SearchIcon from '@mui/icons-material/Search';
 import AddTaskOutlinedIcon from '@mui/icons-material/AddTaskOutlined';
 import StraightOutlinedIcon from '@mui/icons-material/StraightOutlined';
+import { styled, alpha } from '@mui/material/styles';
+import InputBase from '@mui/material/InputBase';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import FavoriteBorder from '@mui/icons-material/FavoriteBorder';
+import Favorite from '@mui/icons-material/Favorite';
 import { Badge } from 'antd';
 import DetailsOfAccordion from './DetailsOfAccordion';
+
+const Search = styled('div')(({ theme }) => ({
+  position: 'relative',
+  borderRadius: theme.shape.borderRadius,
+  backgroundColor: alpha(theme.palette.common.white, 0.75),
+  '&:hover': {
+    backgroundColor: alpha(theme.palette.common.white, 0.95),
+  },
+  marginLeft: 0,
+  marginRight: 30,
+  width: '100%',
+  [theme.breakpoints.up('sm')]: {
+    marginLeft: theme.spacing(1),
+    width: 'auto',
+  },
+}));
+
+const SearchIconWrapper = styled('div')(({ theme }) => ({
+  padding: theme.spacing(0, 2),
+  height: '100%',
+  position: 'absolute',
+  pointerEvents: 'none',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+}));
+
+const StyledInputBase = styled(InputBase)(({ theme }) => ({
+  color: 'black',
+  '& .MuiInputBase-input': {
+    padding: theme.spacing(1, 1, 1, 0),
+    // vertical padding + font size from searchIcon
+    paddingLeft: `calc(1em + ${theme.spacing(4)})`,
+    transition: theme.transitions.create('width'),
+    width: '100%',
+    [theme.breakpoints.up('sm')]: {
+      width: '16ch',
+      '&:focus': {
+        width: '20ch',
+      },
+    },
+  },
+}));
 
 const currencies = [
   {
@@ -36,7 +86,7 @@ const currencies = [
 function StockAccordion() {
   const dispatch = useDispatch();
   const stocks = useSelector((state) => state.stocks);
-  const allNews = useSelector((state) => state.allNews)
+  const allNews = useSelector((state) => state.allNews);
   const [filterStocks, setFilterStocks] = useState(stocks);
   const [loading, setLoading] = useState(true);
   const [checked, setChecked] = useState(false);
@@ -90,14 +140,18 @@ function StockAccordion() {
   };
 
   const newsContentSearch = (elemName) => {
-    const splitName = elemName.split(' ')[0]
+    const splitName = elemName.split(' ')[0];
     const lowerCaseName = splitName.toLowerCase();
     const upperCaseName = splitName.toUpperCase();
-    const arrayOfNews = [...allNews]
-    const companyNews = arrayOfNews.filter((elem) => elem.title.includes(splitName || lowerCaseName || upperCaseName) || elem.content?.includes(splitName || lowerCaseName || upperCaseName));
-    console.log(companyNews)
+    const arrayOfNews = [...allNews];
+    const companyNews = arrayOfNews.filter(
+      (elem) =>
+        elem.title.includes(splitName || lowerCaseName || upperCaseName) ||
+        elem.content?.includes(splitName || lowerCaseName || upperCaseName),
+    );
+    console.log(companyNews);
     dispatch({ type: 'NEWS_OF_CURRENT_COMPANY', payload: companyNews });
-  }
+  };
 
   const moneyChange = (event) => {
     setCurrency(event.target.value);
@@ -222,27 +276,45 @@ function StockAccordion() {
   );
   // console.log('==========> diagramLoading', diagramLoading);
   // console.log('==========> history', history);
+  const labelCheckBox = { inputProps: { 'aria-label': 'controlled' } };
 
   return (
     <>
+      <Search sx={{ display: 'inline-block' }}>
+        <SearchIconWrapper>
+          <SearchIcon sx={{ color: 'gray' }} />
+        </SearchIconWrapper>
+        <StyledInputBase
+          onChange={(value) => searchStock(value)}
+          placeholder="Поиск по акциям"
+          inputProps={{ 'aria-label': 'search' }}
+        />
+      </Search>
+
       <TextField
         onChange={(value) => searchStock(value)}
         sx={{ width: '180px', paddingBottom: '20px' }}
         id="filled-basic"
+        InputProps={{
+          startAdornment: (
+            <InputAdornment position="start">
+              <SearchIcon />
+            </InputAdornment>
+          ),
+        }}
         label="Поиск по акциям"
-        variant="filled"
+        variant="outlined"
       />
 
       <TextField
         id="standard-select-currency-native"
-        sx={{ width: '180px', paddingLeft: '20px', paddingTop: '24px' }}
+        sx={{ width: '180px', paddingLeft: '20px', paddingBottom: '20px' }}
         select
         value={currency}
         onChange={moneyChange}
         SelectProps={{
           native: true,
         }}
-        variant="standard"
       >
         {currencies.map((option) => (
           <option key={option.value} value={option.value}>
@@ -250,13 +322,26 @@ function StockAccordion() {
           </option>
         ))}
       </TextField>
-
-      <Checkbox
+      <FormControlLabel
+        control={
+          <Checkbox
+            {...labelCheckBox}
+            icon={<FavoriteBorder />}
+            checkedIcon={<Favorite sx={{ fill: '#ad1457' }} />}
+            checked={checked}
+            sx={{ paddingLeft: '20px' }}
+            onChange={FondsCheck}
+          />
+        }
+        label="Сердечко Олега"
+        sx={{ color: 'gray', paddingTop: '6px' }}
+      />
+      {/* <Checkbox
         checked={checked}
         sx={{ paddingLeft: '20px', paddingTop: '24px' }}
         onChange={FondsCheck}
         inputProps={{ 'aria-label': 'controlled' }}
-      />
+      /> */}
 
       {filterStocks.length
         ? filterStocks.map((el, index) => {
@@ -283,8 +368,7 @@ function StockAccordion() {
                     id={el.id}
                     sx={{
                       padding: '0 30px 0 70px',
-                      backgroundColor: 'DarkSlateGrey',
-                      color: 'white',
+                      backgroundColor: '#eaeaea',
                     }}
                   >
                     <StraightOutlinedIcon
@@ -338,6 +422,7 @@ function StockAccordion() {
                     id={el.id}
                     sx={{
                       padding: '0 30px 0 70px',
+                      backgroundColor: '#eaeaea',
                     }}
                   >
                     <StraightOutlinedIcon
