@@ -1,13 +1,14 @@
 import './App.css';
 import { useEffect } from 'react';
 
-import 'boxicons/css/boxicons.min.css'
+import 'boxicons/css/boxicons.min.css';
 import { checkAuth } from './api/userAPI';
-import { useDispatch } from 'react-redux';
-import Drawer from './components/Drawer/Drawer'
+import { useDispatch, useSelector } from 'react-redux';
+import Drawer from './components/Drawer/Drawer';
 
 function App() {
   const dispatch = useDispatch();
+  const user = useSelector((store) => store.user);
 
   useEffect(() => {
     if (localStorage.getItem('token')) {
@@ -25,9 +26,7 @@ function App() {
     }
   }, [dispatch]);
 
-  return (
-    <Drawer />
-  );
+  return <Drawer />;
 }
 
 export default App;
