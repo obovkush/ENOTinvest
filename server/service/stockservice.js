@@ -88,7 +88,7 @@ class StockService {
           finnhubClient.quote(`${el}`, async (error, data, response) => {
             const checkStock = await Stock.findOne({ where: { secid: `${el}` }, row: true });
             if (checkStock) {
-              if (data.c.toFixed(2) !== checkStock.last) {
+              if (data.c?.toFixed(2) !== checkStock.last) {
                 await Stock.update({
                   open: data.o,
                   high: data.h,
@@ -122,7 +122,7 @@ class StockService {
             }
         });
         });
-      }, 30 * 1000);
+      }, 2 * 60 * 1000);
     } catch (error) {
       console.log('stockservice ENG =>', error);
     }
