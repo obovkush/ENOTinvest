@@ -3,9 +3,11 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 import Diagram from '../Diagram/Diagram';
 import OneCompanyNews from './OneCompanyNews/OneCompanyNews';
+import wikilogo from './wikilogo.png'
 
 export default function DetailsOfAccordion() {
   const wikiLink = useSelector((state) => state.wikipediaUrl);
+  const companyInfo = useSelector(state => state.companyInfo)
 
   return (
     <AccordionDetails>
@@ -26,8 +28,16 @@ export default function DetailsOfAccordion() {
           <OneCompanyNews />
         </Grid>
         <Grid item xs={12}>
-          <Typography>
-            <a href={wikiLink}>Информация о компании на Wikipedia</a>
+          <Typography>О компании:</Typography>
+          <Typography sx={{ fontSize: 12 }}>
+            {companyInfo}
+          </Typography>
+          <br />
+          <Typography sx={{ fontSize: 12, fontStyle: 'italic' }}>
+            <a href={wikiLink}>
+              <img src={wikilogo} style={{ height: 30 }} alt="wikilogo" />
+              Информация о компании на Wikipedia
+            </a>
           </Typography>
         </Grid>
       </Grid>

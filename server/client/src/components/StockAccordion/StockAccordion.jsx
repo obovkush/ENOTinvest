@@ -126,6 +126,7 @@ function StockAccordion() {
     setExpanded(isExpanded ? panel : false);
   };
 
+  // Ищем информацию о компании в википедии
   const wikipediaSearch = (elem) => {
     axios
       .post(`${process.env.REACT_APP_API_URL}api/wikipedia`, {
@@ -139,17 +140,22 @@ function StockAccordion() {
       });
   };
 
+  const companyInfoSearch = (secid) => {
+    const stocksCopy = [...stocks]
+    const info = stocksCopy.filter(el => el.secid === secid )
+    if (info.length === 1) {
+      dispatch({ type: 'SET_CURRENT_COMPANY_INFO', payload: info[0].companyinfo });
+    } else {
+      console.log('Отфильтровалось 0 или более 1 компании')
+    }
+  }
+
   const newsContentSearch = (elemName) => {
     const splitName = elemName.split(' ')[0];
     const lowerCaseName = splitName.toLowerCase();
     const upperCaseName = splitName.toUpperCase();
-    const arrayOfNews = [...allNews];
-    const companyNews = arrayOfNews.filter(
-      (elem) =>
-        elem.title.includes(splitName || lowerCaseName || upperCaseName) ||
-        elem.content?.includes(splitName || lowerCaseName || upperCaseName),
-    );
-    console.log(companyNews);
+    const arrayOfNews = [...allNews]
+    const companyNews = arrayOfNews.filter((elem) => elem.title.includes(splitName || lowerCaseName || upperCaseName) || elem.content?.includes(splitName || lowerCaseName || upperCaseName));
     dispatch({ type: 'NEWS_OF_CURRENT_COMPANY', payload: companyNews });
   };
 
@@ -352,6 +358,7 @@ function StockAccordion() {
                 key={el.secid}
                 onClick={() => {
                   wikipediaSearch(el.secid);
+                  companyInfoSearch(el.secid);
                   hystoriCal(el.secid);
                   newsContentSearch(el.shortName);
                   historicalData(el.secid, el.currency);
@@ -407,7 +414,9 @@ function StockAccordion() {
                 key={el.secid}
                 onClick={() => {
                   wikipediaSearch(el.secid);
+                  companyInfoSearch(el.secid);
                   hystoriCal(el.secid);
+                  newsContentSearch(el.shortName);
                   historicalData(el.secid, el.currency);
                 }}
               >

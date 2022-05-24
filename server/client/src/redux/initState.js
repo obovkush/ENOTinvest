@@ -8,4 +8,5 @@ export const initState = {
   allNews: [],
   wikipediaUrl: '',
   companyNews: [],
+  companyInfo: '',
 };

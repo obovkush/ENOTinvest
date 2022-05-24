@@ -151,7 +151,7 @@ function ResponsiveDrawer(props) {
           <NavLink to={item.to} key={index}>
             <ListItem key={item.display} disablePadding>
               <ListItemButton>
-                <ListItemIcon sx={{ filter: 'invert(1)' }}>{item.icon}</ListItemIcon>
+                <ListItemIcon>{item.icon}</ListItemIcon>
                 <ListItemText primary={item.display} />
               </ListItemButton>
             </ListItem>
