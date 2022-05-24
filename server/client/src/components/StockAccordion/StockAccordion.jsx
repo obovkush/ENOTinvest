@@ -152,7 +152,6 @@ function StockAccordion() {
 
   const newsContentSearch = (elemName) => {
     const splitName = elemName.split(' ')[0];
-    console.log(splitName)
     const lowerCaseName = splitName.toLowerCase();
     const upperCaseName = splitName.toUpperCase();
     const arrayOfNews = [...allNews]
