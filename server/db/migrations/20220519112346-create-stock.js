@@ -57,6 +57,7 @@ module.exports = {
       prevprice: {
         type: Sequelize.FLOAT,
       },
+      // Валюта 'USD', 'RUB'
       currency: {
         type: Sequelize.TEXT,
       },
