@@ -20,7 +20,7 @@ export default function DetailsOfAccordion() {
             eiusmod tempor incididunt ut labore et dolore magna aliqua.
           </Typography>
         </Grid>
-        <Grid item xs={6}>
+        <Grid item xs={12}>
           <Diagram />
         </Grid>
         <Grid item xs={12}>
