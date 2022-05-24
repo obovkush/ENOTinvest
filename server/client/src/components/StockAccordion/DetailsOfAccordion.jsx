@@ -34,7 +34,7 @@ export default function DetailsOfAccordion() {
           </Typography>
           <br />
           <Typography sx={{ fontSize: 12, fontStyle: 'italic' }}>
-            <a href={wikiLink}>
+            <a href={wikiLink} target="_blank" rel="noreferrer">
               <img src={wikilogo} style={{ height: 30 }} alt="wikilogo" />
               Информация о компании на Wikipedia
             </a>

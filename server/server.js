@@ -6,7 +6,7 @@ const app = express();
 const path = require('path');
 const router = require('./routes/index');
 const errorMiddleware = require('./middlewares/errorMiddleware');
-const stockController = require('./controllers/stockController');
+// const stockController = require('./controllers/stockController');
 
 const log = console;
 // Задаем порт подключения к серверу
@@ -59,7 +59,7 @@ const start = async () => {
 start();
 
 // Вызов функций обновления информации по русским акциям/фондам с API в базу
-const intFetchRuStocks = setInterval(stockController.getRuStocksFromMOEX, 2000);
-setTimeout(() => clearInterval(intFetchRuStocks), 3000);
-const intFetchRuFunds = setInterval(stockController.getRuFundsFromMOEX, 1000);
-setTimeout(() => clearInterval(intFetchRuFunds), 1500);
+// const intFetchRuStocks = setInterval(stockController.getRuStocksFromMOEX, 2000);
+// setTimeout(() => clearInterval(intFetchRuStocks), 3000);
+// const intFetchRuFunds = setInterval(stockController.getRuFundsFromMOEX, 1000);
+// setTimeout(() => clearInterval(intFetchRuFunds), 1500);
