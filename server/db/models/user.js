@@ -35,6 +35,9 @@ module.exports = (sequelize, DataTypes) => {
       activationLink: {
         type: DataTypes.TEXT,
       },
+      tinkToken: {
+        type: DataTypes.TEXT,
+      },
       createdAt: {
         allowNull: false,
         type: DataTypes.DATE,

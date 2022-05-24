@@ -4,6 +4,8 @@ module.exports = {
       {
         // Идентификатор финансового инструмента
         secid: 'ABRD',
+        // Режим торгов
+        board: 'TQBR',
         // Тип акция/фонд
         type: 'Акция',
         // Краткое наименование ценной бумаги"
@@ -18,13 +20,13 @@ module.exports = {
         high: 125,
         // Цена последней сделки
         last: 124,
-        // Изменение цены последней сделки к цене предыдущей сделки, рублей
+        // Изменение цены последней сделки к цене предыдущего дня, рублей
         lastchange: -1,
-        // Изменение цены последней сделки к цене предыдущей сделки, %
+        // Изменение цены последней сделки к цене предыдущего дня, %
         lastchangeprcnt: -0.7,
         // Цена предыдущего дня
         prevprice: 122,
-        companyinfo: `Группа компаний «Абрау-Дюрсо» выпускает игристые вина, произведенные по классической технологии и методом Charmat, тихие вина, а также сидр, крепкие алкогольные напитки, безалкогольные газированные напитки и артезианскую воду. 
+        companyinfo: `Группа компаний «Абрау-Дюрсо» выпускает игристые вина, произведенные по классической технологии и методом Charmat, тихие вина, а также сидр, крепкие алкогольные напитки, безалкогольные газированные напитки и артезианскую воду.
         Группа компаний «Абрау-Дюрсо» представляет коллекции виноделен: «Абрау-Дюрсо», «Винодельня Ведерниковъ», «Лоза», а также является официальным и эксклюзивным дистрибьютором международных брендов Mionetto Prosecco, Henkell и Torley. В 2020 году совокупный объем продаж Группы компаний составил 41,05 млн бутылок. Ежегодно вина из коллекций ГК «Абрау-Дюрсо» получают высокие награды престижных международных дегустационных конкурсов, таких как International Wine & Spirit Competition (IWSC), Decanter World Wine Awards, International Wine Challenge, Mundus Vini и Сhampagne & Sparkling Wine World Championships (CSWWC).`,
         currency: 'RUB',
         createdAt: new Date(),
@@ -33,6 +35,7 @@ module.exports = {
       // Русские акции:
       {
         secid: 'VKCO',
+        board: 'TQBR',
         type: 'Акция',
         shortName: 'VKCO',
         secName: 'VKCO',
@@ -43,7 +46,7 @@ module.exports = {
         lastchange: -1,
         lastchangeprcnt: -0.7,
         prevprice: 122,
-        companyinfo: `VK Company Limited это компания, развивающая электронную коммерцию, русскоязычные социальные сети и мессенджеры. Компания участвует в различных предприятиях, включая порталы, социальные сети и коммуникацию, службы доставки, онлайн-магазины, разработчиков игр и другие. 
+        companyinfo: `VK Company Limited это компания, развивающая электронную коммерцию, русскоязычные социальные сети и мессенджеры. Компания участвует в различных предприятиях, включая порталы, социальные сети и коммуникацию, службы доставки, онлайн-магазины, разработчиков игр и другие.
         Операционные сегменты компании включают электронную почту, портал и мессенджеры; ВКонтакте (ВК) и социальные сети; игры онлайн; поиск, электронную коммерцию и другие услуги. Сегмент электронной почты, портала и мессенджеров, включает электронную почту, службы обмена мгновенными сообщениями и портал mail.ru, вместе с медиапроектами. В сегмент социальных сетей входят социальные сети "Одноклассники" (ОК), "Мой мир" и VK.com. Сегмент онлайн-игр включает браузерные, клиентские и мобильные игры. Сегмент поиска, электронной коммерции и других услуг включает поисковые услуги, электронную коммерцию и другие проекты.`,
         currency: 'RUB',
         createdAt: new Date(),
@@ -51,6 +54,7 @@ module.exports = {
       },
       {
         secid: 'SIBN',
+        board: 'TQBR',
         type: 'Акция',
         shortName: 'SIBN',
         secName: 'SIBN',
@@ -69,6 +73,7 @@ module.exports = {
       },
       {
         secid: 'GMKN',
+        board: 'TQBR',
         type: 'Акция',
         shortName: 'GMKN',
         secName: 'GMKN',
@@ -88,6 +93,7 @@ module.exports = {
       },
       {
         secid: 'MTSS',
+        board: 'TQBR',
         type: 'Акция',
         shortName: 'MTSS',
         secName: 'MTSS',
@@ -105,6 +111,7 @@ module.exports = {
       },
       {
         secid: 'OZON',
+        board: 'TQBR',
         type: 'Акция',
         shortName: 'OZON',
         secName: 'OZON',
@@ -122,6 +129,7 @@ module.exports = {
       },
       {
         secid: 'ALRS',
+        board: 'TQBR',
         type: 'Акция',
         shortName: 'ALRS',
         secName: 'ALRS',
@@ -140,6 +148,7 @@ module.exports = {
       },
       {
         secid: 'SBER',
+        board: 'TQBR',
         type: 'Акция',
         shortName: 'SBER',
         secName: 'SBER',
@@ -157,6 +166,7 @@ module.exports = {
       },
       {
         secid: 'YNDX',
+        board: 'TQBR',
         type: 'Акция',
         shortName: 'YNDX',
         secName: 'YNDX',
@@ -176,6 +186,7 @@ module.exports = {
       // Русские фонды:
       {
         secid: 'TMOS',
+        board: 'TQTF',
         type: 'Фонд',
         shortName: 'TMOS',
         secName: 'TMOS',
@@ -186,16 +197,17 @@ module.exports = {
         lastchange: -1,
         lastchangeprcnt: -0.7,
         prevprice: 122,
-        companyinfo: `TMOS - фонд, который инвестирует в акции крупных публичных компаний России. Целевым индексом является Индекс МосБиржи (IMOEX), который пересматривается раз в квартал.  Валюта фонда -рубли. На Мосбирже  фонд котируется в рублях. В Радаре цена указана также в рублях.`,
+        companyinfo: `TMOS - фонд, который инвестирует в акции крупных публичных компаний России. Целевым индексом является Индекс МосБиржи (IMOEX), который пересматривается раз в квартал.  Валюта фонда - рубли. На Мосбирже фонд котируется в рублях. В Радаре цена указана также в рублях.`,
         currency: 'RUB',
         createdAt: new Date(),
         updatedAt: new Date(),
       },
       {
-        secid: 'TBIO',
+        secid: 'TBRU',
+        board: 'TQTF',
         type: 'Фонд',
-        shortName: 'TBIO',
-        secName: 'TBIO',
+        shortName: 'TBRU',
+        secName: 'TBRU',
         open: 123,
         low: 122,
         high: 125,
@@ -203,16 +215,17 @@ module.exports = {
         lastchange: -1,
         lastchangeprcnt: -0.7,
         prevprice: 122,
-        companyinfo: `TBIO - фонд инвестирует в фармацевтические и биотехнологические компании по всему миру (США, Великобритании, Швейцарии, Китая, Израиль). Основная доля около 90% приходится на США. Фонд отслеживает индекс NASDAQ Biotechnology Total Return Index — индекс полной доходности с реинвестированием дивидендов, рассчитываемого биржей Nasdaq. Веса в индексе взвешены по капитализации компаний. На топ-5 активов должно приходится не более 8% (на каждый актив). Валютой стоимости чистых активов фонда являются доллары США. На Мосбирже фонд котируется в долл. США. В Радаре цена также указана в долларах США.`,
+        companyinfo: `TBRU — биржевой фонд, который инвестирует в краткосрочные, среднесрочные и долгосрочные рублевые облигации. Портфель составляется командой управляющих банка, то есть фактора отслеживания какого-либо индекса нет (как в случае) с ETF-фондом TMOS нет.`,
         currency: 'RUB',
         createdAt: new Date(),
         updatedAt: new Date(),
       },
       {
-        secid: 'TGLD',
+        secid: 'TRUR',
+        board: 'TQTF',
         type: 'Фонд',
-        shortName: 'TGLD',
-        secName: 'TGLD',
+        shortName: 'TRUR',
+        secName: 'TRUR',
         open: 123,
         low: 122,
         high: 125,
@@ -220,7 +233,7 @@ module.exports = {
         lastchange: -1,
         lastchangeprcnt: -0.7,
         prevprice: 122,
-        companyinfo: `TGLD - фонд, который инвестирует в золото через покупку иностранного фонда — iShares Gold Trust ETF. Индикатором фонда выступает также цена iShares Gold Trust ETF, который в свою очередь покупает золотые слитки (под управлением около 30 млрд. долл. США). Валюта фонда - долл. США. На Мосбирже  фонд котируется в долл. США. В Радаре цена указана также в долл. США.  `,
+        companyinfo: `TRUR — биржевой паевой инвестиционный фонд (БПИФ), который торгуется на Московской бирже и вкладывает сразу в 4 класса активов: российские акции, краткосрочные и долгосрочные рублёвые гос облигации, а также золото.`,
         currency: 'RUB',
         createdAt: new Date(),
         updatedAt: new Date(),
@@ -228,6 +241,7 @@ module.exports = {
       // Иностранные акции
       {
         secid: 'NFLX',
+        board: '',
         type: 'Акция',
         shortName: 'Netflix Inc',
         secName: 'NFLX',
@@ -246,6 +260,7 @@ module.exports = {
       },
       {
         secid: 'INTC',
+        board: '',
         type: 'Акция',
         shortName: 'Intel Corp',
         secName: 'INTC',
@@ -264,6 +279,7 @@ module.exports = {
       },
       {
         secid: 'NVDA',
+        board: '',
         type: 'Акция',
         shortName: 'NVIDIA Corp',
         secName: 'NVDA',
@@ -281,6 +297,7 @@ module.exports = {
       },
       {
         secid: 'AAPL',
+        board: '',
         type: 'Акция',
         shortName: 'Apple Inc',
         secName: 'AAPL',
@@ -298,6 +315,7 @@ module.exports = {
       },
       {
         secid: 'TWTR',
+        board: '',
         type: 'Акция',
         shortName: 'Twitter Inc',
         secName: 'TWTR',
@@ -316,6 +334,7 @@ module.exports = {
       },
       {
         secid: 'DIS',
+        board: '',
         type: 'Акция',
         shortName: 'Walt Disney Co',
         secName: 'DIS',
@@ -334,6 +353,7 @@ module.exports = {
       },
       {
         secid: 'AMZN',
+        board: '',
         type: 'Акция',
         shortName: 'Amazon.com Inc',
         secName: 'AMZN',
@@ -352,6 +372,7 @@ module.exports = {
       },
       {
         secid: 'TSLA',
+        board: '',
         type: 'Акция',
         shortName: 'Tesla Inc',
         secName: 'TSLA',
@@ -370,6 +391,7 @@ module.exports = {
       },
       {
         secid: 'BMW@DE',
+        board: '',
         type: 'Акция',
         shortName: 'BMW@DE',
         secName: 'BMW@DE',
