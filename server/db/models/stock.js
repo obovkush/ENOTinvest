@@ -16,6 +16,10 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.TEXT,
         unique: true,
       },
+      // Режим торгов
+      board: {
+        type: DataTypes.TEXT,
+      },
       // Тип акция/фонд
       type: {
         type: DataTypes.TEXT,
@@ -44,11 +48,11 @@ module.exports = (sequelize, DataTypes) => {
       last: {
         type: DataTypes.FLOAT,
       },
-      // Изменение цены последней сделки к цене предыдущей сделки, рублей
+      // Изменение цены последней сделки к цене предыдущего дня, рублей
       lastchange: {
         type: DataTypes.FLOAT,
       },
-      // Изменение цены последней сделки к цене предыдущей сделки, %
+      // Изменение цены последней сделки к цене предыдущего дня, %
       lastchangeprcnt: {
         type: DataTypes.FLOAT,
       },
