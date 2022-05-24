@@ -17,6 +17,7 @@ import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import AppRouter from '../../routes/AppRouter';
 import People from '@mui/icons-material/People';
+import PersonAddAlt1Icon from '@mui/icons-material/PersonAddAlt1';
 import Dns from '@mui/icons-material/Dns';
 import Public from '@mui/icons-material/Public';
 import Home from '@mui/icons-material/Home';
@@ -24,6 +25,54 @@ import { NavLink } from 'react-router-dom';
 import logo from './logo.png';
 import axios from 'axios';
 import AccountMenu from './AccountMenu/AccountMenu';
+
+//-------------------------------------------------
+import { styled, alpha } from '@mui/material/styles';
+import SearchIcon from '@mui/icons-material/Search';
+import InputBase from '@mui/material/InputBase';
+//-------------------------------------------------
+
+const Search = styled('div')(({ theme }) => ({
+  position: 'relative',
+  borderRadius: theme.shape.borderRadius,
+  backgroundColor: alpha(theme.palette.common.white, 0.15),
+  '&:hover': {
+    backgroundColor: alpha(theme.palette.common.white, 0.25),
+  },
+  marginLeft: 0,
+  width: '100%',
+  [theme.breakpoints.up('sm')]: {
+    marginLeft: theme.spacing(1),
+    width: 'auto',
+  },
+}));
+
+const SearchIconWrapper = styled('div')(({ theme }) => ({
+  padding: theme.spacing(0, 2),
+  height: '100%',
+  position: 'absolute',
+  pointerEvents: 'none',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+}));
+
+const StyledInputBase = styled(InputBase)(({ theme }) => ({
+  color: 'inherit',
+  '& .MuiInputBase-input': {
+    padding: theme.spacing(1, 1, 1, 0),
+    // vertical padding + font size from searchIcon
+    paddingLeft: `calc(1em + ${theme.spacing(4)})`,
+    transition: theme.transitions.create('width'),
+    width: '100%',
+    [theme.breakpoints.up('sm')]: {
+      width: '16ch',
+      '&:focus': {
+        width: '20ch',
+      },
+    },
+  },
+}));
 
 const drawerWidth = 240;
 
@@ -53,13 +102,13 @@ function ResponsiveDrawer(props) {
       display: 'Главная',
       to: '/',
       section: '',
-      icon: <Home />,
+      icon: <Home sx={{ fill: '#e65100' }} />,
     },
     {
       display: 'Акции',
       to: '/stocks',
       section: 'stocks',
-      icon: <Dns />,
+      icon: <Dns sx={{ fill: '#e65100' }} />,
     },
     {
       display: 'Портфель',
@@ -71,24 +120,24 @@ function ResponsiveDrawer(props) {
       display: 'Логин',
       to: '/signin',
       section: 'signin',
-      icon: <People />,
+      icon: <People sx={{ fill: '#e65100' }} />,
     },
     {
       display: 'Регистрация',
       to: '/signup',
       section: 'signup',
-      icon: <People />,
+      icon: <PersonAddAlt1Icon sx={{ fill: '#e65100' }} />,
     },
   ];
 
   const drawer = (
     <div>
-      <Toolbar>
+      <Toolbar sx={{ maxHeight: '64px' }}>
         <div className="sidebar__logo">
           <img src={logo} style={{ height: 100 }} alt="logo" />
         </div>
       </Toolbar>
-      <Divider />
+      <Divider sx={{ borderColor: 'white' }}/>
       <Toolbar sx={{ justifyContent: 'center' }}>
         <div className="sidebar__menu__item" style={{ fontSize: '17px' }}>
           USD: {usd}
@@ -96,7 +145,7 @@ function ResponsiveDrawer(props) {
           EUR: {eur}
         </div>
       </Toolbar>
-      <Divider />
+      <Divider sx={{ borderColor: 'white' }}/>
       <List>
         {sidebarNavItems.map((item, index) => (
           <NavLink to={item.to} key={index}>
@@ -125,12 +174,14 @@ function ResponsiveDrawer(props) {
           width: { sm: `calc(100% - ${drawerWidth}px)` },
           ml: { sm: `${drawerWidth}px` },
           justifyContent: 'space-between',
-          backgroundColor: '#1d2327',
+          backgroundColor: '#4d5357',
         }}
       >
-        <Toolbar
+
+        {/* <Toolbar
           sx={{
             justifyContent: 'space-between',
+            borderLeft: '1px solid white',
           }}
         >
           <IconButton
@@ -142,11 +193,9 @@ function ResponsiveDrawer(props) {
           >
             <MenuIcon />
           </IconButton>
-          <Typography variant="h6" noWrap component="div">
-            {/* Какой-нибудь текст или нет */}
-          </Typography>
           <AccountMenu />
-        </Toolbar>
+        </Toolbar> */}
+
       </AppBar>
       <Box
         component="nav"
@@ -167,7 +216,7 @@ function ResponsiveDrawer(props) {
             '& .MuiDrawer-paper': {
               boxSizing: 'border-box',
               width: drawerWidth,
-              backgroundColor: '#1d2327',
+              backgroundColor: '#4d5357',
               color: 'white',
             },
           }}
@@ -181,7 +230,7 @@ function ResponsiveDrawer(props) {
             '& .MuiDrawer-paper': {
               boxSizing: 'border-box',
               width: drawerWidth,
-              backgroundColor: '#1d2327',
+              backgroundColor: '#4d5357',
               color: 'white',
             },
           }}
@@ -200,7 +249,16 @@ function ResponsiveDrawer(props) {
           width: { sm: `calc(100% - ${drawerWidth}px)` },
         }}
       >
-        <Toolbar />
+        <IconButton
+            color="default"
+            aria-label="open drawer"
+            edge="start"
+            onClick={handleDrawerToggle}
+            sx={{ mr: 2, mt: 2, display: { sm: 'none' } }}
+          >
+            <MenuIcon />
+          </IconButton>
+        {/* <Toolbar /> */}
         <AppRouter />
       </Box>
     </Box>

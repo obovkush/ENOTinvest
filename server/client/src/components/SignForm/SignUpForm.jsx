@@ -33,7 +33,7 @@ import {
 // assets
 import { EyeOutlined, EyeInvisibleOutlined } from '@ant-design/icons';
 
-const labelSX = { mb: -2 };
+const labelSX = { mb: 0 };
 
 const SignUp = () => {
   const user = useSelector((store) => store.user);

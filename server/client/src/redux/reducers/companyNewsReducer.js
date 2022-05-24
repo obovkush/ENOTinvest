@@ -1,11 +1,9 @@
 import { initState } from '../initState';
 
-export const historyReducer = (state = initState, action) => {
+export const companyNewsReducer = (state = initState, action) => {
   const { type, payload } = action;
   switch (type) {
-    case 'SET_HISTORY':
-      return [...state, ...payload];
-    case 'REMOVE_HISTORY':
+    case 'NEWS_OF_CURRENT_COMPANY':
       return payload;
     default:
       return state;
