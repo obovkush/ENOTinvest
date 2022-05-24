@@ -59,6 +59,10 @@ module.exports = (sequelize, DataTypes) => {
       currency: {
         type: DataTypes.TEXT,
       },
+      // Информация о компании
+      companyinfo: {
+        type: DataTypes.TEXT,
+      },
       createdAt: {
         allowNull: false,
         type: DataTypes.DATE,

@@ -1,7 +1,7 @@
 import { Grid, Typography } from '@mui/material';
 import React from 'react'
 import { useSelector } from 'react-redux';
-import logo from '/home/falcon/elbrus/final/ENOTinvest/server/client/src/components/Drawer/logo.png'
+import logo from '../../Drawer/logo.png'
 
 export default function OneCompanyNews() {
 
