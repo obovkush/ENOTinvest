@@ -163,6 +163,28 @@ function StockAccordion() {
     }
   };
 
+  // Функция сортировки по дате публикации новости или ролика
+  const sortedByPublishedDate = (array) => {
+    const sortedArray = array.sort((a, b) => {
+      const newsElemA = a?.pubDate?.replace(/[A-Z-:\s]/gim, '').trim();
+      const newsElemB = b?.pubDate?.replace(/[A-Z-:\s]/gim, '').trim();
+      const youtubeElemA = a?.snippet?.publishedAt
+        ?.replace(/[A-Z-:]/gim, '')
+        .trim();
+      const youtubeElemB = b?.snippet?.publishedAt
+        ?.replace(/[A-Z-:]/gim, '')
+        .trim();
+      if ((newsElemA || youtubeElemA) > (newsElemB || youtubeElemB)) {
+        return -1;
+      }
+      if ((newsElemA || youtubeElemA) < (newsElemB || youtubeElemB)) {
+        return 1;
+      }
+      return 0;
+    });
+    return sortedArray;
+  };
+
   const newsContentSearch = (elemName) => {
     const splitName = elemName.split(' ')[0];
     const lowerCaseName = splitName.toLowerCase();
@@ -171,9 +193,9 @@ function StockAccordion() {
     const companyNews = arrayOfNews.filter((elem) => elem.title.includes(splitName || lowerCaseName || upperCaseName) || elem.content?.includes(splitName || lowerCaseName || upperCaseName));
     const firstFiveNews = arrayOfNews.slice(0,5)
     if (!companyNews.length) {
-      dispatch({ type: 'NEWS_OF_CURRENT_COMPANY', payload: firstFiveNews });
+      dispatch({ type: 'NEWS_OF_CURRENT_COMPANY', payload: sortedByPublishedDate(firstFiveNews) });
     } else {
-      dispatch({ type: 'NEWS_OF_CURRENT_COMPANY', payload: companyNews });
+      dispatch({ type: 'NEWS_OF_CURRENT_COMPANY', payload: sortedByPublishedDate(companyNews) });
     }
   };
 
