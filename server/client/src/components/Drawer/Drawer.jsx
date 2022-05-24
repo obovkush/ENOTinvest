@@ -62,9 +62,9 @@ function ResponsiveDrawer(props) {
       icon: <Dns />,
     },
     {
-      display: 'Аномалии',
-      to: '/anomaly',
-      section: 'anomaly',
+      display: 'Портфель',
+      to: '/profile',
+      section: 'profile',
       icon: <Public />,
     },
     {

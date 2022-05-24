@@ -135,9 +135,7 @@ function StockAccordion() {
       if (!diagramLoading) {
         const today = new Date();
         const todayOneYearAgo = formatDateMinusYear(today);
-        console.log('==========> todayOneYearAgo', todayOneYearAgo);
         const base_URL = `https://iss.moex.com/iss/history/engines/stock/markets/shares/sessions/total/boards/TQBR/securities/${key}.json?from=${todayOneYearAgo}`;
-        console.log(base_URL);
         axios
           .get(base_URL)
           .then((history) => {
@@ -161,8 +159,7 @@ function StockAccordion() {
     },
     [diagramLoading, dispatch],
   );
-  console.log('==========> diagramLoading', diagramLoading);
-  // console.log('==========> history', history);
+
   return (
     <>
       <TextField

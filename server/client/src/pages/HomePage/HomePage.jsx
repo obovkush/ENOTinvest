@@ -1,11 +1,14 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Grid } from '@mui/material';
 import SliderForNewsAndYouTube from '../../components/SliderForNewsAndYouTube/SliderForNewsAndYouTube';
 import StockAccordion from '../../components/StockAccordion/StockAccordion';
 import Best from '../../components/StocksPacks/Best';
 import Worst from '../../components/StocksPacks/Worst';
+import axios from 'axios';
+
 
 function HomePage() {
+
   return (
     <>
       <Grid container spacing={2} pt={2} >

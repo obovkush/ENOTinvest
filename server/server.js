@@ -1,6 +1,7 @@
 require('dotenv').config();
 const express = require('express');
 const cookieParser = require('cookie-parser');
+
 const app = express();
 const path = require('path');
 const router = require('./routes/index');
@@ -39,6 +40,7 @@ app.use('/api', router);
 
 // Обработка обшибок, последний middleware
 app.use(errorMiddleware);
+
 
 // Запускаем сервер
 const start = async () => {
