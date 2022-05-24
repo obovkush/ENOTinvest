@@ -16,7 +16,6 @@ const dbConnectionCheck = require('./db/dbConnectionCheck');
 
 app.use(cookieParser());
 
-
 // Вместо политики CORS
 app.use((req, res, next) => {
   const accessList = ['http://localhost:3000'];
@@ -40,6 +39,7 @@ app.use('/api', router);
 
 // Обработка обшибок, последний middleware
 app.use(errorMiddleware);
+
 
 // Запускаем сервер
 const start = async () => {

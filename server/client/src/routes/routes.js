@@ -3,10 +3,13 @@ import {
   SIGNUP_ROUTE,
   HOME_ROUTE,
   STOCK_ROUTE,
+  PROFILE_ROUTE
 } from '../utils/consts';
 import SignPage from '../pages/SignPage/SignPage';
 import HomePage from '../pages/HomePage/HomePage';
 import StockPage from '../pages/StockPage/StockPage';
+import Profile from '../pages/Profile/Profile';
+
 
 // export const authRoutes = [
 //   {
@@ -32,10 +35,10 @@ export const publicRoutes = [
     path: STOCK_ROUTE,
     Component: StockPage,
   },
-  // {
-  //   path: ACTION_ROUTE,
-  //   Component: Info,
-  // },
+  {
+    path: PROFILE_ROUTE,
+    Component: Profile,
+  },
   // {
   //   path: `${ACTION_ROUTE}/:id`,
   //   Component: Toy,
