@@ -1,6 +1,7 @@
 const router = require('express').Router();
 const Parser = require('rss-parser');
 const googleIt = require('google-it');
+const jsoner = require('../json/first.json');
 
 const parser = new Parser();
 
@@ -49,7 +50,7 @@ router.get('/rssnews', async (req, res) => {
     const investNews = rssDataInvest.items;
     const interNews = rssDataInter.items;
     const finamNews = rssDataFinam.items;
-    const arrayOfAllNews = [investNews, interNews, finamNews];
+    const arrayOfAllNews = [investNews, interNews, finamNews, jsoner];
 
     res.json(arrayOfAllNews.flat());
   } catch (error) {
