@@ -17,7 +17,7 @@ const demoStocks = [
 ];
 
 // задаем массив выборки фондов
-const demoFunds = ['TBIO', 'TGLD', 'TMOS'];
+const demoFunds = ['TBRU', 'TMOS', 'TRUR'];
 
 class StockController {
   async getRuStocksFromMOEX() {

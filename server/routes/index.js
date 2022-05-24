@@ -18,12 +18,17 @@ router.get('/', (req, res) => {
 router.post('/wikipedia', (req, res) => {
   const { secid } = req.body;
   // Ищем в гугле по secid и выводим ссылку с первого сайта
-  googleIt({ query: `${secid} компания википедия` }).then((results) => {
-    const link = results.filter((el) => el.link.match(/ru.wikipedia.org/gm));
-    res.json(link[0]?.link);
-  }).catch((error) => {
-    res.json({ message: 'Не удалось получить данные из Wikipedia', error: error.message });
-  });
+  googleIt({ query: `${secid} компания википедия` })
+    .then((results) => {
+      const link = results.filter((el) => el.link.match(/ru.wikipedia.org/gm));
+      res.json(link[0]?.link);
+    })
+    .catch((error) => {
+      res.json({
+        message: 'Не удалось получить данные из Wikipedia',
+        error: error.message,
+      });
+    });
 });
 
 // Ручка на получение RSS новостей

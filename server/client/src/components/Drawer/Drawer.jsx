@@ -17,13 +17,62 @@ import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import AppRouter from '../../routes/AppRouter';
 import People from '@mui/icons-material/People';
+import PersonAddAlt1Icon from '@mui/icons-material/PersonAddAlt1';
 import Dns from '@mui/icons-material/Dns';
 import Public from '@mui/icons-material/Public';
 import Home from '@mui/icons-material/Home';
 import { NavLink } from 'react-router-dom';
-import logo from './logo.png'
+import logo from './logo.png';
 import axios from 'axios';
 import AccountMenu from './AccountMenu/AccountMenu';
+
+//-------------------------------------------------
+import { styled, alpha } from '@mui/material/styles';
+import SearchIcon from '@mui/icons-material/Search';
+import InputBase from '@mui/material/InputBase';
+//-------------------------------------------------
+
+const Search = styled('div')(({ theme }) => ({
+  position: 'relative',
+  borderRadius: theme.shape.borderRadius,
+  backgroundColor: alpha(theme.palette.common.white, 0.15),
+  '&:hover': {
+    backgroundColor: alpha(theme.palette.common.white, 0.25),
+  },
+  marginLeft: 0,
+  width: '100%',
+  [theme.breakpoints.up('sm')]: {
+    marginLeft: theme.spacing(1),
+    width: 'auto',
+  },
+}));
+
+const SearchIconWrapper = styled('div')(({ theme }) => ({
+  padding: theme.spacing(0, 2),
+  height: '100%',
+  position: 'absolute',
+  pointerEvents: 'none',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+}));
+
+const StyledInputBase = styled(InputBase)(({ theme }) => ({
+  color: 'inherit',
+  '& .MuiInputBase-input': {
+    padding: theme.spacing(1, 1, 1, 0),
+    // vertical padding + font size from searchIcon
+    paddingLeft: `calc(1em + ${theme.spacing(4)})`,
+    transition: theme.transitions.create('width'),
+    width: '100%',
+    [theme.breakpoints.up('sm')]: {
+      width: '16ch',
+      '&:focus': {
+        width: '20ch',
+      },
+    },
+  },
+}));
 
 const drawerWidth = 240;
 
@@ -31,17 +80,18 @@ function ResponsiveDrawer(props) {
   const { window } = props;
   const [mobileOpen, setMobileOpen] = React.useState(false);
 
-  const [usd, setUsd] = useState(0)
-  const [eur, setEur] = useState(0)
+  const [usd, setUsd] = useState(0);
+  const [eur, setEur] = useState(0);
 
   useEffect(() => {
-    axios.get('https://www.cbr-xml-daily.ru/daily_json.js')
+    axios
+      .get('https://www.cbr-xml-daily.ru/daily_json.js')
       .then((data) => {
-        setUsd(data.data.Valute.USD.Value)
-        setEur(data.data.Valute.EUR.Value)
+        setUsd(data.data.Valute.USD.Value);
+        setEur(data.data.Valute.EUR.Value);
       })
-      .catch(error => console.log(error))
-  }, [])
+      .catch((error) => console.log(error));
+  }, []);
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
@@ -52,72 +102,68 @@ function ResponsiveDrawer(props) {
       display: 'Главная',
       to: '/',
       section: '',
-      icon: <Home />
+      icon: <Home sx={{ fill: '#e65100' }} />,
     },
     {
       display: 'Акции',
       to: '/stocks',
       section: 'stocks',
-      icon: <Dns />
+      icon: <Dns sx={{ fill: '#e65100' }} />,
     },
     {
       display: 'Аномалии',
       to: '/anomaly',
       section: 'anomaly',
-      icon: <Public />
+      icon: <Public sx={{ fill: '#e65100' }} />,
     },
     {
       display: 'Логин',
       to: '/signin',
       section: 'signin',
-      icon: <People />
+      icon: <People sx={{ fill: '#e65100' }} />,
     },
     {
       display: 'Регистрация',
       to: '/signup',
       section: 'signup',
-      icon: <People />
-    }
-  ]
+      icon: <PersonAddAlt1Icon sx={{ fill: '#e65100' }} />,
+    },
+  ];
 
   const drawer = (
     <div>
-      <Toolbar>
+      <Toolbar sx={{ maxHeight: '64px' }}>
         <div className="sidebar__logo">
-          <img src={logo} style={{ height: 100 }} alt='logo' />
+          <img src={logo} style={{ height: 100 }} alt="logo" />
         </div>
       </Toolbar>
-      <Divider />
+      <Divider sx={{ borderColor: 'white' }}/>
       <Toolbar sx={{ justifyContent: 'center' }}>
-        <div className='sidebar__menu__item' style={{ fontSize: '17px' }}>
+        <div className="sidebar__menu__item" style={{ fontSize: '17px' }}>
           USD: {usd}
           <br />
           EUR: {eur}
         </div>
       </Toolbar>
-      <Divider />
+      <Divider sx={{ borderColor: 'white' }}/>
       <List>
-        {
-          sidebarNavItems.map((item, index) => (
-            <NavLink to={item.to} key={index}>
-              <ListItem key={item.display} disablePadding>
-                <ListItemButton>
-                  <ListItemIcon>
-                    {item.icon}
-                  </ListItemIcon>
-                  <ListItemText primary={item.display} />
-                </ListItemButton>
-              </ListItem>
-            </NavLink>
-          ))
-        }
+        {sidebarNavItems.map((item, index) => (
+          <NavLink to={item.to} key={index}>
+            <ListItem key={item.display} disablePadding>
+              <ListItemButton>
+                <ListItemIcon>{item.icon}</ListItemIcon>
+                <ListItemText primary={item.display} />
+              </ListItemButton>
+            </ListItem>
+          </NavLink>
+        ))}
       </List>
       {/* <Divider /> */}
-
     </div>
   );
 
-  const container = window !== undefined ? () => window().document.body : undefined;
+  const container =
+    window !== undefined ? () => window().document.body : undefined;
 
   return (
     <Box sx={{ display: 'flex' }}>
@@ -127,29 +173,29 @@ function ResponsiveDrawer(props) {
         sx={{
           width: { sm: `calc(100% - ${drawerWidth}px)` },
           ml: { sm: `${drawerWidth}px` },
-          justifyContent: 'space-between'
+          justifyContent: 'space-between',
+          backgroundColor: '#4d5357',
         }}
       >
-        <Toolbar sx={{
-          justifyContent: 'space-between'
-        }}>
+
+        {/* <Toolbar
+          sx={{
+            justifyContent: 'space-between',
+            borderLeft: '1px solid white',
+          }}
+        >
           <IconButton
             color="inherit"
             aria-label="open drawer"
             edge="start"
             onClick={handleDrawerToggle}
             sx={{ mr: 2, display: { sm: 'none' } }}
-
           >
             <MenuIcon />
           </IconButton>
-          <Typography variant="h6" noWrap component="div">
-
-            {/* Какой-нибудь текст или нет */}
-
-          </Typography>
           <AccountMenu />
-        </Toolbar>
+        </Toolbar> */}
+
       </AppBar>
       <Box
         component="nav"
@@ -167,7 +213,12 @@ function ResponsiveDrawer(props) {
           }}
           sx={{
             display: { xs: 'block', sm: 'none' },
-            '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth },
+            '& .MuiDrawer-paper': {
+              boxSizing: 'border-box',
+              width: drawerWidth,
+              backgroundColor: '#4d5357',
+              color: 'white',
+            },
           }}
         >
           {drawer}
@@ -176,7 +227,12 @@ function ResponsiveDrawer(props) {
           variant="permanent"
           sx={{
             display: { xs: 'none', sm: 'block' },
-            '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth },
+            '& .MuiDrawer-paper': {
+              boxSizing: 'border-box',
+              width: drawerWidth,
+              backgroundColor: '#4d5357',
+              color: 'white',
+            },
           }}
           open
         >
@@ -186,12 +242,25 @@ function ResponsiveDrawer(props) {
       {/* Блок ниже это основная область сайта!!! */}
       <Box
         component="main"
-        sx={{ flexGrow: 1, p: 4, pt: 0, width: { sm: `calc(100% - ${drawerWidth}px)` } }}
+        sx={{
+          flexGrow: 1,
+          p: 4,
+          pt: 0,
+          width: { sm: `calc(100% - ${drawerWidth}px)` },
+        }}
       >
-        <Toolbar />
+        <IconButton
+            color="default"
+            aria-label="open drawer"
+            edge="start"
+            onClick={handleDrawerToggle}
+            sx={{ mr: 2, mt: 2, display: { sm: 'none' } }}
+          >
+            <MenuIcon />
+          </IconButton>
+        {/* <Toolbar /> */}
         <AppRouter />
       </Box>
-
     </Box>
   );
 }

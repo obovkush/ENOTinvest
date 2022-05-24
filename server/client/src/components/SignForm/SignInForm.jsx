@@ -23,7 +23,7 @@ import * as Yup from 'yup';
 import { Formik } from 'formik';
 import { EyeOutlined, EyeInvisibleOutlined } from '@ant-design/icons';
 
-const labelSX = { mb: -2 };
+const labelSX = { mb: 0 };
 
 const SignIn = () => {
   const user = useSelector((store) => store.user);

@@ -3,7 +3,6 @@ const express = require('express');
 const cookieParser = require('cookie-parser');
 
 const app = express();
-
 const path = require('path');
 const router = require('./routes/index');
 const errorMiddleware = require('./middlewares/errorMiddleware');
@@ -16,6 +15,7 @@ const PORT = process.env.PORT ?? 5000;
 const dbConnectionCheck = require('./db/dbConnectionCheck');
 
 app.use(cookieParser());
+
 
 // Вместо политики CORS
 app.use((req, res, next) => {
