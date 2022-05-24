@@ -18,7 +18,6 @@ import StraightOutlinedIcon from '@mui/icons-material/StraightOutlined';
 import { Badge } from 'antd';
 import DetailsOfAccordion from './DetailsOfAccordion';
 
-
 const currencies = [
   {
     value: 'Все',
@@ -60,8 +59,7 @@ function StockAccordion() {
     } else {
       console.log('Здесь будет api/stocks/RU history');
     }
-}
-
+  };
 
   useEffect(() => {
     axios

@@ -86,10 +86,32 @@ class StockService {
       setInterval(() => {
         stocks.forEach((el) => {
           finnhubClient.quote(`${el}`, async (error, data, response) => {
-            const checkStock = await Stock.findOne({ where: { secid: `${el}` }, row: true });
+            const checkStock = await Stock.findOne({
+              where: { secid: `${el}` },
+              row: true,
+            });
             if (checkStock) {
               if (data.c.toFixed(2) !== checkStock.last) {
-                await Stock.update({
+                await Stock.update(
+                  {
+                    open: data.o,
+                    high: data.h,
+                    low: data.l,
+                    last: data.c.toFixed(2),
+                    prevprice: data.pc,
+                    lastchange: data.d.toFixed(2),
+                    lastchangeprcnt: (
+                      ((data.c - data.pc) / data.pc) *
+                      100
+                    ).toFixed(2),
+                  },
+                  { where: { id: checkStock.id } },
+                );
+              } else {
+                await Stock.create({
+                  secid: `${el}`,
+                  type: 'Акция',
+                  shortName: `${el}`,
                   open: data.o,
                   high: data.h,
                   low: data.l,
@@ -100,27 +122,19 @@ class StockService {
                     ((data.c - data.pc) / data.pc) *
                     100
                   ).toFixed(2),
-                },
-                { where: { id: checkStock.id } },
-              );
+                });
+                finnhubClient.companyProfile2(
+                  { symbol: `${el}` },
+                  async (error, data, response) => {
+                    await Stock.update(
+                      { shortName: data.name, currency: data.currency },
+                      { where: { shortName: `${el}` } },
+                    );
+                  },
+                );
               }
-            } else {
-              await Stock.create({
-                secid: `${el}`,
-                type: 'Акция',
-                shortName: `${el}`,
-                open: data.o,
-                high: data.h,
-                low: data.l,
-                last: data.c.toFixed(2),
-                prevprice: data.pc,
-                lastchange: data.d.toFixed(2),
-                lastchangeprcnt: (((data.c - data.pc) / data.pc) * 100).toFixed(2)});
-              finnhubClient.companyProfile2({ symbol: `${el}` }, async (error, data, response) => {
-                await Stock.update({ shortName: data.name, currency: data.currency }, { where: { shortName: `${el}` } });
-              });
             }
-        });
+          });
         });
       }, 30 * 1000);
     } catch (error) {
