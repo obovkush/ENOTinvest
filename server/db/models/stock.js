@@ -56,6 +56,7 @@ module.exports = (sequelize, DataTypes) => {
       prevprice: {
         type: DataTypes.FLOAT,
       },
+      // Валюта 'USD', 'RUB'
       currency: {
         type: DataTypes.TEXT,
       },
