@@ -84,7 +84,6 @@ class StockService {
       const finnhubClient = new finnhub.DefaultApi();
 
       setInterval(() => {
-        // console.log('🚨');
         stocks.forEach((el) => {
           finnhubClient.quote(`${el}`, async (error, data, response) => {
             const checkStock = await Stock.findOne({
@@ -137,7 +136,7 @@ class StockService {
             }
           });
         });
-      }, 600 * 1000);
+      }, 30 * 1000);
     } catch (error) {
       console.log('stockservice ENG =>', error);
     }
