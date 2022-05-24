@@ -17,6 +17,7 @@ import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import AppRouter from '../../routes/AppRouter';
 import People from '@mui/icons-material/People';
+import PersonAddAlt1Icon from '@mui/icons-material/PersonAddAlt1';
 import Dns from '@mui/icons-material/Dns';
 import Public from '@mui/icons-material/Public';
 import Home from '@mui/icons-material/Home';
@@ -24,6 +25,54 @@ import { NavLink } from 'react-router-dom';
 import logo from './logo.png';
 import axios from 'axios';
 import AccountMenu from './AccountMenu/AccountMenu';
+
+//-------------------------------------------------
+import { styled, alpha } from '@mui/material/styles';
+import SearchIcon from '@mui/icons-material/Search';
+import InputBase from '@mui/material/InputBase';
+//-------------------------------------------------
+
+const Search = styled('div')(({ theme }) => ({
+  position: 'relative',
+  borderRadius: theme.shape.borderRadius,
+  backgroundColor: alpha(theme.palette.common.white, 0.15),
+  '&:hover': {
+    backgroundColor: alpha(theme.palette.common.white, 0.25),
+  },
+  marginLeft: 0,
+  width: '100%',
+  [theme.breakpoints.up('sm')]: {
+    marginLeft: theme.spacing(1),
+    width: 'auto',
+  },
+}));
+
+const SearchIconWrapper = styled('div')(({ theme }) => ({
+  padding: theme.spacing(0, 2),
+  height: '100%',
+  position: 'absolute',
+  pointerEvents: 'none',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+}));
+
+const StyledInputBase = styled(InputBase)(({ theme }) => ({
+  color: 'inherit',
+  '& .MuiInputBase-input': {
+    padding: theme.spacing(1, 1, 1, 0),
+    // vertical padding + font size from searchIcon
+    paddingLeft: `calc(1em + ${theme.spacing(4)})`,
+    transition: theme.transitions.create('width'),
+    width: '100%',
+    [theme.breakpoints.up('sm')]: {
+      width: '16ch',
+      '&:focus': {
+        width: '20ch',
+      },
+    },
+  },
+}));
 
 const drawerWidth = 240;
 
@@ -53,31 +102,31 @@ function ResponsiveDrawer(props) {
       display: 'Главная',
       to: '/',
       section: '',
-      icon: <Home />,
+      icon: <Home sx={{ fill: '#e65100' }} />,
     },
     {
       display: 'Акции',
       to: '/stocks',
       section: 'stocks',
-      icon: <Dns />,
+      icon: <Dns sx={{ fill: '#e65100' }} />,
     },
     {
       display: 'Аномалии',
       to: '/anomaly',
       section: 'anomaly',
-      icon: <Public />,
+      icon: <Public sx={{ fill: '#e65100' }} />,
     },
     {
       display: 'Логин',
       to: '/signin',
       section: 'signin',
-      icon: <People />,
+      icon: <People sx={{ fill: '#e65100' }} />,
     },
     {
       display: 'Регистрация',
       to: '/signup',
       section: 'signup',
-      icon: <People />,
+      icon: <PersonAddAlt1Icon sx={{ fill: '#e65100' }} />,
     },
   ];
 
@@ -125,7 +174,7 @@ function ResponsiveDrawer(props) {
           width: { sm: `calc(100% - ${drawerWidth}px)` },
           ml: { sm: `${drawerWidth}px` },
           justifyContent: 'space-between',
-          backgroundColor: '#1d2327',
+          backgroundColor: '#311b92',
         }}
       >
         <Toolbar
@@ -142,6 +191,15 @@ function ResponsiveDrawer(props) {
           >
             <MenuIcon />
           </IconButton>
+          <Search>
+            <SearchIconWrapper>
+              <SearchIcon />
+            </SearchIconWrapper>
+            <StyledInputBase
+              placeholder="Поиск по акциям..."
+              inputProps={{ 'aria-label': 'search' }}
+            />
+          </Search>
           <Typography variant="h6" noWrap component="div">
             {/* Какой-нибудь текст или нет */}
           </Typography>
@@ -167,7 +225,6 @@ function ResponsiveDrawer(props) {
             '& .MuiDrawer-paper': {
               boxSizing: 'border-box',
               width: drawerWidth,
-              backgroundColor: '#1d2327',
               color: 'white',
             },
           }}
@@ -181,7 +238,7 @@ function ResponsiveDrawer(props) {
             '& .MuiDrawer-paper': {
               boxSizing: 'border-box',
               width: drawerWidth,
-              backgroundColor: '#1d2327',
+              backgroundColor: '#311b92',
               color: 'white',
             },
           }}

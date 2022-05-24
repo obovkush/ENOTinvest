@@ -18,7 +18,6 @@ import StraightOutlinedIcon from '@mui/icons-material/StraightOutlined';
 import { Badge } from 'antd';
 import DetailsOfAccordion from './DetailsOfAccordion';
 
-
 const currencies = [
   {
     value: 'Все',
@@ -44,7 +43,7 @@ function StockAccordion() {
   const [expanded, setExpanded] = useState(false);
 
   const historicalData = (key, currency) => {
-    if (currency === "USD") {
+    if (currency === 'USD') {
       console.log('Здесь будет api/stocks/USD history');
       // fetch(`https://api.polygon.io/v2/aggs/ticker/${key}/range/1/day/2020-05-20/2022-05-20?apiKey=MVOp2FJDsLDLqEmq1t6tYy8hXro8YgUh`, {
       //   method: 'GET',
@@ -57,8 +56,7 @@ function StockAccordion() {
     } else {
       console.log('Здесь будет api/stocks/RU history');
     }
-}
-
+  };
 
   useEffect(() => {
     axios
