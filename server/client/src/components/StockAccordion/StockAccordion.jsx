@@ -78,8 +78,8 @@ const currencies = [
     label: 'USD',
   },
   {
-    value: 'EUR',
-    label: '€',
+    value: 'RUB',
+    label: 'RUB',
   },
 ];
 
@@ -90,12 +90,15 @@ function StockAccordion() {
   const [filterStocks, setFilterStocks] = useState(stocks);
   const [loading, setLoading] = useState(true);
   const [checked, setChecked] = useState(false);
-  const [currency, setCurrency] = useState('Все');
+  const [stateFilter, setCurrency] = useState('Все');
   const [expanded, setExpanded] = useState(false);
 
   const historicalData = (key, currency) => {
     if (currency === 'USD') {
-        fetch(`https://api.polygon.io/v2/aggs/ticker/${key}/range/1/day/2021-05-20/2022-05-20?apiKey=MVOp2FJDsLDLqEmq1t6tYy8hXro8YgUh`, {
+      const year = new Date().getFullYear();
+      const month = new Date().getMonth()+1;
+      const day = new Date().getDate();
+        fetch(`https://api.polygon.io/v2/aggs/ticker/${key}/range/1/day/${year -1}-0${month}-${day}/${year}-0${month}-${day}?apiKey=MVOp2FJDsLDLqEmq1t6tYy8hXro8YgUh`, {
           method: 'GET',
           headers: { 'Content-Type': 'application/json' },
         }).then((res) => res.json())
@@ -159,12 +162,16 @@ function StockAccordion() {
     dispatch({ type: 'NEWS_OF_CURRENT_COMPANY', payload: companyNews });
   };
 
-  const moneyChange = (event) => {
-    setCurrency(event.target.value);
-    if (currency === 'USD' || currency === '€') {
-      const filtrstocks = stocks.filter((el) => el.value === currency);
+  // Сортировка по валюте
+  const currencyFilter = (event) => {
+      setCurrency(event.target.value);
+    if (event.target.value === 'USD') {
+      const filtrstocks = stocks.filter((el) => el.currency === event.target.value);
       setFilterStocks(filtrstocks);
-    } else {
+    } else if (event.target.value === 'RUB') {
+      const filtrstocks = stocks.filter((el) => el.currency === event.target.value);
+      setFilterStocks(filtrstocks);
+    } else if (event.target.value === 'Все') {
       setFilterStocks(stocks);
     }
   };
@@ -222,7 +229,6 @@ function StockAccordion() {
           `https://iss.moex.com/iss/history/engines/stock/markets/shares/sessions/total/boards/TQBR/securities/${key}.json?from=${todayOneYearAgo}&start=200`,
         ]; //2022-01-01 // ${todayOneYearAgo}
         console.log(base_URL);
-
         axios
           .get(base_URL[0])
           .then((history) => {
@@ -280,8 +286,7 @@ function StockAccordion() {
     },
     [diagramLoading, dispatch],
   );
-  // console.log('==========> diagramLoading', diagramLoading);
-  // console.log('==========> history', history);
+
   const labelCheckBox = { inputProps: { 'aria-label': 'controlled' } };
 
   return (
@@ -316,8 +321,8 @@ function StockAccordion() {
         id="standard-select-currency-native"
         sx={{ width: '180px', paddingLeft: '20px', paddingBottom: '20px' }}
         select
-        value={currency}
-        onChange={moneyChange}
+        value={stateFilter}
+        onChange={currencyFilter}
         SelectProps={{
           native: true,
         }}
@@ -383,13 +388,13 @@ function StockAccordion() {
                       sx={{ transform: 'rotate(135deg)' }}
                     />
                     <Typography sx={{ width: '33%', flexShrink: 0 }}>
-                      {el?.shortName}
+                      {el.shortName}
                     </Typography>
                     <Typography title="Текущая цена" sx={{ width: '20%' }}>
-                      {el.last.toFixed(2)}$
+                      {el.currency === 'USD' ? `${el.last} $` : `${el.last} ₽`}
                     </Typography>
-                    <Typography title="Дневной прирост" sx={{ width: '20%' }}>
-                      {el.lastchange.toFixed(2)}$
+                    <Typography title="Дневной прирост" sx={{ width: '20%', color: `${el.lastchange > 0 ? 'green' : 'red'}` }}>
+                     {el.currency === 'USD' ? `${el.lastchange} $` : `${el.lastchange} ₽`}
                     </Typography>
                     <Typography
                       title="Процент изменения за день"
@@ -439,13 +444,13 @@ function StockAccordion() {
                       sx={{ transform: 'rotate(135deg)' }}
                     />
                     <Typography sx={{ width: '33%', flexShrink: 0 }}>
-                      {el?.shortName}
+                      {el.shortName}
                     </Typography>
                     <Typography title="Текущая цена" sx={{ width: '20%' }}>
-                      {el.last.toFixed(2)}$
+                      {el.currency === 'USD' ? `${el.last} $` : `${el.last} ₽`}
                     </Typography>
-                    <Typography title="Дневной прирост" sx={{ width: '20%' }}>
-                      {el.lastchange.toFixed(2)}$
+                    <Typography title="Дневной прирост" sx={{ width: '20%', color:  `${el.lastchange > 0 ? 'green' : 'red'}` }}>
+                      {el.currency === 'USD' ? `${el.lastchange} $` : `${el.lastchange} ₽`}
                     </Typography>
                     <Typography
                       title="Процент изменения за день"

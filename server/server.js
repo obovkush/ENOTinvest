@@ -16,7 +16,6 @@ const dbConnectionCheck = require('./db/dbConnectionCheck');
 
 app.use(cookieParser());
 
-
 // Вместо политики CORS
 app.use((req, res, next) => {
   const accessList = ['http://localhost:3000'];
@@ -41,6 +40,7 @@ app.use('/api', router);
 // Обработка обшибок, последний middleware
 app.use(errorMiddleware);
 
+
 // Запускаем сервер
 const start = async () => {
   try {
@@ -59,7 +59,7 @@ const start = async () => {
 start();
 
 // Вызов функций обновления информации по русским акциям/фондам с API в базу
-const intFetchRuStocks = setInterval(stockController.getRuStocksFromMOEX, 2000);
-setTimeout(() => clearInterval(intFetchRuStocks), 3000);
-const intFetchRuFunds = setInterval(stockController.getRuFundsFromMOEX, 1000);
-setTimeout(() => clearInterval(intFetchRuFunds), 1500);
+// const intFetchRuStocks = setInterval(stockController.getRuStocksFromMOEX, 2000);
+// setTimeout(() => clearInterval(intFetchRuStocks), 3000);
+// const intFetchRuFunds = setInterval(stockController.getRuFundsFromMOEX, 1000);
+// setTimeout(() => clearInterval(intFetchRuFunds), 1500);
