@@ -152,10 +152,13 @@ function StockAccordion() {
 
   const newsContentSearch = (elemName) => {
     const splitName = elemName.split(' ')[0];
+    console.log(splitName)
     const lowerCaseName = splitName.toLowerCase();
     const upperCaseName = splitName.toUpperCase();
     const arrayOfNews = [...allNews]
+    console.log(arrayOfNews)
     const companyNews = arrayOfNews.filter((elem) => elem.title.includes(splitName || lowerCaseName || upperCaseName) || elem.content?.includes(splitName || lowerCaseName || upperCaseName));
+    console.log(companyNews)
     dispatch({ type: 'NEWS_OF_CURRENT_COMPANY', payload: companyNews });
   };
 
