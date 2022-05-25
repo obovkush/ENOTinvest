@@ -43,15 +43,17 @@ router.post('/wikipedia', (req, res) => {
 // Гребаный тинькоф
 
 router.get('/profile', async (req, res) => {
-  try {
-    const arr = await api.OperationsServicePromise.GetPortfolio({
-      account_id: '2038810095',
-    });
-    res.json(arr);
-  } catch (err) {
-    console.log(err);
-  }
-});
+    try {
+    const profile = await api.OperationsServicePromise.GetPortfolio({'account_id' : '2038810095'})
+    const shares = await api.InstrumentsServicePromise.Shares({})
+    const etfs = await api.InstrumentsServicePromise.Etfs({})
+    res.json({ profile, shares, etfs })
+  
+}catch(err){
+  console.log(err);
+}
+})
+
 
 // Ручка на получение RSS новостей
 router.get('/rssnews', async (req, res) => {
