@@ -13,6 +13,10 @@ module.exports = {
         type: Sequelize.TEXT,
         unique: true,
       },
+      // Режим торгов
+      board: {
+        type: Sequelize.TEXT,
+      },
       // Тип акция/фонд
       type: {
         type: Sequelize.TEXT,
@@ -41,11 +45,11 @@ module.exports = {
       last: {
         type: Sequelize.FLOAT,
       },
-      // Изменение цены последней сделки к цене предыдущей сделки, рублей
+      // Изменение цены последней сделки к цене предыдущего дня, рублей
       lastchange: {
         type: Sequelize.FLOAT,
       },
-      // Изменение цены последней сделки к цене предыдущей сделки, %
+      // Изменение цены последней сделки к цене предыдущего дня, %
       lastchangeprcnt: {
         type: Sequelize.FLOAT,
       },
@@ -53,6 +57,7 @@ module.exports = {
       prevprice: {
         type: Sequelize.FLOAT,
       },
+      // Валюта 'USD', 'RUB'
       currency: {
         type: Sequelize.TEXT,
       },

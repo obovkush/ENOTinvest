@@ -1,5 +1,7 @@
 import * as React from 'react';
 import { useEffect, useState } from 'react';
+import { NavLink, Link, useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
@@ -16,72 +18,34 @@ import MenuIcon from '@mui/icons-material/Menu';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import AppRouter from '../../routes/AppRouter';
-import People from '@mui/icons-material/People';
+import FaceIcon from '@mui/icons-material/Face';
 import PersonAddAlt1Icon from '@mui/icons-material/PersonAddAlt1';
+import PersonOffIcon from '@mui/icons-material/PersonOff';
 import Dns from '@mui/icons-material/Dns';
 import Public from '@mui/icons-material/Public';
 import Home from '@mui/icons-material/Home';
-import { NavLink } from 'react-router-dom';
+import Alert from '@mui/material/Alert';
+import AlertTitle from '@mui/material/AlertTitle';
+
+import { SIGNIN_ROUTE } from '../../utils/consts';
+import { logout } from '../../api/userAPI';
+
 import logo from './logo.png';
 import axios from 'axios';
 import AccountMenu from './AccountMenu/AccountMenu';
 
-//-------------------------------------------------
-import { styled, alpha } from '@mui/material/styles';
-import SearchIcon from '@mui/icons-material/Search';
-import InputBase from '@mui/material/InputBase';
-//-------------------------------------------------
-
-const Search = styled('div')(({ theme }) => ({
-  position: 'relative',
-  borderRadius: theme.shape.borderRadius,
-  backgroundColor: alpha(theme.palette.common.white, 0.15),
-  '&:hover': {
-    backgroundColor: alpha(theme.palette.common.white, 0.25),
-  },
-  marginLeft: 0,
-  width: '100%',
-  [theme.breakpoints.up('sm')]: {
-    marginLeft: theme.spacing(1),
-    width: 'auto',
-  },
-}));
-
-const SearchIconWrapper = styled('div')(({ theme }) => ({
-  padding: theme.spacing(0, 2),
-  height: '100%',
-  position: 'absolute',
-  pointerEvents: 'none',
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-}));
-
-const StyledInputBase = styled(InputBase)(({ theme }) => ({
-  color: 'inherit',
-  '& .MuiInputBase-input': {
-    padding: theme.spacing(1, 1, 1, 0),
-    // vertical padding + font size from searchIcon
-    paddingLeft: `calc(1em + ${theme.spacing(4)})`,
-    transition: theme.transitions.create('width'),
-    width: '100%',
-    [theme.breakpoints.up('sm')]: {
-      width: '16ch',
-      '&:focus': {
-        width: '20ch',
-      },
-    },
-  },
-}));
-
 const drawerWidth = 240;
 
 function ResponsiveDrawer(props) {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { window } = props;
   const [mobileOpen, setMobileOpen] = React.useState(false);
 
   const [usd, setUsd] = useState(0);
   const [eur, setEur] = useState(0);
+
+  const user = useSelector((store) => store.user);
 
   useEffect(() => {
     axios
@@ -95,6 +59,22 @@ function ResponsiveDrawer(props) {
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
+  };
+
+  const handleLogout = () => {
+    try {
+      logout()
+        .then(localStorage.removeItem('token'))
+        .then(() => {
+          dispatch({
+            type: 'LOGOUT_USER',
+            payload: {},
+          });
+        })
+        .then(() => navigate(SIGNIN_ROUTE));
+    } catch (err) {
+      console.log(err.response?.data?.message);
+    }
   };
 
   const sidebarNavItems = [
@@ -116,20 +96,21 @@ function ResponsiveDrawer(props) {
       section: 'profile',
       icon: <Public />,
     },
-    {
-      display: 'Логин',
-      to: '/signin',
-      section: 'signin',
-      icon: <People sx={{ fill: '#e65100' }} />,
-    },
-    {
-      display: 'Регистрация',
-      to: '/signup',
-      section: 'signup',
-      icon: <PersonAddAlt1Icon sx={{ fill: '#e65100' }} />,
-    },
+    user.email
+      ? {
+          display: 'Выход',
+          to: '/logout',
+          section: 'logout',
+          icon: <PersonOffIcon sx={{ fill: '#e65100' }} />,
+          onClick: () => handleLogout(),
+        }
+      : {
+          display: 'Вход / Регистрация',
+          to: '/signin',
+          section: 'signin',
+          icon: <PersonAddAlt1Icon sx={{ fill: '#e65100' }} />,
+        },
   ];
-
   const drawer = (
     <div>
       <Toolbar sx={{ maxHeight: '64px' }}>
@@ -137,7 +118,7 @@ function ResponsiveDrawer(props) {
           <img src={logo} style={{ height: 100 }} alt="logo" />
         </div>
       </Toolbar>
-      <Divider sx={{ borderColor: 'white' }}/>
+      <Divider sx={{ borderColor: 'white' }} />
       <Toolbar sx={{ justifyContent: 'center' }}>
         <div className="sidebar__menu__item" style={{ fontSize: '17px' }}>
           USD: {usd}
@@ -145,10 +126,10 @@ function ResponsiveDrawer(props) {
           EUR: {eur}
         </div>
       </Toolbar>
-      <Divider sx={{ borderColor: 'white' }}/>
+      <Divider sx={{ borderColor: 'white' }} />
       <List>
         {sidebarNavItems.map((item, index) => (
-          <NavLink to={item.to} key={index}>
+          <NavLink to={item.to} key={index} onClick={item.onClick}>
             <ListItem key={item.display} disablePadding>
               <ListItemButton>
                 <ListItemIcon>{item.icon}</ListItemIcon>
@@ -177,7 +158,6 @@ function ResponsiveDrawer(props) {
           backgroundColor: '#4d5357',
         }}
       >
-
         {/* <Toolbar
           sx={{
             justifyContent: 'space-between',
@@ -195,7 +175,6 @@ function ResponsiveDrawer(props) {
           </IconButton>
           <AccountMenu />
         </Toolbar> */}
-
       </AppBar>
       <Box
         component="nav"
@@ -249,28 +228,33 @@ function ResponsiveDrawer(props) {
           width: { sm: `calc(100% - ${drawerWidth}px)` },
         }}
       >
+        {user.isActivated === false ? (
+          <Alert severity="warning">
+            <AlertTitle>Не активирован</AlertTitle>
+            Вам на почту направлено письмо со ссылкой на активацию — пожалуйста,
+            перейдите по ссылке в письме для активации аккаунта. <br />
+            Если у вас есть активированный аккаунт
+            <Link to={SIGNIN_ROUTE} onClick={handleLogout}>
+              <strong> войдите</strong>
+            </Link>
+          </Alert>
+        ) : (
+          <></>
+        )}
         <IconButton
-            color="default"
-            aria-label="open drawer"
-            edge="start"
-            onClick={handleDrawerToggle}
-            sx={{ mr: 2, mt: 2, display: { sm: 'none' } }}
-          >
-            <MenuIcon />
-          </IconButton>
+          color="default"
+          aria-label="open drawer"
+          edge="start"
+          onClick={handleDrawerToggle}
+          sx={{ mr: 2, mt: 2, display: { sm: 'none' } }}
+        >
+          <MenuIcon />
+        </IconButton>
         {/* <Toolbar /> */}
         <AppRouter />
       </Box>
     </Box>
   );
 }
-
-ResponsiveDrawer.propTypes = {
-  /**
-   * Injected by the documentation to work in an iframe.
-   * You won't need it on your project.
-   */
-  window: PropTypes.func,
-};
 
 export default ResponsiveDrawer;

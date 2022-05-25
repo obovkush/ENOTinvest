@@ -1,14 +1,21 @@
 const router = require('express').Router();
 const Parser = require('rss-parser');
 const googleIt = require('google-it');
-const tinkoff_v2 = require ('../tinkoff_v2');
-const api = new tinkoff_v2({'token':'t.K7H9cqNn5--JA4xgPitpcrh3VFS4I-DzUSZkhq5WuL3Ufzs_zHYY0-Y6-26Pzyf5V3xeWpWTXZrCnppFvk0Bbw'});
+const jsoner = require('../json/first.json');
+const tinkoff_v2 = require('../tinkoff_v2');
+
+const api = new tinkoff_v2({
+  token:
+    't.K7H9cqNn5--JA4xgPitpcrh3VFS4I-DzUSZkhq5WuL3Ufzs_zHYY0-Y6-26Pzyf5V3xeWpWTXZrCnppFvk0Bbw',
+});
 
 const parser = new Parser();
 
+const favoriteRouter = require('./favoriteRouter');
 const stocksRouter = require('./stockRouter');
 const userRouter = require('./userRouter');
 
+router.use('/favorite/user', favoriteRouter);
 router.use('/stocks', stocksRouter);
 router.use('/user', userRouter);
 
@@ -47,6 +54,7 @@ router.get('/profile', async (req, res) => {
 }
 })
 
+
 // Ручка на получение RSS новостей
 router.get('/rssnews', async (req, res) => {
   try {
@@ -65,7 +73,7 @@ router.get('/rssnews', async (req, res) => {
     const investNews = rssDataInvest.items;
     const interNews = rssDataInter.items;
     const finamNews = rssDataFinam.items;
-    const arrayOfAllNews = [investNews, interNews, finamNews];
+    const arrayOfAllNews = [investNews, interNews, finamNews, jsoner];
 
     res.json(arrayOfAllNews.flat());
   } catch (error) {

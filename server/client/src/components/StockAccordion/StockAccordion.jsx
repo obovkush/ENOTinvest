@@ -11,11 +11,10 @@ import {
   Typography,
   LinearProgress,
   Box,
-  Grid,
 } from '@mui/material';
 import InputAdornment from '@mui/material/InputAdornment';
 import SearchIcon from '@mui/icons-material/Search';
-import AddTaskOutlinedIcon from '@mui/icons-material/AddTaskOutlined';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import StraightOutlinedIcon from '@mui/icons-material/StraightOutlined';
 import { styled, alpha } from '@mui/material/styles';
 import InputBase from '@mui/material/InputBase';
@@ -78,8 +77,8 @@ const currencies = [
     label: 'USD',
   },
   {
-    value: 'EUR',
-    label: '€',
+    value: 'RUB',
+    label: 'RUB',
   },
 ];
 
@@ -90,19 +89,37 @@ function StockAccordion() {
   const [filterStocks, setFilterStocks] = useState(stocks);
   const [loading, setLoading] = useState(true);
   const [checked, setChecked] = useState(false);
-  const [currency, setCurrency] = useState('Все');
+  const [stateFilter, setCurrency] = useState('Все');
   const [expanded, setExpanded] = useState(false);
 
   const historicalData = (key, currency) => {
     if (currency === 'USD') {
-        fetch(`https://api.polygon.io/v2/aggs/ticker/${key}/range/1/day/2021-05-20/2022-05-20?apiKey=MVOp2FJDsLDLqEmq1t6tYy8hXro8YgUh`, {
+      const year = new Date().getFullYear();
+      const month = new Date().getMonth() + 1;
+      const day = new Date().getDate();
+      fetch(
+        `https://api.polygon.io/v2/aggs/ticker/${key}/range/1/day/${
+          year - 1
+        }-0${month}-${day}/${year}-0${month}-${day}?apiKey=MVOp2FJDsLDLqEmq1t6tYy8hXro8YgUh`,
+        {
           method: 'GET',
           headers: { 'Content-Type': 'application/json' },
-        }).then((res) => res.json())
-          .then((data) => {
-              dispatch({ type: 'SET_HISTORY', payload: data.results.map((el, i) => { return { id: i, price: el.c, date: new Date(el.t).toLocaleDateString("sma-SE")}}) });
-          })
-          .catch((err) => console.log('stocks API history =>', err));
+        },
+      )
+        .then((res) => res.json())
+        .then((data) => {
+          dispatch({
+            type: 'SET_HISTORY',
+            payload: data.results.map((el, i) => {
+              return {
+                id: i,
+                price: el.c,
+                date: new Date(el.t).toLocaleDateString('sma-SE'),
+              };
+            }),
+          });
+        })
+        .catch((err) => console.log('stocks API history =>', err));
     } else {
       console.log('Здесь будет api/stocks/RU history');
     }
@@ -138,30 +155,72 @@ function StockAccordion() {
   };
 
   const companyInfoSearch = (secid) => {
-    const stocksCopy = [...stocks]
-    const info = stocksCopy.filter(el => el.secid === secid )
+    const stocksCopy = [...stocks];
+    const info = stocksCopy.filter((el) => el.secid === secid);
     if (info.length === 1) {
-      dispatch({ type: 'SET_CURRENT_COMPANY_INFO', payload: info[0].companyinfo });
+      dispatch({
+        type: 'SET_CURRENT_COMPANY_INFO',
+        payload: info[0].companyinfo,
+      });
     } else {
-      console.log('Отфильтровалось 0 или более 1 компании')
+      console.log('Отфильтровалось 0 или более 1 компании');
     }
-  }
+  };
+
+  // Функция сортировки по дате публикации новости или ролика
+  const sortedByPublishedDate = (array) => {
+    const sortedArray = array.sort((a, b) => {
+      const newsElemA = a?.pubDate?.replace(/[A-Z-:\s]/gim, '').trim();
+      const newsElemB = b?.pubDate?.replace(/[A-Z-:\s]/gim, '').trim();
+      const youtubeElemA = a?.snippet?.publishedAt
+        ?.replace(/[A-Z-:]/gim, '')
+        .trim();
+      const youtubeElemB = b?.snippet?.publishedAt
+        ?.replace(/[A-Z-:]/gim, '')
+        .trim();
+      if ((newsElemA || youtubeElemA) > (newsElemB || youtubeElemB)) {
+        return -1;
+      }
+      if ((newsElemA || youtubeElemA) < (newsElemB || youtubeElemB)) {
+        return 1;
+      }
+      return 0;
+    });
+    return sortedArray;
+  };
 
   const newsContentSearch = (elemName) => {
     const splitName = elemName.split(' ')[0];
     const lowerCaseName = splitName.toLowerCase();
     const upperCaseName = splitName.toUpperCase();
-    const arrayOfNews = [...allNews]
-    const companyNews = arrayOfNews.filter((elem) => elem.title.includes(splitName || lowerCaseName || upperCaseName) || elem.content?.includes(splitName || lowerCaseName || upperCaseName));
-    dispatch({ type: 'NEWS_OF_CURRENT_COMPANY', payload: companyNews });
+    const arrayOfNews = [...allNews];
+    const companyNews = arrayOfNews.filter(
+      (elem) =>
+        elem.title.includes(splitName || lowerCaseName || upperCaseName) ||
+        elem.content?.includes(splitName || lowerCaseName || upperCaseName),
+    );
+    const firstFiveNews = arrayOfNews.slice(0, 5);
+    if (!companyNews.length) {
+      dispatch({ type: 'NEWS_OF_CURRENT_COMPANY', payload: sortedByPublishedDate(firstFiveNews) });
+    } else {
+      dispatch({ type: 'NEWS_OF_CURRENT_COMPANY', payload: sortedByPublishedDate(companyNews) });
+    }
   };
 
-  const moneyChange = (event) => {
+  // Сортировка по валюте
+  const currencyFilter = (event) => {
     setCurrency(event.target.value);
-    if (currency === 'USD' || currency === '€') {
-      const filtrstocks = stocks.filter((el) => el.value === currency);
+    if (event.target.value === 'USD') {
+      const filtrstocks = stocks.filter(
+        (el) => el.currency === event.target.value,
+      );
       setFilterStocks(filtrstocks);
-    } else {
+    } else if (event.target.value === 'RUB') {
+      const filtrstocks = stocks.filter(
+        (el) => el.currency === event.target.value,
+      );
+      setFilterStocks(filtrstocks);
+    } else if (event.target.value === 'Все') {
       setFilterStocks(stocks);
     }
   };
@@ -203,20 +262,20 @@ function StockAccordion() {
   const history = useSelector((store) => store.history);
 
   const hystoriCal = React.useCallback(
-    (key) => {
-      setDiagramLoading(!diagramLoading);
-      dispatch({
-        type: 'REMOVE_HISTORY',
-        payload: [],
-      });
-      if (!diagramLoading) {
+    (key, currency, board) => {
+      if (currency === 'RUB') {
+        setDiagramLoading(!diagramLoading);
+        dispatch({
+          type: 'REMOVE_HISTORY',
+          payload: [],
+        });
         const today = new Date();
         const todayOneYearAgo = formatDateMinusYear(today);
         console.log('==========> todayOneYearAgo', todayOneYearAgo);
         const base_URL = [
-          `https://iss.moex.com/iss/history/engines/stock/markets/shares/sessions/total/boards/TQBR/securities/${key}.json?from=${todayOneYearAgo}&start=0`,
-          `https://iss.moex.com/iss/history/engines/stock/markets/shares/sessions/total/boards/TQBR/securities/${key}.json?from=${todayOneYearAgo}&start=100`,
-          `https://iss.moex.com/iss/history/engines/stock/markets/shares/sessions/total/boards/TQBR/securities/${key}.json?from=${todayOneYearAgo}&start=200`,
+          `https://iss.moex.com/iss/history/engines/stock/markets/shares/sessions/total/boards/${board}/securities/${key}.json?from=${todayOneYearAgo}&start=0`,
+          `https://iss.moex.com/iss/history/engines/stock/markets/shares/sessions/total/boards/${board}/securities/${key}.json?from=${todayOneYearAgo}&start=100`,
+          `https://iss.moex.com/iss/history/engines/stock/markets/shares/sessions/total/boards/${board}/securities/${key}.json?from=${todayOneYearAgo}&start=200`,
         ]; //2022-01-01 // ${todayOneYearAgo}
         console.log(base_URL);
         axios
@@ -277,8 +336,6 @@ function StockAccordion() {
     [diagramLoading, dispatch],
   );
 
-  // console.log('==========> diagramLoading', diagramLoading);
-  // console.log('==========> history', history);
   const labelCheckBox = { inputProps: { 'aria-label': 'controlled' } };
 
   return (
@@ -313,8 +370,8 @@ function StockAccordion() {
         id="standard-select-currency-native"
         sx={{ width: '180px', paddingLeft: '20px', paddingBottom: '20px' }}
         select
-        value={currency}
-        onChange={moneyChange}
+        value={stateFilter}
+        onChange={currencyFilter}
         SelectProps={{
           native: true,
         }}
@@ -356,7 +413,7 @@ function StockAccordion() {
                 onClick={() => {
                   wikipediaSearch(el.secid);
                   companyInfoSearch(el.secid);
-                  hystoriCal(el.secid);
+                  hystoriCal(el.secid, el.currency, el.board);
                   newsContentSearch(el.shortName);
                   historicalData(el.secid, el.currency);
                 }}
@@ -367,7 +424,7 @@ function StockAccordion() {
                   color={el.lastchange > 0 ? '#004d40' : '#ad1457'}
                 >
                   <AccordionSummary
-                    expandIcon={<AddTaskOutlinedIcon />}
+                    expandIcon={<ExpandMoreIcon />}
                     aria-controls={el.id}
                     id={el.id}
                     sx={{
@@ -380,13 +437,21 @@ function StockAccordion() {
                       sx={{ transform: 'rotate(135deg)' }}
                     />
                     <Typography sx={{ width: '33%', flexShrink: 0 }}>
-                      {el?.shortName}
+                      {el.shortName}
                     </Typography>
                     <Typography title="Текущая цена" sx={{ width: '20%' }}>
-                      {el.last.toFixed(2)}$
+                      {el.currency === 'USD' ? `${el.last} $` : `${el.last} ₽`}
                     </Typography>
-                    <Typography title="Дневной прирост" sx={{ width: '20%' }}>
-                      {el.lastchange.toFixed(2)}$
+                    <Typography
+                      title="Дневной прирост"
+                      sx={{
+                        width: '20%',
+                        color: `${el.lastchange > 0 ? 'green' : 'red'}`,
+                      }}
+                    >
+                      {el.currency === 'USD'
+                        ? `${el.lastchange} $`
+                        : `${el.lastchange} ₽`}
                     </Typography>
                     <Typography
                       title="Процент изменения за день"
@@ -412,7 +477,7 @@ function StockAccordion() {
                 onClick={() => {
                   wikipediaSearch(el.secid);
                   companyInfoSearch(el.secid);
-                  hystoriCal(el.secid);
+                  !expanded && hystoriCal(el.secid, el.currency, el.board);
                   newsContentSearch(el.shortName);
                   historicalData(el.secid, el.currency);
                 }}
@@ -423,7 +488,7 @@ function StockAccordion() {
                   color={el.lastchange > 0 ? '#004d40' : '#ad1457'}
                 >
                   <AccordionSummary
-                    expandIcon={<AddTaskOutlinedIcon />}
+                    expandIcon={<ExpandMoreIcon />}
                     aria-controls={el.id}
                     id={el.id}
                     sx={{
@@ -436,13 +501,21 @@ function StockAccordion() {
                       sx={{ transform: 'rotate(135deg)' }}
                     />
                     <Typography sx={{ width: '33%', flexShrink: 0 }}>
-                      {el?.shortName}
+                      {el.shortName}
                     </Typography>
                     <Typography title="Текущая цена" sx={{ width: '20%' }}>
-                      {el.last.toFixed(2)}$
+                      {el.currency === 'USD' ? `${el.last} $` : `${el.last} ₽`}
                     </Typography>
-                    <Typography title="Дневной прирост" sx={{ width: '20%' }}>
-                      {el.lastchange.toFixed(2)}$
+                    <Typography
+                      title="Дневной прирост"
+                      sx={{
+                        width: '20%',
+                        color: `${el.lastchange > 0 ? 'green' : 'red'}`,
+                      }}
+                    >
+                      {el.currency === 'USD'
+                        ? `${el.lastchange} $`
+                        : `${el.lastchange} ₽`}
                     </Typography>
                     <Typography
                       title="Процент изменения за день"
