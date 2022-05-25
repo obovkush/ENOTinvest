@@ -150,7 +150,6 @@ function StockAccordion() {
   // Список всех акций
   // setInterval(() => {
    useEffect(() => {
-    console.log('🚨');
     axios
       .get(`${process.env.REACT_APP_API_URL}api/stocks/ru`)
       .then(({ data }) => {
