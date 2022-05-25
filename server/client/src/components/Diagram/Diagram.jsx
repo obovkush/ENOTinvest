@@ -103,6 +103,9 @@ const options = {
 
 function Diagram() {
   const stockData = useSelector((store) => store.history);
+  
+  if (stockData.length > 250) {
+    
   const userData = {
     labels: stockData?.map((data) => data.date),
     datasets: [
@@ -118,7 +121,8 @@ function Diagram() {
         <Line options={options} data={userData} />
       </div>
     </>
-  );
+    );
+  }
 }
 
 export default memo(Diagram);
