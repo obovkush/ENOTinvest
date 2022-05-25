@@ -12,7 +12,6 @@ function DetailsOfAccordion() {
   return (
     <AccordionDetails>
       <Grid container spacing={0}>
-
         <Grid item xs={12}>
           <Typography>Некоторая информация: цифры и буквы</Typography>
           <br />
@@ -21,12 +20,10 @@ function DetailsOfAccordion() {
             eiusmod tempor incididunt ut labore et dolore magna aliqua.
           </Typography>
         </Grid>
-
         <Grid container xs={12} spacing={2} sx={{ mt: 0 }}>
           <Grid item xs={9}>
             <Diagram />
           </Grid>
-
           <Grid item xs={3}>
             <Typography>О компании:</Typography>
             <Typography sx={{ fontSize: 12 }}>
@@ -41,12 +38,10 @@ function DetailsOfAccordion() {
             </Typography>
           </Grid>
         </Grid>
-
         <Grid item xs={12}>
           <Typography>Новости компании:</Typography>
           <OneCompanyNews />
         </Grid>
-
       </Grid>
     </AccordionDetails>
   );
