@@ -94,6 +94,10 @@ function StockAccordion() {
 
   const historicalData = (key, currency) => {
     if (currency === 'USD') {
+      dispatch({
+        type: 'REMOVE_HISTORY',
+        payload: [],
+      });
       const year = new Date().getFullYear();
       const month = new Date().getMonth() + 1;
       const day = new Date().getDate();
@@ -119,9 +123,9 @@ function StockAccordion() {
             }),
           });
         })
-        .catch((err) => console.log('stocks API history =>', err));
+        .catch((err) => console.log('У вас закончился лимит! 1 минута'));
     } else {
-      console.log('Здесь будет api/stocks/RU history');
+      // console.log('Здесь будет api/stocks/RU history');
     }
   };
 
@@ -167,6 +171,28 @@ function StockAccordion() {
     }
   };
 
+  // Функция сортировки по дате публикации новости или ролика
+  const sortedByPublishedDate = (array) => {
+    const sortedArray = array.sort((a, b) => {
+      const newsElemA = a?.pubDate?.replace(/[A-Z-:\s]/gim, '').trim();
+      const newsElemB = b?.pubDate?.replace(/[A-Z-:\s]/gim, '').trim();
+      const youtubeElemA = a?.snippet?.publishedAt
+        ?.replace(/[A-Z-:]/gim, '')
+        .trim();
+      const youtubeElemB = b?.snippet?.publishedAt
+        ?.replace(/[A-Z-:]/gim, '')
+        .trim();
+      if ((newsElemA || youtubeElemA) > (newsElemB || youtubeElemB)) {
+        return -1;
+      }
+      if ((newsElemA || youtubeElemA) < (newsElemB || youtubeElemB)) {
+        return 1;
+      }
+      return 0;
+    });
+    return sortedArray;
+  };
+
   const newsContentSearch = (elemName) => {
     const splitName = elemName.split(' ')[0];
     const lowerCaseName = splitName.toLowerCase();
@@ -179,9 +205,9 @@ function StockAccordion() {
     );
     const firstFiveNews = arrayOfNews.slice(0, 5);
     if (!companyNews.length) {
-      dispatch({ type: 'NEWS_OF_CURRENT_COMPANY', payload: firstFiveNews });
+      dispatch({ type: 'NEWS_OF_CURRENT_COMPANY', payload: sortedByPublishedDate(firstFiveNews) });
     } else {
-      dispatch({ type: 'NEWS_OF_CURRENT_COMPANY', payload: companyNews });
+      dispatch({ type: 'NEWS_OF_CURRENT_COMPANY', payload: sortedByPublishedDate(companyNews) });
     }
   };
 
@@ -267,7 +293,6 @@ function StockAccordion() {
       });
       const today = new Date();
       const todayOneYearAgo = formatDateMinusYear(today);
-      console.log('==========> todayOneYearAgo', todayOneYearAgo);
       const base_URL = [
         `https://iss.moex.com/iss/history/engines/stock/markets/shares/sessions/total/boards/${board}/securities/${key}.json?from=${todayOneYearAgo}&start=0`,
         `https://iss.moex.com/iss/history/engines/stock/markets/shares/sessions/total/boards/${board}/securities/${key}.json?from=${todayOneYearAgo}&start=100`,
@@ -350,9 +375,9 @@ function StockAccordion() {
             onClick={() => {
               wikipediaSearch(el.secid);
               companyInfoSearch(el.secid);
-              hystoriCal(el.secid, el.currency, el.board);
+              !expanded  && hystoriCal(el.secid, el.currency, el.board);
               newsContentSearch(el.shortName);
-              historicalData(el.secid, el.currency);
+              !expanded  && historicalData(el.secid, el.currency);
             }}
           >
             <Badge.Ribbon
@@ -393,7 +418,7 @@ function StockAccordion() {
                 <Typography
                   title="Процент изменения за день"
                   sx={{
-                    width: '20%',
+                    width: '20 %',
                     color: `${el.lastchange > 0 ? '#004d40' : '#ad1457'}`,
                   }}
                 >

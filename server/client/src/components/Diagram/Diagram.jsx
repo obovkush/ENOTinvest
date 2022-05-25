@@ -22,35 +22,6 @@ ChartJS.register(
   LineElement,
 );
 
-//Данные для графика
-// const stockData = [
-//   {
-//     id: 1,
-//     date: '16.05',
-//     price: 65,
-//   },
-//   {
-//     id: 2,
-//     date: '17.05',
-//     price: 64,
-//   },
-//   {
-//     id: 3,
-//     date: '18.05',
-//     price: 63,
-//   },
-//   {
-//     id: 4,
-//     date: '19.05',
-//     price: 64,
-//   },
-//   {
-//     id: 5,
-//     date: '20.05',
-//     price: 58,
-//   },
-// ];
-
 // Параметры для графика
 const options = {
   responsive: true,
@@ -132,6 +103,9 @@ const options = {
 
 function Diagram() {
   const stockData = useSelector((store) => store.history);
+  
+  if (stockData.length > 250) {
+    
   const userData = {
     labels: stockData?.map((data) => data.date),
     datasets: [
@@ -147,7 +121,8 @@ function Diagram() {
         <Line options={options} data={userData} />
       </div>
     </>
-  );
+    );
+  }
 }
 
 export default Diagram;
