@@ -255,7 +255,7 @@ function StockAccordion() {
     } else {
       setFilterStocks(stocks);
     }
-  };
+  }, [checked, stocks]);
                                  
   // Функция форматирования времени для истории (минус год)
   function formatDateMinusYear(date) {

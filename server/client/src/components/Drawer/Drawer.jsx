@@ -10,7 +10,7 @@ import Divider from '@mui/material/Divider';
 import Drawer from '@mui/material/Drawer';
 import IconButton from '@mui/material/IconButton';
 import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
+import ListItem, { listItemClasses } from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
@@ -47,6 +47,17 @@ function ResponsiveDrawer(props) {
 
   const user = useSelector((store) => store.user);
 
+  // Меняем цвет на hover элементов сайдбара + теперь заработал NavLink
+  const linkStyle = {
+    [`& .active, & .${listItemClasses.root}:hover`]: {
+      color: "#f07800",
+      fontWeight: "bold",
+      "& svg": {
+        fill: "#f07800"
+      }
+    }
+  }
+
   useEffect(() => {
     axios
       .get('https://www.cbr-xml-daily.ru/daily_json.js')
@@ -82,33 +93,33 @@ function ResponsiveDrawer(props) {
       display: 'Главная',
       to: '/',
       section: '',
-      icon: <Home sx={{ fill: '#e65100' }} />,
+      icon: <Home sx={{ fill: '#ffffff' }} />,
     },
     {
       display: 'Акции',
       to: '/stocks',
       section: 'stocks',
-      icon: <Dns sx={{ fill: '#e65100' }} />,
+      icon: <Dns sx={{ fill: '#ffffff' }} />,
     },
     {
       display: 'Портфель',
       to: '/profile',
       section: 'profile',
-      icon: <Public />,
+      icon: <Public sx={{ fill: '#ffffff' }} />,
     },
     user.email
       ? {
           display: 'Выход',
           to: '/logout',
           section: 'logout',
-          icon: <PersonOffIcon sx={{ fill: '#e65100' }} />,
+          icon: <PersonOffIcon sx={{ fill: '#ffffff' }} />,
           onClick: () => handleLogout(),
         }
       : {
           display: 'Вход / Регистрация',
           to: '/signin',
           section: 'signin',
-          icon: <PersonAddAlt1Icon sx={{ fill: '#e65100' }} />,
+          icon: <PersonAddAlt1Icon sx={{ fill: '#ffffff' }} />,
         },
   ];
   const drawer = (
@@ -127,7 +138,7 @@ function ResponsiveDrawer(props) {
         </div>
       </Toolbar>
       <Divider sx={{ borderColor: 'white' }} />
-      <List>
+      <List sx={ linkStyle }>
         {sidebarNavItems.map((item, index) => (
           <NavLink to={item.to} key={index} onClick={item.onClick}>
             <ListItem key={item.display} disablePadding>
