@@ -56,9 +56,3 @@ const start = async () => {
 };
 
 start();
-
-// Вызов функций обновления информации по русским акциям/фондам с API в базу
-// const intFetchRuStocks = setInterval(stockController.getRuStocksFromMOEX, 2000);
-// setTimeout(() => clearInterval(intFetchRuStocks), 3000);
-// const intFetchRuFunds = setInterval(stockController.getRuFundsFromMOEX, 1000);
-// setTimeout(() => clearInterval(intFetchRuFunds), 1500);
