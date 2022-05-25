@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback, memo } from 'react';
 import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
 import TextField from '@mui/material/TextField';
@@ -92,7 +92,7 @@ function StockAccordion() {
   const [stateFilter, setCurrency] = useState('Все');
   const [expanded, setExpanded] = useState(false);
 
-  const historicalData = (key, currency) => {
+  const historicalData = useCallback((key, currency) => {
     if (currency === 'USD') {
       dispatch({
         type: 'REMOVE_HISTORY',
@@ -127,7 +127,7 @@ function StockAccordion() {
     } else {
       // console.log('Здесь будет api/stocks/RU history');
     }
-  };
+  }, [dispatch]);
 
   useEffect(() => {
     axios
@@ -145,7 +145,7 @@ function StockAccordion() {
   };
 
   // Ищем информацию о компании в википедии
-  const wikipediaSearch = (elem) => {
+  const wikipediaSearch = useCallback((elem) => {
     axios
       .post(`${process.env.REACT_APP_API_URL}api/wikipedia`, {
         secid: elem,
@@ -156,9 +156,9 @@ function StockAccordion() {
           setLoading(false);
         }
       });
-  };
+  }, [dispatch]);
 
-  const companyInfoSearch = (secid) => {
+  const companyInfoSearch = useCallback((secid) => {
     const stocksCopy = [...stocks];
     const info = stocksCopy.filter((el) => el.secid === secid);
     if (info.length === 1) {
@@ -169,10 +169,10 @@ function StockAccordion() {
     } else {
       console.log('Отфильтровалось 0 или более 1 компании');
     }
-  };
+  }, [dispatch, stocks]);
 
   // Функция сортировки по дате публикации новости или ролика
-  const sortedByPublishedDate = (array) => {
+  const sortedByPublishedDate = useCallback((array) => {
     const sortedArray = array.sort((a, b) => {
       const newsElemA = a?.pubDate?.replace(/[A-Z-:\s]/gim, '').trim();
       const newsElemB = b?.pubDate?.replace(/[A-Z-:\s]/gim, '').trim();
@@ -191,9 +191,9 @@ function StockAccordion() {
       return 0;
     });
     return sortedArray;
-  };
+  }, []);
 
-  const newsContentSearch = (elemName) => {
+  const newsContentSearch = useCallback((elemName) => {
     const splitName = elemName.split(' ')[0];
     const lowerCaseName = splitName.toLowerCase();
     const upperCaseName = splitName.toUpperCase();
@@ -209,10 +209,10 @@ function StockAccordion() {
     } else {
       dispatch({ type: 'NEWS_OF_CURRENT_COMPANY', payload: sortedByPublishedDate(companyNews) });
     }
-  };
+  }, [allNews, dispatch, sortedByPublishedDate]);
 
   // Сортировка по валюте
-  const currencyFilter = (event) => {
+  const currencyFilter = useCallback((event) => {
     setCurrency(event.target.value);
     if (event.target.value === 'USD') {
       const filtrstocks = stocks.filter(
@@ -227,9 +227,9 @@ function StockAccordion() {
     } else if (event.target.value === 'Все') {
       setFilterStocks(stocks);
     }
-  };
+  }, [stocks]);
 
-  const searchStock = (event) => {
+  const searchStock = useCallback((event) => {
     const filtrstocks = stocks.filter(
       (el) =>
         el.secid.slice(0, event.target.value.length) ===
@@ -238,9 +238,9 @@ function StockAccordion() {
           event.target.value.toLowerCase(),
     );
     setFilterStocks(filtrstocks);
-  };
+  }, [stocks]);
 
-  const FondsCheck = (event) => {
+  const FondsCheck = useCallback((event) => {
     setChecked(event.target.checked);
     if (checked === false) {
       const filtrstocks = stocks.filter((el) => el.type === 'Фонд');
@@ -248,8 +248,8 @@ function StockAccordion() {
     } else {
       setFilterStocks(stocks);
     }
-  };
-
+  }, [checked, stocks]);
+  
   function formatDateMinusYear(date) {
     let month = String(date.getMonth() + 1);
     let day = String(date.getDate());
@@ -261,7 +261,7 @@ function StockAccordion() {
       day = '0' + day;
     }
     return [year, month, day].join('-');
-  }
+  }, [])
 
   // Функция запроса истории
   const getHistoryFromMOEX = (url) => {
@@ -439,4 +439,4 @@ function StockAccordion() {
   );
 }
 
-export default StockAccordion;
+export default memo(StockAccordion);
