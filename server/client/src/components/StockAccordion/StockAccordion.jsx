@@ -375,9 +375,9 @@ function StockAccordion() {
             onClick={() => {
               wikipediaSearch(el.secid);
               companyInfoSearch(el.secid);
-              !expanded  && hystoriCal(el.secid, el.currency, el.board);
+              hystoriCal(el.secid, el.currency, el.board);
               newsContentSearch(el.shortName);
-              !expanded  && historicalData(el.secid, el.currency);
+              historicalData(el.secid, el.currency);
             }}
           >
             <Badge.Ribbon
@@ -422,7 +422,7 @@ function StockAccordion() {
                     color: `${el.lastchange > 0 ? '#004d40' : '#ad1457'}`,
                   }}
                 >
-                  {el.lastchangeprcnt}%
+                  {el.lastchangeprcnt} %
                 </Typography>
               </AccordionSummary>
             </Badge.Ribbon>
