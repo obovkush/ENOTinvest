@@ -261,7 +261,7 @@ function StockAccordion() {
       day = '0' + day;
     }
     return [year, month, day].join('-');
-  }, [])
+  }
 
   // Функция запроса истории
   const getHistoryFromMOEX = (url) => {
