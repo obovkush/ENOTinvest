@@ -282,7 +282,7 @@ function StockAccordion() {
   const isFiltered = () => {
     return filterStocks.length ? filterStocks : stocks;
   };
-
+  console.log('isExpanded', expanded);
   return (
     <>
       <Search sx={{ display: 'inline-block' }}>
@@ -401,7 +401,7 @@ function StockAccordion() {
                 </Typography>
               </AccordionSummary>
             </Badge.Ribbon>
-            <DetailsOfAccordion />
+            {expanded === `panel${el.id}` && <DetailsOfAccordion />}
           </Accordion>
         );
       })}
