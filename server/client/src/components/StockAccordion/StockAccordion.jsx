@@ -85,6 +85,7 @@ const currencies = [
 function StockAccordion() {
   const dispatch = useDispatch();
   const stocks = useSelector((state) => state.stocks);
+  const history = useSelector((state) => state.history);
   const allNews = useSelector((state) => state.allNews);
   const [filterStocks, setFilterStocks] = useState(stocks);
   const [loading, setLoading] = useState(true);
@@ -205,9 +206,15 @@ function StockAccordion() {
     );
     const firstFiveNews = arrayOfNews.slice(0, 5);
     if (!companyNews.length) {
-      dispatch({ type: 'NEWS_OF_CURRENT_COMPANY', payload: sortedByPublishedDate(firstFiveNews) });
+      dispatch({
+        type: 'NEWS_OF_CURRENT_COMPANY',
+        payload: sortedByPublishedDate(firstFiveNews),
+      });
     } else {
-      dispatch({ type: 'NEWS_OF_CURRENT_COMPANY', payload: sortedByPublishedDate(companyNews) });
+      dispatch({
+        type: 'NEWS_OF_CURRENT_COMPANY',
+        payload: sortedByPublishedDate(companyNews),
+      });
     }
   }, [allNews, dispatch, sortedByPublishedDate]);
 
@@ -248,8 +255,9 @@ function StockAccordion() {
     } else {
       setFilterStocks(stocks);
     }
-  }, [checked, stocks]);
-  
+  };
+                                 
+  // Функция форматирования времени для истории (минус год)
   function formatDateMinusYear(date) {
     let month = String(date.getMonth() + 1);
     let day = String(date.getDate());
@@ -264,27 +272,6 @@ function StockAccordion() {
   }
 
   // Функция запроса истории
-  const getHistoryFromMOEX = (url) => {
-    axios
-      .get(url)
-      .then((history) => {
-        return history.data.history.data.map((el, i) => {
-          return {
-            id: i + 1,
-            shortName: el[2],
-            date: new Date(el[1]).toLocaleDateString('sma-SE'),
-            price: el[9],
-          };
-        });
-      })
-      .then((history) => {
-        dispatch({
-          type: 'SET_HISTORY',
-          payload: history,
-        });
-      });
-  };
-
   const hystoriCal = (key, currency, board) => {
     if (currency === 'RUB') {
       dispatch({
@@ -298,7 +285,28 @@ function StockAccordion() {
         `https://iss.moex.com/iss/history/engines/stock/markets/shares/sessions/total/boards/${board}/securities/${key}.json?from=${todayOneYearAgo}&start=100`,
         `https://iss.moex.com/iss/history/engines/stock/markets/shares/sessions/total/boards/${board}/securities/${key}.json?from=${todayOneYearAgo}&start=200`,
       ]; //2022-01-01
-      base_URL.forEach((el) => getHistoryFromMOEX(el));
+
+      Promise.allSettled(base_URL.map((url) => axios.get(url))).then((data) =>
+        data.forEach((result, num) => {
+          if (result.status === 'fulfilled') {
+            // result.value.data.history.data.map
+            dispatch({
+              type: 'SET_HISTORY',
+              payload: result.value.data.history.data.map((el, i) => {
+                return {
+                  id: i + 1,
+                  shortName: el[2],
+                  date: new Date(el[1]).toLocaleDateString('sma-SE'),
+                  price: el[9],
+                };
+              }),
+            });
+          }
+          if (result.status === 'rejected') {
+            console.log(`Не удалось получить данные по ${num} запросу`);
+          }
+        }),
+      );
     }
   };
 
@@ -307,7 +315,7 @@ function StockAccordion() {
   const isFiltered = () => {
     return filterStocks.length ? filterStocks : stocks;
   };
-
+  console.log('isExpanded', expanded);
   return (
     <>
       <Search sx={{ display: 'inline-block' }}>
