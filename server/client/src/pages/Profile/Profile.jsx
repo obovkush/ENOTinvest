@@ -14,6 +14,8 @@ import { Badge } from 'antd';
 
 export default function Profile() {
   const [portfolio, setPortfolio] = useState();
+  const [shares, setShares] = useState()
+  const [etfs, setEtfs] = useState()
   const [loading, setLoading] = useState(true);
   const [expanded, setExpanded] = useState(false);
 
@@ -23,15 +25,41 @@ export default function Profile() {
       .then((data) => data)
       .then((data) => {
         console.log('данные с апишки', data);
-        setPortfolio(data.data);
+        setPortfolio(data.data.profile);
+        setShares(data.data.shares)
+        setEtfs(data.data.etfs)
         setLoading(false);
-        console.log('портфель в аксиосе после опишки', portfolio);
       });
   }, []);
 
   const AccordionOpen = (panel) => (event, isExpanded) => {
     setExpanded(isExpanded ? panel : false);
   };
+
+  const tikerSearch = (figi, type) => {
+    if (type === 'share') {
+      const findTiker = shares.instruments.filter((el) => el.figi === figi)
+        return findTiker[0].ticker
+    } else if (type === 'etf'){
+      const findTikerEtfs = etfs.instruments.filter((el) => el.figi === figi)
+        return findTikerEtfs[0].ticker
+    } else {
+      const findTiker = portfolio.positions.filter((el) => el.figi === figi)
+      return findTiker[0].current_nkd.currency.toUpperCase()
+    }
+  }
+
+  const nameSearch = (figi, type) => {
+    if (type === 'share') {
+      const findTiker = shares.instruments.filter((el) => el.figi === figi)
+        return findTiker[0].name
+    } else if (type === 'etf'){
+      const findTikerEtfs = etfs.instruments.filter((el) => el.figi === figi)
+        return findTikerEtfs[0].name
+    } else {
+      return 'Валюта'
+    }
+  }
 
   return (
     <>
@@ -56,7 +84,7 @@ export default function Profile() {
           >
             <Badge.Ribbon
               placement="start"
-              text={el.figi}
+              text={tikerSearch(el.figi, el.instrument_type)}
               color={el.expected_yield.units > 0 ? 'green' : 'red'}
             >
               <AccordionSummary
@@ -76,7 +104,7 @@ export default function Profile() {
                   sx={{ transform: 'rotate(135deg)' }}
                 />
                 <Typography sx={{ width: '33%', flexShrink: 0 }}>
-                  {el?.figi}
+                  {nameSearch(el.figi, el.instrument_type)}
                 </Typography>
                 <Typography title="Текущая цена" sx={{ width: '20%' }}>
                   {el.current_price.units}$

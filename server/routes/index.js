@@ -37,8 +37,10 @@ router.post('/wikipedia', (req, res) => {
 
 router.get('/profile', async (req, res) => {
     try {
-    const arr = await api.OperationsServicePromise.GetPortfolio({'account_id' : '2038810095'})
-    res.json(arr)
+    const profile = await api.OperationsServicePromise.GetPortfolio({'account_id' : '2038810095'})
+    const shares = await api.InstrumentsServicePromise.Shares({})
+    const etfs = await api.InstrumentsServicePromise.Etfs({})
+    res.json({ profile, shares, etfs })
   
 }catch(err){
   console.log(err);
