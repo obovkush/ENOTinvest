@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import { Line } from 'react-chartjs-2';
 import {
   Chart as ChartJS,
@@ -121,4 +121,4 @@ function Diagram() {
   );
 }
 
-export default Diagram;
+export default memo(Diagram);
