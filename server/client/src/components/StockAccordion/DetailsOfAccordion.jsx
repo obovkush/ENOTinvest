@@ -21,10 +21,10 @@ function DetailsOfAccordion() {
           </Typography>
         </Grid>
         <Grid container xs={12} spacing={2} sx={{ mt: 0 }}>
-          <Grid item xs={9}>
+          <Grid item xs={12} sm={12} md={12} lg={9} xl={9}>
             <Diagram />
           </Grid>
-          <Grid item xs={3}>
+          <Grid item xs={12} sm={12} md={12} lg={3} xl={3}>
             <Typography>О компании:</Typography>
             <Typography sx={{ fontSize: 12 }}>
               {companyInfo}
