@@ -40,7 +40,6 @@ app.use('/api', router);
 // Обработка обшибок, последний middleware
 app.use(errorMiddleware);
 
-
 // Запускаем сервер
 const start = async () => {
   try {
