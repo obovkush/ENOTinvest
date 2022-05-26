@@ -34,7 +34,6 @@ export default function Best() {
           });
   }, []);
 
-
   return (
     <>
       {filterStocks.map((el, index) => {

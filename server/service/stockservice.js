@@ -77,6 +77,7 @@ class StockService {
         'DIS',
         'AMZN',
         'TSLA',
+        // 'GOOGL',
       ];
 
       const { api_key } = finnhub.ApiClient.instance.authentications;
@@ -122,9 +123,9 @@ class StockService {
                   await Stock.update( { shortName: data.name, currency: data.currency }, { where: { shortName: `${el}` } } );
                   });
               }
-          })
-            }
-            );
+            })
+          }
+        );
       }, 2 * 60 * 1000);
     } catch (error) {
       console.log('stockservice ENG =>', error);
