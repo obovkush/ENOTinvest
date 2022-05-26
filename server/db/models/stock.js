@@ -68,6 +68,10 @@ module.exports = (sequelize, DataTypes) => {
       companyinfo: {
         type: DataTypes.TEXT,
       },
+      // Лого
+      img: {
+        type: DataTypes.TEXT,
+      },
       createdAt: {
         allowNull: false,
         type: DataTypes.DATE,
