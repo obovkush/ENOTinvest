@@ -6,7 +6,6 @@ import 'boxicons/css/boxicons.min.css';
 import { checkAuth } from './api/userAPI';
 import { useDispatch, useSelector } from 'react-redux';
 import Drawer from './components/Drawer/Drawer';
-import axios from 'axios';
 
 function App() {
   const dispatch = useDispatch();
@@ -39,7 +38,7 @@ function App() {
       });
   }, []);
 
-  console.log('------->', tinkoff)
+  console.log('------->', tinkoff);
 
   useEffect(() => {
     if (localStorage.getItem('token')) {
