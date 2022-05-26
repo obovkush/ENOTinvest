@@ -41,3 +41,7 @@ a {
 #root>div>main>div>div.MuiGrid-root.MuiGrid-item.MuiGrid-grid-xs-12.MuiGrid-grid-sm-12.MuiGrid-grid-md-7.MuiGrid-grid-lg-5.MuiGrid-grid-xl-4.css-1hbkgir-MuiGrid-root>div>div.MuiTabs-root.css-jkvau6-MuiTabs-root>div>div>button.MuiButtonBase-root.MuiTab-root.MuiTab-textColorPrimary.Mui-selected.css-1t4lqmc-MuiButtonBase-root-MuiTab-root>svg>path {
   color: #ca441a;
 }
+
+#root>div>nav>div>div>div>ul>a.active>li>div>div.MuiListItemIcon-root.css-cveggr-MuiListItemIcon-root>svg>path {
+  color: white;
+}

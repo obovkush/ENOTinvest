@@ -84,7 +84,7 @@ class StockService {
       api_key.apiKey = 'ca28s8iad3iaqnc2om4g';
       const finnhubClient = new finnhub.DefaultApi();
 
-      setInterval(() => {
+      // setInterval(() => {
         stocks.forEach((el) => {
           finnhubClient.quote(`${el}`, async (error, data, response) => {
             const checkStock = await Stock.findOne({ where: { secid: `${el}` }, row: true });
@@ -126,7 +126,7 @@ class StockService {
             })
           }
         );
-      }, 2 * 60 * 1000);
+      // }, 2 * 60 * 1000);
     } catch (error) {
       console.log('stockservice ENG =>', error);
     }

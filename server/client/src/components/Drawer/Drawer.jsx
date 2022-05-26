@@ -98,33 +98,33 @@ function ResponsiveDrawer(props) {
       display: 'Главная',
       to: '/',
       section: '',
-      icon: <Home sx={{ fill: '#ffffff' }} />,
+      icon: <Home sx={{ color: 'white' }} />,
     },
     {
       display: 'Акции',
       to: '/stocks',
       section: 'stocks',
-      icon: <Dns sx={{ fill: '#ffffff' }} />,
+      icon: <Dns sx={{ color: 'white' }} />,
     },
     {
       display: 'Портфель',
       to: '/profile',
       section: 'profile',
-      icon: <Public sx={{ fill: '#ffffff' }} />,
+      icon: <Public sx={{ color: 'white' }} />,
     },
     user.email
       ? {
           display: 'Выход',
           to: '/logout',
           section: 'logout',
-          icon: <PersonOffIcon sx={{ fill: '#ffffff' }} />,
+          icon: <PersonOffIcon sx={{ color: 'white' }} />,
           onClick: () => handleLogout(),
         }
       : {
           display: 'Вход / Регистрация',
           to: '/signin',
           section: 'signin',
-          icon: <PersonAddAlt1Icon sx={{ fill: '#ffffff' }} />,
+          icon: <PersonAddAlt1Icon sx={{ color: 'white' }} />,
         },
   ];
   const drawer = (
