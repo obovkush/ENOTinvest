@@ -207,10 +207,10 @@ function Worst() {
                     <Typography sx={{ width: '5%', flexShrink: 0 }}>
                     {<img src={el.img} width={30} alt="icon" />}
                     </Typography>
-                    <Typography sx={{ width: '33%', flexShrink: 0 }}>
+                    <Typography sx={{ width: '33%', flexShrink: 0, paddingTop: '5px' }}>
                       {el.shortName}
                     </Typography>
-                    <Typography title="Текущая цена" sx={{ width: '20%' }}>
+                    <Typography title="Текущая цена" sx={{ width: '20%', paddingTop: '5px' }}>
                       {el.currency === 'USD' ? `${el.last} $` : `${el.last} ₽`}
                     </Typography>
                     <Typography
@@ -218,6 +218,7 @@ function Worst() {
                       sx={{
                         width: '20%',
                         color: `${el.lastchange > 0 ? 'green' : 'red'}`,
+                        paddingTop: '5px'
                       }}
                     >
                       {el.currency === 'USD'
@@ -228,7 +229,9 @@ function Worst() {
                       fontSize="small"
                       sx={{ 
                         color: `${el.lastchange > 0 ? 'green' : 'red'}`,
-                        transform: `${el.lastchange > 0 ? 'rotate(35deg)' : 'rotate(135deg)'}` 
+                        transform: `${el.lastchange > 0 ? 'rotate(35deg)' : 'rotate(135deg)'}`,
+                        marginTop: '7px',
+                        paddingBottom: '4px'
                       }}
                     />
                     <Typography
@@ -236,6 +239,7 @@ function Worst() {
                       sx={{
                         width: '20%',
                         color: `${el.lastchange > 0 ? 'green' : 'red'}`,
+                        paddingTop: '5px'
                       }}
                     >
                       {el.lastchangeprcnt}%

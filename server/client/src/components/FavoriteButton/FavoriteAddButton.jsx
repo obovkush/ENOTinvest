@@ -22,7 +22,7 @@ function FavoriteAddButton({ secid }) {
         aria-label="delete"
         title="Добавить в избранное"
         onClick={handleCreateFavorite}
-        sx={{ display: 'inline-block' }}
+        sx={{ margin: '0', padding: '0' }}
       >
         <BookmarkAddOutlinedIcon />
       </IconButton>

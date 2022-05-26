@@ -5,7 +5,7 @@ import Typography from '@mui/material/Typography';
 import BusinessCenterIcon from '@mui/icons-material/BusinessCenter';
 import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet';
 import ShowChartIcon from '@mui/icons-material/ShowChart';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import {
   Box,
 } from '@mui/material';
@@ -38,15 +38,48 @@ const informationForCards = [
 ]
 
 export default function MainPageHeader() {
+  const dispatch = useDispatch();
   const tinkoff = useSelector((state) => state.tinkoff);
   const [loading, setLoading] = useState(true);
-  const [sortprofile, setSortProfile] = useState()
+  const [sortProfile, setSortProfile] = useState()
+  const worst = 'worst'
+  const best = 'best'
 
   useEffect(() => {
     tinkoff.length === 3 && setLoading(false)
-    setSortProfile(tinkoff)
   }, [tinkoff])
-  
+
+  const tikerSearchBest = (best) => {
+    const fltr = tinkoff[1].positions.sort((a, b) => a.expected_yield.units - b.expected_yield.units)
+    if (best === 'best') {
+      return fltr[0].expected_yield.units
+    }
+    if (fltr[0].instrument_type === 'share') {
+      const findTiker = tinkoff[0].instruments.filter((el) => el.figi === fltr[0].figi);
+      return findTiker[0].ticker;
+    } else if (fltr[0].instrument_type === 'etf') {
+      const findTikerEtfs = tinkoff[2].instruments.filter((el) => el.figi === fltr[0].figi);
+      return findTikerEtfs[0].ticker;
+    } else {
+      return 'RUB'
+    }
+  }
+
+  const tikerSearchWorst = (worst) => {
+    const fltr = tinkoff[1].positions.sort((a, b) => a.expected_yield.units - b.expected_yield.units)
+    if (worst === 'worst') {
+      return fltr[8].expected_yield.units
+    }
+    if (fltr[8].instrument_type === 'share') {
+      const findTiker = tinkoff[0].instruments.filter((el) => el.figi === fltr[8].figi);
+      return findTiker[0].ticker;
+    } else if (fltr[8].instrument_type === 'etf') {
+      const findTikerEtfs = tinkoff[2].instruments.filter((el) => el.figi === fltr[8].figi);
+      return findTikerEtfs[0].ticker;
+    } else {
+      return 'RUB'
+    }
+  }
 
   return (
     <>
@@ -121,32 +154,18 @@ export default function MainPageHeader() {
       <Box sx={{display: 'flex', justifyContent: 'space-around'}}>
       <Box>
       <Typography sx={{fontSize: '30px'}}>
-      {((`${tinkoff[1].total_amount_shares.units}` / (`${tinkoff[1].total_amount_currencies.units +
-            tinkoff[1].total_amount_etf.units +
-            tinkoff[1].total_amount_shares.units} `)) * 100).toFixed(1)}% 
+      {tikerSearchBest(best)}
         </Typography>
         <Typography sx={{fontSize: '20px'}}>
-      Акции
+      {tikerSearchBest()}
       </Typography>
       </Box>
       <Box>
       <Typography sx={{fontSize: '30px'}}>
-      {((`${tinkoff[1].total_amount_etf.units}` / (`${tinkoff[1].total_amount_currencies.units +
-            tinkoff[1].total_amount_etf.units +
-            tinkoff[1].total_amount_shares.units}`)) * 100).toFixed(1)}% 
+      {tikerSearchWorst(worst)}
         </Typography>
         <Typography sx={{fontSize: '20px'}}>
-      Фонды
-      </Typography>
-      </Box>
-      <Box>
-      <Typography sx={{fontSize: '30px'}}>
-      {((`${tinkoff[1].total_amount_currencies.units}` / (`${tinkoff[1].total_amount_currencies.units +
-            tinkoff[1].total_amount_etf.units +
-            tinkoff[1].total_amount_shares.units}`)) * 100).toFixed(1)}% 
-        </Typography>
-        <Typography sx={{fontSize: '20px'}}>
-      Валюта
+        {tikerSearchWorst()}
       </Typography>
       </Box>
       </Box>

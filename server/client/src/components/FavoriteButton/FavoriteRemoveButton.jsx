@@ -22,7 +22,7 @@ function FavoriteRemoveButton({ secid }) {
         aria-label="delete"
         title="Удалить из избранного"
         onClick={handleCreateFavorite}
-        sx={{ display: 'inline-block' }}
+        sx={{ margin: '0', padding: '0' }}
       >
         <BookmarkRemoveIcon />
       </IconButton>
