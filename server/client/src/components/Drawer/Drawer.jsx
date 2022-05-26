@@ -132,9 +132,9 @@ function ResponsiveDrawer(props) {
       <Divider sx={{ borderColor: 'white' }} />
       <Toolbar sx={{ justifyContent: 'center' }}>
         <div className="sidebar__menu__item" style={{ fontSize: '17px' }}>
-          USD: {usd}
+          USD: {usd.toFixed(2)}
           <br />
-          EUR: {eur}
+          EUR: {eur.toFixed(2)}
         </div>
       </Toolbar>
       <Divider sx={{ borderColor: 'white' }} />

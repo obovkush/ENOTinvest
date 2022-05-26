@@ -309,22 +309,6 @@ function StockAccordion() {
           inputProps={{ 'aria-label': 'search' }}
         />
       </Search>
-
-      <TextField
-        onChange={(value) => searchStock(value)}
-        sx={{ width: '180px', paddingBottom: '20px' }}
-        id="filled-basic"
-        InputProps={{
-          startAdornment: (
-            <InputAdornment position="start">
-              <SearchIcon />
-            </InputAdornment>
-          ),
-        }}
-        label="Поиск по акциям"
-        variant="outlined"
-      />
-
       <TextField
         id="standard-select-currency-native"
         sx={{ width: '180px', paddingLeft: '20px', paddingBottom: '20px' }}
@@ -348,13 +332,27 @@ function StockAccordion() {
             icon={<FavoriteBorder />}
             checkedIcon={<Favorite sx={{ fill: '#ad1457' }} />}
             checked={checked}
-            sx={{ paddingLeft: '20px' }}
+            sx={{ marginLeft: '20px' }}
             onChange={FondsCheck}
           />
         }
-        label="Сердечко Олега"
-        sx={{ color: 'gray', paddingTop: '6px' }}
+        label="Фонды"
+        sx={{ color: 'black', paddingTop: '6px' }}
       />
+
+      {filterStocks.length
+        ? filterStocks.map((el, index) => {
+            return (
+              <Accordion
+                expanded={expanded === `panel${el.id}`}
+                onChange={AccordionOpen(`panel${el.id}`)}
+                key={el.secid}
+                onClick={() => {
+                  wikipediaSearch(el.secid);
+                  companyInfoSearch(el.secid);
+                  hystoriCal(el.secid, el.currency, el.board);
+                  newsContentSearch(el.shortName);
+                  historicalData(el.secid, el.currency);
       {isFiltered().map((el, index) => {
         return (
           <Accordion
@@ -399,6 +397,121 @@ function StockAccordion() {
                     color: `${el.lastchange > 0 ? '#004d40' : '#ad1457'}`,
                   }}
                 >
+                  <AccordionSummary
+                    expandIcon={<ExpandMoreIcon />}
+                    aria-controls={el.id}
+                    id={el.id}
+                    sx={{
+                      padding: '0 30px 0 70px',
+                      backgroundColor: '#eaeaea',
+                    }}
+                  >
+                    <StraightOutlinedIcon
+                      fontSize="small"
+                      sx={{ transform: 'rotate(135deg)' }}
+                    />
+                    <Typography sx={{ width: '33%', flexShrink: 0 }}>
+                      {el.shortName}
+                    </Typography>
+                    <Typography title="Текущая цена" sx={{ width: '20%' }}>
+                      {el.currency === 'USD' ? `${el.last} $` : `${el.last} ₽`}
+                    </Typography>
+                    <Typography
+                      title="Дневной прирост"
+                      sx={{
+                        width: '20%',
+                        color: `${el.lastchange > 0 ? 'green' : 'red'}`,
+                      }}
+                    >
+                      {el.currency === 'USD'
+                        ? `${el.lastchange} $`
+                        : `${el.lastchange} ₽`}
+                    </Typography>
+                    <Typography
+                      title="Процент изменения за день"
+                      sx={{
+                        width: '20%',
+                        color: `${el.lastchange > 0 ? 'green' : 'red'}`,
+                      }}
+                    >
+                      {el.lastchangeprcnt}%
+                    </Typography>
+                  </AccordionSummary>
+                </Badge.Ribbon>
+                <DetailsOfAccordion />
+              </Accordion>
+            );
+          })
+        : stocks.map((el, index) => {
+            return (
+              <Accordion
+                expanded={expanded === `panel${el.id}`}
+                onChange={AccordionOpen(`panel${el.id}`)}
+                sx={{marginTop: '7px',  borderRadius: '5px'}}
+                key={el.secid}
+                onClick={() => {
+                  wikipediaSearch(el.secid);
+                  companyInfoSearch(el.secid);
+                  !expanded && hystoriCal(el.secid, el.currency, el.board);
+                  newsContentSearch(el.shortName);
+                  historicalData(el.secid, el.currency);
+                }}
+              >
+                <Badge.Ribbon
+                  placement="start"
+                  text={el.secid}
+                  color={el.lastchange > 0 ? '#004d40' : '#ad1457'}
+                >
+                  <AccordionSummary
+                    expandIcon={<ExpandMoreIcon />}
+                    aria-controls={el.id}
+                    id={el.id}
+                    sx={{
+                      padding: '0 30px 0 70px',
+                      // backgroundColor: '#eaeaea',
+                    }}
+                  >
+                    <Typography sx={{ width: '33%', flexShrink: 0 }}>
+                      {el.shortName}
+                    </Typography>
+                    <Typography title="Текущая цена" sx={{ width: '20%' }}>
+                      {el.currency === 'USD' ? `${el.last} $` : `${el.last} ₽`}
+                    </Typography>
+                    <Typography
+                      title="Дневной прирост"
+                      sx={{
+                        width: '20%',
+                        color: `${el.lastchange > 0 ? 'green' : 'red'}`,
+                      }}
+                    >
+                      {el.currency === 'USD'
+                        ? `${el.lastchange} $`
+                        : `${el.lastchange} ₽`}
+                    </Typography>
+                    <StraightOutlinedIcon
+                      fontSize="small"
+                      sx={{ 
+                        color: `${el.lastchange > 0 ? 'green' : 'red'}`,
+                        transform: `${el.lastchange > 0 ? 'rotate(35deg)' : 'rotate(135deg)'}` 
+                      }}
+                    />
+                    <Typography
+                      title="Процент изменения за день"
+                      sx={{
+                        width: '20%',
+                        color: `${el.lastchange > 0 ? 'green' : 'red'}`,
+                      }}
+                    >
+                      {el.lastchangeprcnt}%
+                    </Typography>
+                  </AccordionSummary>
+                </Badge.Ribbon>
+                <DetailsOfAccordion />
+              </Accordion>
+            );
+          })}
+      {}
+      {loading ? (
                   {el.currency === 'USD'
                     ? `${el.lastchange} $`
                     : `${el.lastchange} ₽`}
