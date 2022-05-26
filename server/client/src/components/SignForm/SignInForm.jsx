@@ -18,6 +18,7 @@ import {
   Typography,
   Divider,
 } from '@mui/material';
+import { LoadingButton } from '@mui/lab';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import * as Yup from 'yup';
 import { Formik } from 'formik';
@@ -34,6 +35,8 @@ const SignIn = () => {
   const navigate = useNavigate();
 
   const [checked, setChecked] = useState(false);
+
+  const [loading, setLoading] = useState(false);
 
   const [showPassword, setShowPassword] = useState(false);
   const handleClickShowPassword = () => {
@@ -62,6 +65,7 @@ const SignIn = () => {
             .required('Обязательное поле'),
         })}
         onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
+          setLoading(true);
           try {
             console.log(values);
             await login(values.email, values.password)
@@ -80,6 +84,7 @@ const SignIn = () => {
             setStatus({ success: false });
             setErrors({ submit: err.response.data.description });
             setSubmitting(false);
+            setLoading(false);
           }
         }}
       >
@@ -213,24 +218,26 @@ const SignIn = () => {
                 </Grid>
               )}
               <Grid item xs={12}>
-                <Button
+                <LoadingButton
                   disableElevation
                   disabled={isSubmitting || !values.email || !values.password}
                   fullWidth
+                  color="warning"
                   size="large"
+                  // onClick={handleClick}
+                  loading={loading}
+                  loadingPosition="start"
                   type="submit"
                   variant="contained"
-                  color="primary"
-                  sx={{ mt: 2 }}
                 >
-                  Войти
-                </Button>
+                  {loading ? 'Входим' : 'Войти'}
+                </LoadingButton>
               </Grid>
-              <Grid item xs={12}>
+              {/* <Grid item xs={12}>
                 <Divider>
                   <Typography variant="caption">Войти с помощью</Typography>
                 </Divider>
-              </Grid>
+              </Grid> */}
             </Grid>
           </form>
         )}

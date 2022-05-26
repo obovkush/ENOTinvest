@@ -85,13 +85,17 @@ const favorite = ['ABRD', 'TMOS', 'MTSS'];
 
 function StockAccordion() {
   const dispatch = useDispatch();
+  const user = useSelector((state) => state.user);
   const stocks = useSelector((state) => state.stocks);
   const allNews = useSelector((state) => state.allNews);
+  const favorite = useSelector((state) => state.favorite);
   const [filterStocks, setFilterStocks] = useState(stocks);
   const [loading, setLoading] = useState(true);
   const [checked, setChecked] = useState(false);
   const [stateFilter, setCurrency] = useState('Все');
   const [expanded, setExpanded] = useState(false);
+
+  console.log(favorite);
 
   // Исторические данные по акциям
   const historicalData = useCallback(
@@ -429,11 +433,12 @@ function StockAccordion() {
                 >
                   {el.lastchangeprcnt}%
                 </Typography>
-                {!favorite.includes(el.secid) ? (
-                  <FavoriteAddButton secid={el.secid} />
-                ) : (
-                  <FavoriteRemoveButton secid={el.secid} />
-                )}
+                {user.isActivated &&
+                  (favorite.some((favorite) => favorite.secid === el.secid) ? (
+                    <FavoriteRemoveButton secid={el.secid} />
+                  ) : (
+                    <FavoriteAddButton secid={el.secid} />
+                  ))}
               </AccordionSummary>
             </Badge.Ribbon>
             <DetailsOfAccordion />

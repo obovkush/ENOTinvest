@@ -18,6 +18,7 @@ import {
   Stack,
   Typography,
 } from '@mui/material';
+import { LoadingButton } from '@mui/lab';
 import AssignmentIndOutlinedIcon from '@mui/icons-material/AssignmentIndOutlined';
 import * as Yup from 'yup';
 import { Formik } from 'formik';
@@ -37,6 +38,8 @@ const labelSX = { mb: 0 };
 
 const SignUp = () => {
   const user = useSelector((store) => store.user);
+
+  const [loading, setLoading] = useState(false);
 
   console.log('user', user);
 
@@ -83,6 +86,7 @@ const SignUp = () => {
             .required('Обязательное поле'),
         })}
         onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
+          setLoading(true);
           try {
             console.log(values);
             await registration(values.name, values.email, values.password)
@@ -101,6 +105,7 @@ const SignUp = () => {
             setStatus({ success: false });
             setErrors({ submit: err.response.data.description });
             setSubmitting(false);
+            setLoading(false);
           }
         }}
       >
@@ -274,24 +279,27 @@ const SignUp = () => {
               )}
               <Grid item xs={12}>
                 {/* <AnimateButton> */}
-                <Button
+                <LoadingButton
                   disableElevation
                   disabled={isSubmitting}
                   fullWidth
+                  color="warning"
                   size="large"
+                  // onClick={handleClick}
+                  loading={loading}
+                  loadingPosition="start"
                   type="submit"
                   variant="contained"
-                  color="primary"
                 >
-                  Создать
-                </Button>
+                  {loading ? 'Создаем аккаунт' : 'Создать'}
+                </LoadingButton>
                 {/* </AnimateButton> */}
               </Grid>
-              <Grid item xs={12}>
+              {/* <Grid item xs={12}>
                 <Divider>
                   <Typography variant="caption">Войти с помощью</Typography>
                 </Divider>
-              </Grid>
+              </Grid> */}
               {/* <Grid item xs={12}>
                 <FirebaseSocial />
               </Grid> */}
