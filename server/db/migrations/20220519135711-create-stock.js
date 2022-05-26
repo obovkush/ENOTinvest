@@ -65,6 +65,10 @@ module.exports = {
       companyinfo: {
         type: Sequelize.TEXT,
       },
+      // Лого
+      img: {
+        type: Sequelize.TEXT,
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,
