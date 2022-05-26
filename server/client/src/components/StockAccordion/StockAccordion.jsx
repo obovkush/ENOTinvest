@@ -365,6 +365,9 @@ function StockAccordion() {
                       padding: '0 30px 0 70px',
                     }}
                   >
+                    <Typography sx={{ width: '3%', flexShrink: 0 }}>
+                    {<img src={el.img} width={30} alt="icon" />}
+                    </Typography>
                     <Typography sx={{ width: '33%', flexShrink: 0 }}>
                       {el.shortName}
                     </Typography>
@@ -400,7 +403,7 @@ function StockAccordion() {
                     </Typography>
                   </AccordionSummary>
                 </Badge.Ribbon>
-                <DetailsOfAccordion />
+                {expanded === `panel${el.id}` && <DetailsOfAccordion />}
               </Accordion>
             );
           })}
