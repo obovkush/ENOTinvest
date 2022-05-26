@@ -17,9 +17,9 @@ export default function AllNewsBlock({ spinner, Item }) {
   // useEffect(() => {
   //   // По необходимости нужно добавить различные свойства к запросу, например сортировка.
   //   axios.get('https://youtube.googleapis.com/youtube/v3/search?part=snippet&channelId=UC-WK8QlQJpAROCrO7dRvqcw&maxResults=3&key=AIzaSyABhJbYlM-GGIKjhaAguyWZKyaRyKCdtVU')
-  //   .then((listFromChanelInvestFuture) => {
-  //     const { items } = listFromChanelInvestFuture.data
-  //     // console.log('====> Видео с канала InvestFuture', items);
+  //     .then((listFromChanelInvestFuture) => {
+  //       const { items } = listFromChanelInvestFuture.data
+  //       // console.log('====> Видео с канала InvestFuture', items);
   //       if (items.length) {
   //         const sortedArray = sortedByPublishedDate(items)
   //         dispatch({ type: 'SET_ALL_YOUTUBE_VIDEO', payload: sortedArray })
@@ -27,7 +27,7 @@ export default function AllNewsBlock({ spinner, Item }) {
   //       }
   //     })
   //     .catch(error => console.log(error))
-  //   }, [])
+  // }, [])
 
   // Получаем данные RSS новостей с сервера и записываем в Redux
   useEffect(() => {
@@ -119,7 +119,7 @@ export default function AllNewsBlock({ spinner, Item }) {
                   <Box
                     component="img"
                     sx={{
-                      background: 'white',
+                      background: 'grey',
                       borderRadius: 2,
                       width: 120,
                       maxHeight: { xs: 233, md: 167 },
