@@ -1,4 +1,4 @@
-import { LinearProgress, Stack, Typography } from '@mui/material';
+import { Divider, LinearProgress, List, ListItem, ListItemText } from '@mui/material';
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
@@ -17,9 +17,9 @@ export default function AllNewsBlock({ spinner, Item }) {
   // useEffect(() => {
   //   // По необходимости нужно добавить различные свойства к запросу, например сортировка.
   //   axios.get('https://youtube.googleapis.com/youtube/v3/search?part=snippet&channelId=UC-WK8QlQJpAROCrO7dRvqcw&maxResults=3&key=AIzaSyABhJbYlM-GGIKjhaAguyWZKyaRyKCdtVU')
-  //   .then((listFromChanelInvestFuture) => {
-  //     const { items } = listFromChanelInvestFuture.data
-  //     // console.log('====> Видео с канала InvestFuture', items);
+  //     .then((listFromChanelInvestFuture) => {
+  //       const { items } = listFromChanelInvestFuture.data
+  //       // console.log('====> Видео с канала InvestFuture', items);
   //       if (items.length) {
   //         const sortedArray = sortedByPublishedDate(items)
   //         dispatch({ type: 'SET_ALL_YOUTUBE_VIDEO', payload: sortedArray })
@@ -27,7 +27,7 @@ export default function AllNewsBlock({ spinner, Item }) {
   //       }
   //     })
   //     .catch(error => console.log(error))
-  //   }, [])
+  // }, [])
 
   // Получаем данные RSS новостей с сервера и записываем в Redux
   useEffect(() => {
@@ -103,34 +103,51 @@ export default function AllNewsBlock({ spinner, Item }) {
       <LinearProgress />
     </Box>
   ) : (
-    <Stack spacing={2}>
+    <List sx={{ width: '100%', maxWidth: 360, bgcolor: '#eaeaea', mt: 0, pt: 0 }} >
       {listOfConcatNews &&
         listOfConcatNews.map((elem, index) => {
           if (elem.title) {
             return (
-              <Item
-                key={index}
-                sx={{
-                  display: 'flex',
+              <>
+                <ListItem alignItems="flex-start" key={index} sx={{
                   flexDirection: 'row',
+                  flexWrap: 'nowrap',
                   alignItems: 'center',
-                }}
-              >
-                <img
-                  src={elem.enclosure?.url || logo}
-                  style={{ width: 120, objectFit: 'contain' }}
-                  alt=""
-                />
-                <a
-                  href={elem.link}
-                  className="elem-link"
-                  style={{ marginLeft: 10, textAlign: 'start' }}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  {elem.title}
-                </a>
-              </Item>
+                  width: '100%'
+                }}>
+
+                  <Box
+                    component="img"
+                    sx={{
+                      background: 'grey',
+                      borderRadius: 2,
+                      width: 120,
+                      maxHeight: { xs: 233, md: 167 },
+                      maxWidth: { xs: 350, md: 250 },
+                      objectFit: 'contain',
+                      mr: 2,
+                    }}
+                    alt="The today news"
+                    src={elem.enclosure?.url || logo}
+                  />
+
+                  <ListItemText
+                    secondary={
+                      <a
+                        href={elem.link}
+                        className="elem-link"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        {elem.title}
+                      </a>
+                    }
+                    sx={{ width: 300 }}
+                  />
+
+                </ListItem>
+                <Divider variant="middle" />
+              </>
             );
           } else {
             return (
@@ -143,6 +160,54 @@ export default function AllNewsBlock({ spinner, Item }) {
             );
           }
         })}
-    </Stack>
+    </List>
   );
 }
+
+// return loading ? (
+//     <Box sx={{ width: '100%' }}>
+//       <LinearProgress />
+//     </Box>
+//   ) : (
+//     <Stack spacing={2}>
+//       {listOfConcatNews &&
+//         listOfConcatNews.map((elem, index) => {
+//           if (elem.title) {
+//             return (
+//               <Item
+//                 key={index}
+//                 sx={{
+//                   display: 'flex',
+//                   flexDirection: 'row',
+//                   alignItems: 'center',
+//                 }}
+//               >
+//                 <img
+//                   src={elem.enclosure?.url || logo}
+//                   style={{ width: 120, objectFit: 'contain' }}
+//                   alt=""
+//                 />
+//                 <a
+//                   href={elem.link}
+//                   className="elem-link"
+//                   style={{ marginLeft: 10, textAlign: 'start' }}
+//                   target="_blank"
+//                   rel="noopener noreferrer"
+//                 >
+//                   {elem.title}
+//                 </a>
+//               </Item>
+//             );
+//           } else {
+//             return (
+//               <Item key={elem.id.videoId}>
+//                 {ResponsivePlayer(elem.id.videoId)}
+//                 <p style={{ color: '#202124', marginBottom: 0 }}>
+//                   {elem.snippet.title}
+//                 </p>
+//               </Item>
+//             );
+//           }
+//         })}
+//     </Stack>
+//   );

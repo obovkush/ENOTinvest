@@ -1,4 +1,4 @@
-import { Box, LinearProgress, Stack } from '@mui/material'
+import { Box, Divider, LinearProgress, List } from '@mui/material'
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import ReactPlayer from 'react-player/lazy'
@@ -33,20 +33,27 @@ export default function YoutubeBlock({ spinner, Item }) {
         <LinearProgress />
       </Box> :
       (
-        <Stack spacing={2}>
+        <List sx={{ textAlign: 'center' }}>
           {listFromChanelInvestFuture &&
             listFromChanelInvestFuture.map(elem => {
               return (
-                <Item
-                  key={elem.id.videoId}
-                >
-                  {ResponsivePlayer(elem.id.videoId)}
-                  <p style={{ color: '#202124', marginBottom: 0 }}>{elem.snippet.title}</p>
-                </Item>
+                <>
+                  <Box
+                    key={elem.id.videoId}
+                    sx={{
+                      width: '100%',
+                      mb: 1,
+                    }}
+                  >
+                    {ResponsivePlayer(elem.id.videoId)}
+                    <p style={{ color: '#202124', marginBottom: 0 }}>{elem.snippet.title}</p>
+                  </Box>
+                  <Divider variant="middle" sx={{ mb: 1 }}/>
+                </>
               )
             })
           }
-        </Stack>
+        </List>
       )
   )
 }

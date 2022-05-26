@@ -6,10 +6,40 @@ import 'boxicons/css/boxicons.min.css';
 import { checkAuth } from './api/userAPI';
 import { useDispatch, useSelector } from 'react-redux';
 import Drawer from './components/Drawer/Drawer';
+import axios from 'axios';
 
 function App() {
   const dispatch = useDispatch();
+  const tinkoff = useSelector((state) => state.tinkoff);
   const user = useSelector((store) => store.user);
+
+  useEffect(() => {
+    dispatch({ type: 'REMOVE_PROFILE', payload: [] });
+    axios
+      .get(`${process.env.REACT_APP_API_URL}api/profile`)
+      .then((data) => data)
+      .then((data) => {
+        dispatch({
+          type: 'ADD_SHARE',
+          payload: data.data.shares,
+        });
+        dispatch({
+          type: 'ADD_PROFILE',
+          payload: data.data.profile,
+        });
+        dispatch({
+          type: 'ADD_ETFS',
+          payload: data.data.etfs,
+        });
+        // console.log('данные с апишки', data);
+        // setPortfolio(data.data.profile);
+        // setShares(data.data.shares);
+        // setEtfs(data.data.etfs);
+        // setLoading(false);
+      });
+  }, []);
+
+  console.log('------->', tinkoff)
 
   useEffect(() => {
     if (localStorage.getItem('token')) {

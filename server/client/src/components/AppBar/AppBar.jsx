@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import axios from 'axios';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useLocation, Outlet } from 'react-router-dom';
 
@@ -8,6 +9,7 @@ import { HOME_ROUTE, SIGNIN_ROUTE, SIGNUP_ROUTE } from '../../utils/consts';
 export default function MenuAppBar() {
   const dispatch = useDispatch();
   const user = useSelector((store) => store.user);
+  
   console.log('user', user);
   const handleLogout = () => {
     try {

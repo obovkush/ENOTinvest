@@ -390,62 +390,62 @@ function StockAccordion() {
               text={el.secid}
               color={el.lastchange > 0 ? '#004d40' : '#ad1457'}
             >
-              <AccordionSummary
-                expandIcon={<ExpandMoreIcon />}
-                aria-controls={el.id}
-                id={el.id}
-                sx={{
-                  padding: '0 30px 0 70px',
-                }}
-              >
-                <Typography sx={{ width: '33%', flexShrink: 0 }}>
-                  {el.shortName}
-                </Typography>
-                <Typography title="Текущая цена" sx={{ width: '20%' }}>
-                  {el.currency === 'USD' ? `${el.last} $` : `${el.last} ₽`}
-                </Typography>
-                <Typography
-                  title="Дневной прирост"
-                  sx={{
-                    width: '20%',
-                    color: `${el.lastchange > 0 ? 'green' : 'red'}`,
-                  }}
-                >
-                  {el.currency === 'USD'
-                    ? `${el.lastchange} $`
-                    : `${el.lastchange} ₽`}
-                </Typography>
-                <StraightOutlinedIcon
-                  fontSize="small"
-                  sx={{
-                    color: `${el.lastchange > 0 ? 'green' : 'red'}`,
-                    transform: `${
-                      el.lastchange > 0 ? 'rotate(35deg)' : 'rotate(135deg)'
-                    }`,
-                  }}
-                />
-                <Typography
-                  title="Процент изменения за день"
-                  sx={{
-                    width: '20%',
-                    color: `${el.lastchange > 0 ? 'green' : 'red'}`,
-                  }}
-                >
-                  {el.lastchangeprcnt}%
-                </Typography>
-                {user.isActivated &&
+                  <AccordionSummary
+                    expandIcon={<ExpandMoreIcon />}
+                    aria-controls={el.id}
+                    id={el.id}
+                    sx={{
+                      padding: '0 30px 0 70px',
+                    }}
+                  >
+                    <Typography sx={{ width: '3%', flexShrink: 0 }}>
+                    {<img src={el.img} width={30} alt="icon" />}
+                    </Typography>
+                    <Typography sx={{ width: '33%', flexShrink: 0 }}>
+                      {el.shortName}
+                    </Typography>
+                    <Typography title="Текущая цена" sx={{ width: '20%' }}>
+                      {el.currency === 'USD' ? `${el.last} $` : `${el.last} ₽`}
+                    </Typography>
+                    <Typography
+                      title="Дневной прирост"
+                      sx={{
+                        width: '20%',
+                        color: `${el.lastchange > 0 ? 'green' : 'red'}`,
+                      }}
+                    >
+                      {el.currency === 'USD'
+                        ? `${el.lastchange} $`
+                        : `${el.lastchange} ₽`}
+                    </Typography>
+                    <StraightOutlinedIcon
+                      fontSize="small"
+                      sx={{ 
+                        color: `${el.lastchange > 0 ? 'green' : 'red'}`,
+                        transform: `${el.lastchange > 0 ? 'rotate(35deg)' : 'rotate(135deg)'}` 
+                      }}
+                    />
+                    <Typography
+                      title="Процент изменения за день"
+                      sx={{
+                        width: '20%',
+                        color: `${el.lastchange > 0 ? 'green' : 'red'}`,
+                      }}
+                    >
+                      {el.lastchangeprcnt}%
+                    </Typography>
+                    {user.isActivated &&
                   (favorite.some((favorite) => favorite.secid === el.secid) ? (
                     <FavoriteRemoveButton secid={el.secid} />
                   ) : (
                     <FavoriteAddButton secid={el.secid} />
                   ))}
-              </AccordionSummary>
-            </Badge.Ribbon>
-            <DetailsOfAccordion />
-          </Accordion>
-        );
-      })}
-
+                  </AccordionSummary>
+                </Badge.Ribbon>
+                {expanded === `panel${el.id}` && <DetailsOfAccordion />}
+              </Accordion>
+            );
+          })}
       {loading && (
         <Box sx={{ width: '100%' }}>
           <LinearProgress />

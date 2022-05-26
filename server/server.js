@@ -6,6 +6,7 @@ const app = express();
 const path = require('path');
 const router = require('./routes/index');
 const errorMiddleware = require('./middlewares/errorMiddleware');
+const stockController = require('./controllers/stockController');
 // const stockController = require('./controllers/stockController');
 
 const log = console;

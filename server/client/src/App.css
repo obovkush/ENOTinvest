@@ -9,7 +9,7 @@
 
 body {
   background-color: #eaeaea !important;
-  color: white !important;
+  color: rgb(0, 0, 0) !important;
   font-family: 'Roboto', sans-serif;
 }
 
@@ -30,5 +30,14 @@ a {
 
 #custom_scroll::-webkit-scrollbar-thumb {
   border-radius: 10px;
-  background: linear-gradient(180deg, rgb(25, 118, 210, 1), #00c6fb);
+  background: linear-gradient(180deg, #ffa801, #ca441a);
+}
+
+#simple-tabpanel-0>div>p>ul,
+#simple-tabpanel-1>div>p>ul {
+  max-width: 500px;
+}
+
+#root>div>main>div>div.MuiGrid-root.MuiGrid-item.MuiGrid-grid-xs-12.MuiGrid-grid-sm-12.MuiGrid-grid-md-7.MuiGrid-grid-lg-5.MuiGrid-grid-xl-4.css-1hbkgir-MuiGrid-root>div>div.MuiTabs-root.css-jkvau6-MuiTabs-root>div>div>button.MuiButtonBase-root.MuiTab-root.MuiTab-textColorPrimary.Mui-selected.css-1t4lqmc-MuiButtonBase-root-MuiTab-root>svg>path {
+  color: #ca441a;
 }
