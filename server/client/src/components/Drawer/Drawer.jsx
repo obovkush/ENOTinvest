@@ -136,7 +136,7 @@ function ResponsiveDrawer(props) {
       </Toolbar>
       <Divider sx={{ borderColor: 'white' }} />
       <Toolbar sx={{ justifyContent: 'center' }}>
-        <div className="sidebar__menu__item" style={{ fontSize: '17px' }}>
+        <div className="sidebar__menu__item" style={{ fontSize: '17px', textAlign: 'center' }}>
           <Typography sx={{ fontSize: '14px', fontStyle: 'italic' }}>{date}</Typography>
           USD: {usd.toFixed(2)}
           <br />
