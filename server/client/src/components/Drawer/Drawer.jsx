@@ -2,7 +2,6 @@ import * as React from 'react';
 import { useEffect, useState } from 'react';
 import { NavLink, Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import PropTypes from 'prop-types';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -16,9 +15,7 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import MenuIcon from '@mui/icons-material/Menu';
 import Toolbar from '@mui/material/Toolbar';
-import Typography from '@mui/material/Typography';
 import AppRouter from '../../routes/AppRouter';
-import FaceIcon from '@mui/icons-material/Face';
 import PersonAddAlt1Icon from '@mui/icons-material/PersonAddAlt1';
 import PersonOffIcon from '@mui/icons-material/PersonOff';
 import Dns from '@mui/icons-material/Dns';
@@ -32,7 +29,6 @@ import { logout } from '../../api/userAPI';
 
 import logo from './logo.png';
 import axios from 'axios';
-import AccountMenu from './AccountMenu/AccountMenu';
 
 const drawerWidth = 240;
 
