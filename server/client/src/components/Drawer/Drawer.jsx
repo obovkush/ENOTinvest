@@ -23,6 +23,7 @@ import Public from '@mui/icons-material/Public';
 import Home from '@mui/icons-material/Home';
 import Alert from '@mui/material/Alert';
 import AlertTitle from '@mui/material/AlertTitle';
+import Typography from '@mui/material/Typography';
 
 import { SIGNIN_ROUTE } from '../../utils/consts';
 import { logout } from '../../api/userAPI';
@@ -42,6 +43,14 @@ function ResponsiveDrawer(props) {
   const [eur, setEur] = useState(0);
 
   const user = useSelector((store) => store.user);
+
+  const options = {
+    year: 'numeric',
+    month: 'numeric',
+    day: 'numeric',
+    timezone: 'UTC'
+  };
+  const date = new Date().toLocaleString("ru", options)
 
   // Меняем цвет на hover элементов сайдбара + теперь заработал NavLink
   const linkStyle = {
@@ -128,9 +137,11 @@ function ResponsiveDrawer(props) {
       <Divider sx={{ borderColor: 'white' }} />
       <Toolbar sx={{ justifyContent: 'center' }}>
         <div className="sidebar__menu__item" style={{ fontSize: '17px' }}>
+          <Typography sx={{ fontSize: '14px', fontStyle: 'italic' }}>{date}</Typography>
           USD: {usd.toFixed(2)}
           <br />
           EUR: {eur.toFixed(2)}
+          <br />
         </div>
       </Toolbar>
       <Divider sx={{ borderColor: 'white' }} />
