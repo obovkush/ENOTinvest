@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import { Line } from 'react-chartjs-2';
 import {
   Chart as ChartJS,
@@ -103,6 +103,9 @@ const options = {
 
 function Diagram() {
   const stockData = useSelector((store) => store.history);
+
+  // if (stockData.length > 250) {
+
   const userData = {
     labels: stockData?.map((data) => data.date),
     datasets: [
@@ -119,6 +122,7 @@ function Diagram() {
       </div>
     </>
   );
+  // }
 }
 
-export default Diagram;
+export default memo(Diagram);
