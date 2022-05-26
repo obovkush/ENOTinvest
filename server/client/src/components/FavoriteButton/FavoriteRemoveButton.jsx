@@ -8,6 +8,7 @@ function FavoriteRemoveButton({ secid }) {
   const user = useSelector((state) => state.user);
 
   const handleCreateFavorite = (event) => {
+    event.preventDefault();
     event.stopPropagation();
     console.log('work');
     axios.delete(

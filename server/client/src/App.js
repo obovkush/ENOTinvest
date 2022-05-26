@@ -1,5 +1,6 @@
 import './App.css';
 import { useEffect } from 'react';
+import axios from 'axios';
 
 import 'boxicons/css/boxicons.min.css';
 import { checkAuth } from './api/userAPI';
@@ -25,6 +26,19 @@ function App() {
       }
     }
   }, [dispatch]);
+
+  useEffect(() => {
+    user.isActivated &&
+      axios
+        .get(
+          `${process.env.REACT_APP_API_URL}api/favorite/user/${user.id}/read`,
+        )
+        .then(({ data }) => {
+          if (data.length) {
+            dispatch({ type: 'SET_ALL_FAVORITE', payload: data });
+          }
+        });
+  }, [dispatch, user.id, user.isActivated]);
 
   return <Drawer />;
 }

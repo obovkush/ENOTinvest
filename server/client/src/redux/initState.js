@@ -1,4 +1,5 @@
 export const initState = {
+  favorite: [],
   history: [],
   stocks: [],
   user: {},
