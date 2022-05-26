@@ -14,7 +14,7 @@ function DetailsOfAccordion() {
   let oneMonths = `${hodie?.substring(0, 2)}.0${hodie?.substring(3, 5) - 1}.${hodie?.substring(6, 10)}`;
   let sixMonths = `${hodie?.substring(0, 2)}.${Number(hodie?.substring(3, 5)) + 6}.${hodie?.substring(6, 10) -1}`;
   let resultOneMonths = (stockData.filter((el) => el.date === oneMonths)[0]?.price);
-  let resultSixMonths = (stockData.filter((el) => el.date === sixMonths)[0]?.price);
+  let resultSixMonths = (stockData.filter((el) => el.date === sixMonths ? el.date === sixMonths : el.date === `${hodie?.substring(0, 2) - 10}.${Number(hodie?.substring(3, 5)) + 6}.${hodie?.substring(6, 10) -1}`)[0]?.price);
 
   return (
     <AccordionDetails>
