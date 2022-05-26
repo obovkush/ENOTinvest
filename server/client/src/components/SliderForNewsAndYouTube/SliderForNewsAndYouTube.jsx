@@ -1,17 +1,18 @@
 import * as React from 'react';
-import { useState } from 'react'
 import PropTypes from 'prop-types';
-import { useTheme } from '@mui/material/styles';
-import AppBar from '@mui/material/AppBar';
-import Tabs from '@mui/material/Tabs';
-import Tab from '@mui/material/Tab';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
-import { Paper } from '@mui/material';
-import YoutubeBlock from '../News/YoutubeBlock/YoutubeBlock';
-import NewsBlock from '../News/NewsBlock/NewsBlock';
+import Tabs from '@mui/material/Tabs';
+import Tab from '@mui/material/Tab';
+import { instagramTabsStylesHook } from '@mui-treasury/styles/tabs';
+import GridOnOutlined from '@material-ui/icons/GridOnOutlined';
+import YouTubeIcon from '@mui/icons-material/YouTube';
+import NewspaperIcon from '@mui/icons-material/Newspaper';
 import AllNewsBlock from '../News/AllNewsBlock/AllNewsBlock';
+import NewsBlock from '../News/NewsBlock/NewsBlock';
+import YoutubeBlock from '../News/YoutubeBlock/YoutubeBlock';
 import { styled } from '@mui/material/styles';
+import { Paper } from '@mui/material';
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -20,8 +21,8 @@ function TabPanel(props) {
     <div
       role="tabpanel"
       hidden={value !== index}
-      id={`full-width-tabpanel-${index}`}
-      aria-labelledby={`full-width-tab-${index}`}
+      id={`simple-tabpanel-${index}`}
+      aria-labelledby={`simple-tab-${index}`}
       {...other}
     >
       {value === index && (
@@ -39,79 +40,58 @@ TabPanel.propTypes = {
   value: PropTypes.number.isRequired,
 };
 
-function a11yProps(index) {
-  return {
-    id: `full-width-tab-${index}`,
-    'aria-controls': `full-width-tabpanel-${index}`,
-  };
-}
-
 // Элемент MUI необходимый для отрисовки
 const Item = styled(Paper)(({ theme }) => ({
-    backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
-    ...theme.typography.body2,
-    padding: theme.spacing(1),
-    textAlign: 'center',
-    color: theme.palette.text.secondary,
-  }));
+  backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
+  ...theme.typography.body2,
+  padding: theme.spacing(1),
+  textAlign: 'center',
+  color: theme.palette.text.secondary,
+}));
 
-export default function FullWidthTabs() {
-  const theme = useTheme();
-  const [value, setValue] = useState(0);
-  const [loading, setLoading] = useState(true)
-
-  const handleChange = (event, newValue) => {
-    setValue(newValue);
-  };
-
-  const handleChangeIndex = (index) => {
-    setValue(index);
-  };
+export default function BasicTabs() {
+  const [loading, setLoading] = React.useState(true)
+  const [tabIndex, setTabIndex] = React.useState(0);
+  const tabsStyles = instagramTabsStylesHook.useTabs();
+  const tabItemStyles = instagramTabsStylesHook.useTabItem();
 
   return (
-    <Box
-      sx={{
-        bgcolor: 'background.paper',
-        height: '87vh',
-        overflowY: 'hidden',
-      }}
 
-    >
-      <AppBar position="static">
-        <Tabs
-          value={value}
-          onChange={handleChange}
-          indicatorColor="secondary"
-          textColor="inherit"
-          variant="fullWidth"
-          aria-label="full width tabs example"
-        >
-          <Tab label="Все новости" {...a11yProps(0)} />
-          <Tab label="Статьи" {...a11yProps(1)} />
-          <Tab label="Видео" {...a11yProps(2)} />
-        </Tabs>
-      </AppBar>
-      <Box
-        axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}
-        index={value}
-        // onChangeIndex={handleChangeIndex}
-        id="custom_scroll"
+    <Box sx={{ height: '95vh', overflowY: 'hidden' }}>
+
+      <Tabs
+        // стиль для Табсов - флекс
         sx={{
-          bgcolor: 'background.paper',
-          height: '95%',
-          overflowY: 'auto',
+          '& .MuiTabs-flexContainer': {
+            justifyContent: 'center',
+          },
         }}
+        // стиль для линии под иконкой
+        TabIndicatorProps={{
+          style: {
+            backgroundColor: "#D97D54"
+          }
+        }}
+        value={tabIndex} onChange={(e, index) => setTabIndex(index)}>
+        <Tab icon={<GridOnOutlined />} />
+        <Tab icon={<NewspaperIcon />} />
+        <Tab icon={<YouTubeIcon />} />
+      </Tabs>
+
+      <Box id="custom_scroll" sx={{ height: '93%', overflowY: 'auto', }}
       >
-        <TabPanel value={value} index={0} dir={theme.direction}>
-          <AllNewsBlock spinner={{loading, setLoading}} Item={Item} />
+        <TabPanel value={tabIndex} index={0} >
+          <AllNewsBlock spinner={{ loading, setLoading }} Item={Item} />
         </TabPanel>
-        <TabPanel value={value} index={1} dir={theme.direction}>
-          <NewsBlock spinner={{loading, setLoading}} Item={Item} />
+        <TabPanel value={tabIndex} index={1} >
+          <NewsBlock spinner={{ loading, setLoading }} Item={Item} />
         </TabPanel>
-        <TabPanel value={value} index={2} dir={theme.direction}>
-          <YoutubeBlock spinner={{loading, setLoading}} Item={Item} />
+        <TabPanel value={tabIndex} index={2} >
+          <YoutubeBlock spinner={{ loading, setLoading }} Item={Item} />
         </TabPanel>
       </Box>
+
     </Box>
+
   );
 }
