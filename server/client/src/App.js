@@ -37,8 +37,6 @@ function App() {
       });
   }, []);
 
-  console.log('------->', tinkoff)
-
   useEffect(() => {
     if (localStorage.getItem('token')) {
       try {
