@@ -95,8 +95,6 @@ function StockAccordion() {
   const [stateFilter, setCurrency] = useState('Все');
   const [expanded, setExpanded] = useState(false);
 
-  console.log(favorite);
-
   // Исторические данные по акциям
   const historicalData = useCallback(
     (key, currency, board) => {
@@ -160,9 +158,8 @@ function StockAccordion() {
     [dispatch],
   );
 
-  // Список всех акций
-  // setInterval(() => {
   useEffect(() => {
+    console.log('ОЛЕГ ДЕРЖИ КОНСОЛЬ ЛОГ')
     axios
       .get(`${process.env.REACT_APP_API_URL}api/stocks/ru`)
       .then(({ data }) => {
@@ -172,7 +169,21 @@ function StockAccordion() {
         }
       });
   }, []);
-  // }, 1 * 60 * 1000)
+
+  // Список всех акций
+  setInterval(() => {
+  // useEffect(() => {
+    console.log('ОЛЕГ ДЕРЖИ КОНСОЛЬ ЛОГ')
+    axios
+      .get(`${process.env.REACT_APP_API_URL}api/stocks/ru`)
+      .then(({ data }) => {
+        if (data.length) {
+          dispatch({ type: 'SET_ALL_STOCKS', payload: data });
+          setLoading(false);
+        }
+      });
+  // }, []);
+  }, 1 * 60 * 1000)
 
   const AccordionOpen = (panel) => (event, isExpanded) => {
     setExpanded(isExpanded ? panel : false);

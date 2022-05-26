@@ -1,12 +1,10 @@
 import './App.css';
 import { useEffect } from 'react';
 import axios from 'axios';
-
 import 'boxicons/css/boxicons.min.css';
 import { checkAuth } from './api/userAPI';
 import { useDispatch, useSelector } from 'react-redux';
 import Drawer from './components/Drawer/Drawer';
-import axios from 'axios';
 
 function App() {
   const dispatch = useDispatch();
