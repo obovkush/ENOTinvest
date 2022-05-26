@@ -400,7 +400,7 @@ function StockAccordion() {
                     </Typography>
                   </AccordionSummary>
                 </Badge.Ribbon>
-                <DetailsOfAccordion />
+                {expanded === `panel${el.id}` && <DetailsOfAccordion />}
               </Accordion>
             );
           })}

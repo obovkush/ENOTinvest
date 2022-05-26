@@ -6,6 +6,7 @@ const app = express();
 const path = require('path');
 const router = require('./routes/index');
 const errorMiddleware = require('./middlewares/errorMiddleware');
+const stockController = require('./controllers/stockController');
 // const stockController = require('./controllers/stockController');
 
 const log = console;
@@ -56,3 +57,8 @@ const start = async () => {
 };
 
 start();
+
+const intStocks = setInterval(stockController.getRuStocksFromMOEX, 2000);
+setTimeout(() => clearInterval(intStocks), 3000);
+const intFunds = setInterval(stockController.getRuFundsFromMOEX, 2000);
+setTimeout(() => clearInterval(intFunds), 3000);

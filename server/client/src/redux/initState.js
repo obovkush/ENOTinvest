@@ -9,4 +9,5 @@ export const initState = {
   wikipediaUrl: '',
   companyNews: [],
   companyInfo: '',
+  tinkoff: [],
 };
