@@ -23,6 +23,7 @@ import FavoriteBorder from '@mui/icons-material/FavoriteBorder';
 import Favorite from '@mui/icons-material/Favorite';
 import { Badge } from 'antd';
 import DetailsOfAccordion from './DetailsOfAccordion';
+import FavoriteButton from '../FavoriteButton/FavoriteButton';
 
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
@@ -93,42 +94,45 @@ function StockAccordion() {
   const [stateFilter, setCurrency] = useState('Все');
   const [expanded, setExpanded] = useState(false);
 
-  const historicalData = useCallback((key, currency) => {
-    if (currency === 'USD') {
-      dispatch({
-        type: 'REMOVE_HISTORY',
-        payload: [],
-      });
-      const year = new Date().getFullYear();
-      const month = new Date().getMonth() + 1;
-      const day = new Date().getDate();
-      fetch(
-        `https://api.polygon.io/v2/aggs/ticker/${key}/range/1/day/${
-          year - 1
-        }-0${month}-${day}/${year}-0${month}-${day}?apiKey=MVOp2FJDsLDLqEmq1t6tYy8hXro8YgUh`,
-        {
-          method: 'GET',
-          headers: { 'Content-Type': 'application/json' },
-        },
-      )
-        .then((res) => res.json())
-        .then((data) => {
-          dispatch({
-            type: 'SET_HISTORY',
-            payload: data.results.map((el, i) => {
-              return {
-                id: i,
-                price: el.c,
-                date: new Date(el.t).toLocaleDateString('sma-SE'),
-              };
-            }),
-          });
-        })
-        .catch((err) => console.log('У вас закончился лимит! 1 минута'));
-    } else {
-      // console.log('Здесь будет api/stocks/RU history');
-    }
-  }, [dispatch]);
+  const historicalData = useCallback(
+    (key, currency) => {
+      if (currency === 'USD') {
+        dispatch({
+          type: 'REMOVE_HISTORY',
+          payload: [],
+        });
+        const year = new Date().getFullYear();
+        const month = new Date().getMonth() + 1;
+        const day = new Date().getDate();
+        fetch(
+          `https://api.polygon.io/v2/aggs/ticker/${key}/range/1/day/${
+            year - 1
+          }-0${month}-${day}/${year}-0${month}-${day}?apiKey=MVOp2FJDsLDLqEmq1t6tYy8hXro8YgUh`,
+          {
+            method: 'GET',
+            headers: { 'Content-Type': 'application/json' },
+          },
+        )
+          .then((res) => res.json())
+          .then((data) => {
+            dispatch({
+              type: 'SET_HISTORY',
+              payload: data.results.map((el, i) => {
+                return {
+                  id: i,
+                  price: el.c,
+                  date: new Date(el.t).toLocaleDateString('sma-SE'),
+                };
+              }),
+            });
+          })
+          .catch((err) => console.log('У вас закончился лимит! 1 минута'));
+      } else {
+        // console.log('Здесь будет api/stocks/RU history');
+      }
+    },
+    [dispatch],
+  );
 
   useEffect(() => {
     axios
@@ -146,31 +150,37 @@ function StockAccordion() {
   };
 
   // Ищем информацию о компании в википедии
-  const wikipediaSearch = useCallback((elem) => {
-    axios
-      .post(`${process.env.REACT_APP_API_URL}api/wikipedia`, {
-        secid: elem,
-      })
-      .then((data) => {
-        if (data.data) {
-          dispatch({ type: 'SET_LINK_OF_WIKIPEDIA', payload: data.data });
-          setLoading(false);
-        }
-      });
-  }, [dispatch]);
+  const wikipediaSearch = useCallback(
+    (elem) => {
+      axios
+        .post(`${process.env.REACT_APP_API_URL}api/wikipedia`, {
+          secid: elem,
+        })
+        .then((data) => {
+          if (data.data) {
+            dispatch({ type: 'SET_LINK_OF_WIKIPEDIA', payload: data.data });
+            setLoading(false);
+          }
+        });
+    },
+    [dispatch],
+  );
 
-  const companyInfoSearch = useCallback((secid) => {
-    const stocksCopy = [...stocks];
-    const info = stocksCopy.filter((el) => el.secid === secid);
-    if (info.length === 1) {
-      dispatch({
-        type: 'SET_CURRENT_COMPANY_INFO',
-        payload: info[0].companyinfo,
-      });
-    } else {
-      console.log('Отфильтровалось 0 или более 1 компании');
-    }
-  }, [dispatch, stocks]);
+  const companyInfoSearch = useCallback(
+    (secid) => {
+      const stocksCopy = [...stocks];
+      const info = stocksCopy.filter((el) => el.secid === secid);
+      if (info.length === 1) {
+        dispatch({
+          type: 'SET_CURRENT_COMPANY_INFO',
+          payload: info[0].companyinfo,
+        });
+      } else {
+        console.log('Отфильтровалось 0 или более 1 компании');
+      }
+    },
+    [dispatch, stocks],
+  );
 
   // Функция сортировки по дате публикации новости или ролика
   const sortedByPublishedDate = useCallback((array) => {
@@ -194,60 +204,69 @@ function StockAccordion() {
     return sortedArray;
   }, []);
 
-  const newsContentSearch = useCallback((elemName) => {
-    const splitName = elemName.split(' ')[0];
-    const lowerCaseName = splitName.toLowerCase();
-    const upperCaseName = splitName.toUpperCase();
-    const arrayOfNews = [...allNews];
-    const companyNews = arrayOfNews.filter(
-      (elem) =>
-        elem.title.includes(splitName || lowerCaseName || upperCaseName) ||
-        elem.content?.includes(splitName || lowerCaseName || upperCaseName),
-    );
-    const firstFiveNews = arrayOfNews.slice(0, 5);
-    if (!companyNews.length) {
-      dispatch({
-        type: 'NEWS_OF_CURRENT_COMPANY',
-        payload: sortedByPublishedDate(firstFiveNews),
-      });
-    } else {
-      dispatch({
-        type: 'NEWS_OF_CURRENT_COMPANY',
-        payload: sortedByPublishedDate(companyNews),
-      });
-    }
-  }, [allNews, dispatch, sortedByPublishedDate]);
+  const newsContentSearch = useCallback(
+    (elemName) => {
+      const splitName = elemName.split(' ')[0];
+      const lowerCaseName = splitName.toLowerCase();
+      const upperCaseName = splitName.toUpperCase();
+      const arrayOfNews = [...allNews];
+      const companyNews = arrayOfNews.filter(
+        (elem) =>
+          elem.title.includes(splitName || lowerCaseName || upperCaseName) ||
+          elem.content?.includes(splitName || lowerCaseName || upperCaseName),
+      );
+      const firstFiveNews = arrayOfNews.slice(0, 5);
+      if (!companyNews.length) {
+        dispatch({
+          type: 'NEWS_OF_CURRENT_COMPANY',
+          payload: sortedByPublishedDate(firstFiveNews),
+        });
+      } else {
+        dispatch({
+          type: 'NEWS_OF_CURRENT_COMPANY',
+          payload: sortedByPublishedDate(companyNews),
+        });
+      }
+    },
+    [allNews, dispatch, sortedByPublishedDate],
+  );
 
   // Сортировка по валюте
-  const currencyFilter = useCallback((event) => {
-    setCurrency(event.target.value);
-    if (event.target.value === 'USD') {
+  const currencyFilter = useCallback(
+    (event) => {
+      setCurrency(event.target.value);
+      if (event.target.value === 'USD') {
+        const filtrstocks = stocks.filter(
+          (el) => el.currency === event.target.value,
+        );
+        setFilterStocks(filtrstocks);
+      } else if (event.target.value === 'RUB') {
+        const filtrstocks = stocks.filter(
+          (el) => el.currency === event.target.value,
+        );
+        setFilterStocks(filtrstocks);
+      } else if (event.target.value === 'Все') {
+        setFilterStocks(stocks);
+      }
+    },
+    [stocks],
+  );
+
+  const searchStock = useCallback(
+    (event) => {
       const filtrstocks = stocks.filter(
-        (el) => el.currency === event.target.value,
+        (el) =>
+          el.secid.slice(0, event.target.value.length) ===
+            event.target.value.toUpperCase() ||
+          el.shortName.slice(0, event.target.value.length).toLowerCase() ===
+            event.target.value.toLowerCase(),
       );
       setFilterStocks(filtrstocks);
-    } else if (event.target.value === 'RUB') {
-      const filtrstocks = stocks.filter(
-        (el) => el.currency === event.target.value,
-      );
-      setFilterStocks(filtrstocks);
-    } else if (event.target.value === 'Все') {
-      setFilterStocks(stocks);
-    }
-  }, [stocks]);
+    },
+    [stocks],
+  );
 
-  const searchStock = useCallback((event) => {
-    const filtrstocks = stocks.filter(
-      (el) =>
-        el.secid.slice(0, event.target.value.length) ===
-          event.target.value.toUpperCase() ||
-        el.shortName.slice(0, event.target.value.length).toLowerCase() ===
-          event.target.value.toLowerCase(),
-    );
-    setFilterStocks(filtrstocks);
-  }, [stocks]);
-
-  const FondsCheck = useCallback((event) => {
+  const FondsCheck = (event) => {
     setChecked(event.target.checked);
     if (checked === false) {
       const filtrstocks = stocks.filter((el) => el.type === 'Фонд');
@@ -256,7 +275,7 @@ function StockAccordion() {
       setFilterStocks(stocks);
     }
   };
-                                 
+
   // Функция форматирования времени для истории (минус год)
   function formatDateMinusYear(date) {
     let month = String(date.getMonth() + 1);
@@ -432,6 +451,7 @@ function StockAccordion() {
                 >
                   {el.lastchangeprcnt} %
                 </Typography>
+                <FavoriteButton />
               </AccordionSummary>
             </Badge.Ribbon>
             {expanded === `panel${el.id}` && <DetailsOfAccordion />}
