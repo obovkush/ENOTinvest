@@ -66,14 +66,14 @@ router.get('/rssnews', async (req, res) => {
       'https://www.interfax.ru/rss.asp',
     );
 
-    const rssDataFinam = await parser.parseURL(
-      'https://www.finam.ru/analysis/conews/rsspoint',
-    );
+    // const rssDataFinam = await parser.parseURL(
+    //   'https://www.finam.ru/analysis/conews/rsspoint',
+    // );
 
     const investNews = rssDataInvest.items;
     const interNews = rssDataInter.items;
-    const finamNews = rssDataFinam.items;
-    const arrayOfAllNews = [investNews, interNews, finamNews, jsoner];
+    // const finamNews = rssDataFinam.items;
+    const arrayOfAllNews = [investNews, interNews, jsoner];
 
     res.json(arrayOfAllNews.flat());
   } catch (error) {
