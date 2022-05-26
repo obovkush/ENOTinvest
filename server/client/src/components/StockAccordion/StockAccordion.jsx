@@ -350,22 +350,6 @@ function StockAccordion() {
           inputProps={{ 'aria-label': 'search' }}
         />
       </Search>
-
-      <TextField
-        onChange={(value) => searchStock(value)}
-        sx={{ width: '180px', paddingBottom: '20px' }}
-        id="filled-basic"
-        InputProps={{
-          startAdornment: (
-            <InputAdornment position="start">
-              <SearchIcon />
-            </InputAdornment>
-          ),
-        }}
-        label="Поиск по акциям"
-        variant="outlined"
-      />
-
       <TextField
         id="standard-select-currency-native"
         sx={{ width: '180px', paddingLeft: '20px', paddingBottom: '20px' }}
@@ -389,19 +373,13 @@ function StockAccordion() {
             icon={<FavoriteBorder />}
             checkedIcon={<Favorite sx={{ fill: '#ad1457' }} />}
             checked={checked}
-            sx={{ paddingLeft: '20px' }}
+            sx={{ marginLeft: '20px' }}
             onChange={FondsCheck}
           />
         }
-        label="Сердечко Олега"
-        sx={{ color: 'gray', paddingTop: '6px' }}
+        label="Фонды"
+        sx={{ color: 'black', paddingTop: '6px' }}
       />
-      {/* <Checkbox
-        checked={checked}
-        sx={{ paddingLeft: '20px', paddingTop: '24px' }}
-        onChange={FondsCheck}
-        inputProps={{ 'aria-label': 'controlled' }}
-      /> */}
 
       {filterStocks.length
         ? filterStocks.map((el, index) => {
@@ -473,6 +451,7 @@ function StockAccordion() {
               <Accordion
                 expanded={expanded === `panel${el.id}`}
                 onChange={AccordionOpen(`panel${el.id}`)}
+                sx={{marginTop: '7px',  borderRadius: '5px'}}
                 key={el.secid}
                 onClick={() => {
                   wikipediaSearch(el.secid);
@@ -493,13 +472,9 @@ function StockAccordion() {
                     id={el.id}
                     sx={{
                       padding: '0 30px 0 70px',
-                      backgroundColor: '#eaeaea',
+                      // backgroundColor: '#eaeaea',
                     }}
                   >
-                    <StraightOutlinedIcon
-                      fontSize="small"
-                      sx={{ transform: 'rotate(135deg)' }}
-                    />
                     <Typography sx={{ width: '33%', flexShrink: 0 }}>
                       {el.shortName}
                     </Typography>
@@ -517,6 +492,13 @@ function StockAccordion() {
                         ? `${el.lastchange} $`
                         : `${el.lastchange} ₽`}
                     </Typography>
+                    <StraightOutlinedIcon
+                      fontSize="small"
+                      sx={{ 
+                        color: `${el.lastchange > 0 ? 'green' : 'red'}`,
+                        transform: `${el.lastchange > 0 ? 'rotate(35deg)' : 'rotate(135deg)'}` 
+                      }}
+                    />
                     <Typography
                       title="Процент изменения за день"
                       sx={{
