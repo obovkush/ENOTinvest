@@ -24,7 +24,10 @@ app.use((req, res, next) => {
   if (accessList.includes(origin)) {
     res.header('Access-Control-Allow-Origin', origin);
     res.header('Access-Control-Allow-Credentials', true);
-    res.header('Access-Control-Allow-Methods', 'GET, HEAD, OPTIONS, POST, PUT');
+    res.header(
+      'Access-Control-Allow-Methods',
+      'GET, HEAD, OPTIONS, POST, DELETE',
+    );
     res.header(
       'Access-Control-Allow-Headers',
       'Origin, X-Requested-With, Content-Type, Accept, Authorization',
@@ -58,7 +61,8 @@ const start = async () => {
 
 start();
 
-const intStocks = setInterval(stockController.getRuStocksFromMOEX, 2000);
-setTimeout(() => clearInterval(intStocks), 3000);
-const intFunds = setInterval(stockController.getRuFundsFromMOEX, 2000);
-setTimeout(() => clearInterval(intFunds), 3000);
+// Вызов функции обновления информации по русским акциям/фондам с API в базу
+// const intStocks = setInterval(stockController.getRuStocksFromMOEX, 2000);
+// setTimeout(() => clearInterval(intStocks), 3000);
+// const intFunds = setInterval(stockController.getRuFundsFromMOEX, 2000);
+// setTimeout(() => clearInterval(intFunds), 3000);
