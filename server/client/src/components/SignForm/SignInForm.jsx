@@ -102,7 +102,7 @@ const SignIn = () => {
               <Grid item xs={12}>
                 <Divider>
                   <Typography variant="caption">
-                    <LockOutlinedIcon fontSize="large" color="primary" />
+                    <LockOutlinedIcon fontSize="large" color="warning" />
                   </Typography>
                 </Divider>
               </Grid>
@@ -182,7 +182,7 @@ const SignIn = () => {
                   justifyContent="space-between"
                   alignItems="center"
                   spacing={2}
-                  sx={{ mt: 3 }}
+                  sx={{ mt: 3, mb: 1 }}
                 >
                   <FormControlLabel
                     control={
@@ -191,11 +191,15 @@ const SignIn = () => {
                         onChange={(event) => setChecked(event.target.checked)}
                         name="checked"
                         color="primary"
+                        sx={{ display: 'none' }}
                         // size="small"
                       />
                     }
                     label={
-                      <Typography variant="p" sx={{ fontSize: '16px' }}>
+                      <Typography
+                        variant="p"
+                        sx={{ fontSize: '16px', display: 'none' }}
+                      >
                         Запомнить
                       </Typography>
                     }
@@ -205,7 +209,7 @@ const SignIn = () => {
                     sx={{ fontSize: '16px' }}
                     component={RouterLink}
                     to={SIGNUP_ROUTE}
-                    color="primary"
+                    color="#f07800"
                     underline="none"
                   >
                     Нет аккаунта?
@@ -220,7 +224,7 @@ const SignIn = () => {
               <Grid item xs={12}>
                 <LoadingButton
                   disableElevation
-                  disabled={isSubmitting || !values.email || !values.password}
+                  disabled={!values.email || !values.password || isSubmitting}
                   fullWidth
                   color="warning"
                   size="large"

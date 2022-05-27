@@ -47,7 +47,11 @@ function SignPage() {
                 <>
                   <CardHeader
                     sx={headerSX}
-                    title={<Typography variant="h5">Вход в аккаунт</Typography>}
+                    title={
+                      <Typography variant="h5" sx={{ color: '#f07800' }}>
+                        Вход в аккаунт
+                      </Typography>
+                    }
                   />
                   <SignIn />
                 </>
@@ -56,7 +60,9 @@ function SignPage() {
                   <CardHeader
                     sx={headerSX}
                     title={
-                      <Typography variant="h5">Создание аккаунта</Typography>
+                      <Typography variant="h5" sx={{ color: '#f07800' }}>
+                        Создание аккаунта
+                      </Typography>
                     }
                   />
                   <SignUp />

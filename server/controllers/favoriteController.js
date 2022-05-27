@@ -16,13 +16,11 @@ class FavoriteController {
       });
       if (!favorite) {
         try {
-          await Favorite.create({
+          const newFavotite = await Favorite.create({
             userId,
             secid,
           });
-          return res.status(200).send({
-            message: 'Акция успешно добавлена в избранное',
-          });
+          return res.json(newFavotite);
         } catch (err) {
           if (err instanceof ApiError) {
             return res.status(err.status).send({
