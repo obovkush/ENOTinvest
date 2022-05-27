@@ -14,20 +14,20 @@ export default function AllNewsBlock({ spinner, Item }) {
   const listOfConcatNews = useSelector((store) => store.allNews);
 
   //Получаем данные с API YouTube и записываем в Redux
-  // useEffect(() => {
-  //   // По необходимости нужно добавить различные свойства к запросу, например сортировка.
-  //   axios.get('https://youtube.googleapis.com/youtube/v3/search?part=snippet&channelId=UC-WK8QlQJpAROCrO7dRvqcw&maxResults=3&key=AIzaSyABhJbYlM-GGIKjhaAguyWZKyaRyKCdtVU')
-  //     .then((listFromChanelInvestFuture) => {
-  //       const { items } = listFromChanelInvestFuture.data
-  //       // console.log('====> Видео с канала InvestFuture', items);
-  //       if (items.length) {
-  //         const sortedArray = sortedByPublishedDate(items)
-  //         dispatch({ type: 'SET_ALL_YOUTUBE_VIDEO', payload: sortedArray })
-  //         setLoading(false)
-  //       }
-  //     })
-  //     .catch(error => console.log(error))
-  // }, [])
+  useEffect(() => {
+    // По необходимости нужно добавить различные свойства к запросу, например сортировка.
+    axios.get('https://youtube.googleapis.com/youtube/v3/search?part=snippet&channelId=UC-WK8QlQJpAROCrO7dRvqcw&maxResults=3&key=AIzaSyABhJbYlM-GGIKjhaAguyWZKyaRyKCdtVU')
+      .then((listFromChanelInvestFuture) => {
+        const { items } = listFromChanelInvestFuture.data
+        // console.log('====> Видео с канала InvestFuture', items);
+        if (items.length) {
+          const sortedArray = sortedByPublishedDate(items)
+          dispatch({ type: 'SET_ALL_YOUTUBE_VIDEO', payload: sortedArray })
+          setLoading(false)
+        }
+      })
+      .catch(error => console.log(error))
+  }, [])
 
   // Получаем данные RSS новостей с сервера и записываем в Redux
   useEffect(() => {
@@ -151,12 +151,19 @@ export default function AllNewsBlock({ spinner, Item }) {
             );
           } else {
             return (
-              <Item key={elem.id.videoId}>
-                {ResponsivePlayer(elem.id.videoId)}
-                <p style={{ color: '#202124', marginBottom: 0 }}>
-                  {elem.snippet.title}
-                </p>
-              </Item>
+              <>
+                  <Box
+                    key={elem.id.videoId}
+                    sx={{
+                      width: '100%',
+                      mb: 1,
+                    }}
+                  >
+                    {ResponsivePlayer(elem.id.videoId)}
+                    <p style={{ color: '#202124', marginBottom: 0 }}>{elem.snippet.title}</p>
+                  </Box>
+                  <Divider variant="middle" sx={{ mb: 1 }}/>
+                </>
             );
           }
         })}
