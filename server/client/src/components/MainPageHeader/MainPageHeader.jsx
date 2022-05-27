@@ -48,6 +48,7 @@ export default function MainPageHeader() {
     setSortProfile(tinkoff)
   }, [tinkoff])
   
+  const totalCash = `${(tinkoff[1].total_amount_currencies.units + tinkoff[1].total_amount_etf.units + tinkoff[1].total_amount_shares.units).toLocaleString()} ₽`
 
   return (
     user.isActivated
@@ -58,13 +59,8 @@ export default function MainPageHeader() {
           : 
         <CardContent>
           {informationForCards[1].icon}
-          <Typography variant="h3" component="div">
-            {` ${
-              tinkoff[1].total_amount_currencies.units +
-              tinkoff[1].total_amount_etf.units +
-              tinkoff[1].total_amount_shares.units
-            } ₽ 
-            `}
+          <Typography variant="h4" component="div">
+            {totalCash}
           </Typography>
           <Typography variant="body2">
             {`Результат за все время ${tinkoff[1].expected_yield.units}%`}
