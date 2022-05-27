@@ -21,7 +21,7 @@ function HomePage() {
       <Grid container spacing={2} pt={2} >
         <Grid item xs={12} sm={12} md={12} lg={7} xl={8}>
           <Grid item xs={12} sm={12} md={12} lg={12} xl={12} sx={cardLineStyles}>
-                <MainPageHeader />
+            <MainPageHeader />
           </Grid>
           <h3 style={{ marginTop: '1rem' }}>
             Лучшие акции за сегодня

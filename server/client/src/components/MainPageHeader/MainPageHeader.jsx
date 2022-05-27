@@ -85,7 +85,6 @@ export default function MainPageHeader() {
     return `${(tinkoff[1].total_amount_currencies.units + tinkoff[1].total_amount_etf.units + tinkoff[1].total_amount_shares.units).toLocaleString()} ₽`
   }
 
-
   return (
     user.isActivated
       ? <>
