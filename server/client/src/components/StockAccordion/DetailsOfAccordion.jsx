@@ -1,11 +1,11 @@
-import { AccordionDetails, Grid, Typography } from '@mui/material';
-import React, { memo } from 'react';
+import { AccordionDetails, Grid, Typography, LinearProgress, Box } from '@mui/material';
+import React from 'react';
 import { useSelector } from 'react-redux';
 import Diagram from '../Diagram/Diagram';
 import OneCompanyNews from './OneCompanyNews/OneCompanyNews';
-import wikilogo from './wikilogo.png'
+import wikilogo from './wikilogo.png';
 
-function DetailsOfAccordion() {
+export default function DetailsOfAccordion() {
   const wikiLink = useSelector((state) => state.wikipediaUrl);
   const companyInfo = useSelector(state => state.companyInfo)
   const stockData = useSelector((store) => store.history);
@@ -19,15 +19,17 @@ function DetailsOfAccordion() {
   return (
     <AccordionDetails>
       <Grid container spacing={0}>
-        <Grid item xs={12}>
-          <Typography>Изменения за месяц: {(((stockData[stockData.length - 1]?.price - resultOneMonths) / resultOneMonths) * 100 )?.toFixed(2)} %</Typography>
-          <Typography>Изменения за полгода: {(((stockData[stockData.length - 1]?.price - resultSixMonths) / resultSixMonths) * 100 )?.toFixed(2)} %</Typography>
-          <Typography>Изменения за год: {(((stockData[stockData.length - 1]?.price - stockData[0]?.price) / stockData[0]?.price) * 100 )?.toFixed(2)} %</Typography>
-          {/* <br /> */}
-        </Grid>
+        {/* <Grid item xs={12}>
+         {resultOneMonths ? <Typography>Изменения за месяц: {(((stockData[stockData.length - 1]?.price - resultOneMonths) / resultOneMonths) * 100 )?.toFixed(2)} %</Typography> : <Box sx={{ width: '16%' }}><LinearProgress /></Box>}
+         {resultSixMonths ? <Typography>Изменения за полгода: {(((stockData[stockData.length - 1]?.price - resultSixMonths) / resultSixMonths) * 100 )?.toFixed(2)} %</Typography> : <Box sx={{ width: '16%' }}><LinearProgress /></Box>}
+         {resultOneMonths ? <Typography>Изменения за год: {(((stockData[stockData.length - 1]?.price - stockData[0]?.price) / stockData[0]?.price) * 100 )?.toFixed(2)} %</Typography> : <Box sx={{ width: '16%' }}><LinearProgress /></Box>}
+        </Grid> */}
         <Grid container xs={12} spacing={2} sx={{ mt: 0 }}>
           <Grid item xs={12} sm={12} md={12} lg={9} xl={9}>
-            <Diagram />
+          {resultOneMonths ? <Typography>Изменения за месяц: {(((stockData[stockData.length - 1]?.price - resultOneMonths) / resultOneMonths) * 100 )?.toFixed(2)} %</Typography> : <Box sx={{ width: '16%' }}><LinearProgress /></Box>}
+         {resultSixMonths ? <Typography>Изменения за полгода: {(((stockData[stockData.length - 1]?.price - resultSixMonths) / resultSixMonths) * 100 )?.toFixed(2)} %</Typography> : <Box sx={{ width: '16%' }}><LinearProgress /></Box>}
+         {stockData.length > 0 ? <Typography>Изменения за год: {(((stockData[stockData.length - 1]?.price - stockData[0]?.price) / stockData[0]?.price) * 100 )?.toFixed(2)} %</Typography> : <Box sx={{ width: '16%' }}><LinearProgress /></Box>}
+            {stockData.length > 0 ? <Diagram /> : <Box sx={{ width: '16%' }}><LinearProgress /></Box>}
           </Grid>
           <Grid item xs={12} sm={12} md={12} lg={3} xl={3}>
             <Typography>О компании:</Typography>
@@ -52,4 +54,4 @@ function DetailsOfAccordion() {
   );
 }
 
-export default memo(DetailsOfAccordion);
+

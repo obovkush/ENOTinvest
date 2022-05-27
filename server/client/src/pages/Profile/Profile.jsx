@@ -16,6 +16,45 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { useDispatch, useSelector } from 'react-redux';
 import DetailsOfAccordion from '../../components/StockAccordion/DetailsOfAccordion';
 
+const logos = [
+  {
+    value: 'HPQ',
+    url: 'https://invest-brands.cdn-tinkoff.ru/US40434L1052x640.png',
+  },
+  {
+    value: 'AAPL',
+    url: 'https://invest-brands.cdn-tinkoff.ru/US0378331005x640.png',
+  },
+  {
+    value: 'F',
+    url: 'https://invlab.ru/wp-content/uploads/2019/01/%C2%ABFord%C2%BB-1.png',
+  },
+  {
+    value: 'VTBA',
+    url: 'https://invest-brands.cdn-tinkoff.ru/RU000A0JTVJ2x640.png',
+  },
+  {
+    value: 'FXGD',
+    url: 'https://invest-brands.cdn-tinkoff.ru/FXGDx640.png',
+  },
+  {
+    value: 'TECH',
+    url: 'https://invest-brands.cdn-tinkoff.ru/TECHx640.png',
+  },
+  {
+    value: 'TUSD',
+    url: 'https://invest-brands.cdn-tinkoff.ru/TUSDx640.png',
+  },
+  {
+    value: 'TSPX',
+    url: 'https://invest-brands.cdn-tinkoff.ru/TSPXx160.png',
+  },
+  {
+    value: 'RUB',
+    url: 'https://i.pinimg.com/originals/45/57/24/455724f1105f77c3217b7a48f64f71ec.png',
+  },
+];
+
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
   borderRadius: theme.shape.borderRadius,
@@ -233,6 +272,23 @@ export default function Profile() {
     setKey(event.target.value);
   };
 
+  const findImg = (figi, type) => {
+    if (type === 'share') {
+      const findTiker = tinkoff[0].instruments.filter((el) => el.figi === figi);
+      const fltr = logos.filter((el) => el.value === findTiker[0].ticker)
+      return fltr[0].url
+    } else if (type === 'etf') {
+      const findTikerEtfs = tinkoff[2].instruments.filter((el) => el.figi === figi);
+      const fltr = logos.filter((el) => el.value === findTikerEtfs[0].ticker)
+      console.log('///', fltr)
+      return fltr[0].url
+    } else {
+      const findTiker = tinkoff[1].positions.filter((el) => el.figi === figi);
+      const fltr = logos.filter((el) => el.value === findTiker[0].current_nkd.currency.toUpperCase())
+      return fltr[0].url
+    }
+  }
+
   const clearKey = () => {};
 
   return (
@@ -275,7 +331,7 @@ export default function Profile() {
                 <Badge.Ribbon
                   placement="start"
                   text={tikerSearch(el.figi, el.instrument_type)}
-                  color={el.expected_yield.units > 0 ? 'green' : 'red'}
+                  color={el.expected_yield.units > 0 ? '#004d40' : '#ad1457'}
                 >
                   <AccordionSummary
                     expandIcon={<ExpandMoreIcon />}
@@ -285,13 +341,16 @@ export default function Profile() {
                       padding: '0 30px 0 70px',
                     }}
                   >
-                    <Typography sx={{ width: '33%', flexShrink: 0 }}>
+                       <Typography sx={{ width: '3%', flexShrink: 0 }}>
+                    {<img src={findImg(el.figi, el.instrument_type)} width={30} alt="icon" />}
+                    </Typography>
+                    <Typography sx={{ width: '33%', flexShrink: 0, paddingTop: '5px' }}>
                       {nameSearch(el.figi, el.instrument_type)}
                     </Typography>
-                    <Typography title="Текущая цена" sx={{ width: '20%' }}>
+                    <Typography title="Текущая цена" sx={{ width: '20%', paddingTop: '5px' }}>
                       {el.current_price.currency === 'usd' ? `${el.current_price.units} $` : `${el.current_price.units} ₽`}
                     </Typography>
-                    <Typography title="Сумма в портфеле" sx={{ width: '20%' }}>
+                    <Typography title="Сумма в портфеле" sx={{ width: '20%', paddingTop: '5px' }}>
                       {el.current_price.currency === 'usd' ? `${el.current_price.units * el.quantity.units} $` : `${el.current_price.units * el.quantity.units} ₽`}
                     </Typography>
                     <StraightOutlinedIcon
@@ -300,6 +359,8 @@ export default function Profile() {
                         color: `${
                           el.expected_yield.units > 0 ? 'green' : 'red'
                         }`,
+                        marginTop: '7px',
+                        paddingBottom: '4px',
                         transform: `${
                           el.expected_yield.units > 0
                             ? 'rotate(35deg)'
@@ -314,6 +375,7 @@ export default function Profile() {
                         color: `${
                           el.expected_yield.units > 0 ? 'green' : 'red'
                         }`,
+                        paddingTop: '5px'
                       }}
                     >
                     {el.current_price.currency === 'usd' ? `${el.expected_yield.units} $` : `${el.expected_yield.units} ₽`}

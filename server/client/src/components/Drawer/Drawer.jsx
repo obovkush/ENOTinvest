@@ -163,17 +163,12 @@ function ResponsiveDrawer(props) {
       </Toolbar>
       <Divider sx={{ borderColor: 'white' }} />
       <Toolbar sx={{ justifyContent: 'center' }}>
-        <div
-          className="sidebar__menu__item"
-          style={{ fontSize: '17px', textAlign: 'center' }}
-        >
-          <Typography sx={{ fontSize: '14px', fontStyle: 'italic' }}>
-            {date}
-          </Typography>
+        <div className="sidebar__menu__item" style={{ fontSize: '17px', textAlign: 'center' }}>
           USD: {usd.toFixed(2)}
           <br />
           EUR: {eur.toFixed(2)}
           <br />
+          {/* <Typography sx={{ fontSize: '14px' }}>по курсу ЦБ</Typography> */}
         </div>
       </Toolbar>
       <Divider sx={{ borderColor: 'white' }} />
@@ -182,7 +177,7 @@ function ResponsiveDrawer(props) {
           <NavLink to={item.to} key={index} onClick={item.onClick}>
             <ListItem key={item.display} disablePadding>
               <ListItemButton>
-                <ListItemIcon>{item.icon}</ListItemIcon>
+                <ListItemIcon sx={{ minWidth: 40 }}>{item.icon}</ListItemIcon>
                 <ListItemText primary={item.display} />
               </ListItemButton>
             </ListItem>

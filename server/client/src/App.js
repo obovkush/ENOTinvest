@@ -1,7 +1,6 @@
 import './App.css';
 import { useEffect } from 'react';
 import axios from 'axios';
-
 import 'boxicons/css/boxicons.min.css';
 import { checkAuth } from './api/userAPI';
 import { useDispatch, useSelector } from 'react-redux';
@@ -38,13 +37,10 @@ function App() {
       });
   }, []);
 
-  console.log('------->', tinkoff);
-
   useEffect(() => {
     if (localStorage.getItem('token')) {
       try {
         checkAuth().then((data) => {
-          console.log('dataFromServerLogin', data);
           dispatch({
             type: 'SET_USER',
             payload: data,

@@ -84,12 +84,12 @@ class StockService {
       api_key.apiKey = 'ca28s8iad3iaqnc2om4g';
       const finnhubClient = new finnhub.DefaultApi();
 
-      setInterval(() => {
         stocks.forEach((el) => {
           finnhubClient.quote(`${el}`, async (error, data, response) => {
             const checkStock = await Stock.findOne({ where: { secid: `${el}` }, row: true });
             if (checkStock) {
               if (data?.c?.toFixed(2) !== checkStock.last) {
+                console.log('Обновилась 💰💰💰', el, '💰💰💰');
                 await Stock.update(
                   {
                     open: data.o,
@@ -105,6 +105,8 @@ class StockService {
                   },
                   { where: { id: checkStock.id } },
                 );
+              } else {
+                console.log('Не обновилась 💰💰💰', el, '💰💰💰');
               }
               } else {
                 await Stock.create({
@@ -126,23 +128,10 @@ class StockService {
             })
           }
         );
-      }, 2 * 60 * 1000);
     } catch (error) {
       console.log('stockservice ENG =>', error);
     }
   }
-
-  // // finnhubClient.company Profile 2({'symbol': 'BMW.DE'}, (error, data, response) => {
-  //   console.log('🚨', data)
-  // });
-  // finnhubClient.quote('BMW.DE', (error, data, response) => {
-  //   console.log('🚨', data);
-  // });
-
-  // BMW
-  // BMWG
-  // BMW@DE
-  // BMW.DE
 
   async getAllStocksfromDB() {
     const allStocks = await Stock.findAll();

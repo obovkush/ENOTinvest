@@ -9,6 +9,7 @@ import {
   Typography,
   LinearProgress,
   Box,
+  Grid,
 } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
@@ -20,22 +21,161 @@ import FavoriteBorder from '@mui/icons-material/FavoriteBorder';
 import Favorite from '@mui/icons-material/Favorite';
 import { Badge } from 'antd';
 import DetailsOfAccordion from './DetailsOfAccordion';
+
 import FavoriteButton from '../FavoriteButton/FavoriteButton';
+import SelectUnstyled, {
+  selectUnstyledClasses,
+} from '@mui/base/SelectUnstyled';
+import OptionUnstyled, {
+  optionUnstyledClasses,
+} from '@mui/base/OptionUnstyled';
+import PopperUnstyled from '@mui/base/PopperUnstyled';
+
+const blue = {
+  100: '#DAECFF',
+  200: '#99CCF3',
+  400: '#3399FF',
+  500: '#007FFF',
+  600: '#0072E5',
+  900: '#003A75',
+};
+
+const grey = {
+  100: '#E7EBF0',
+  200: '#E0E3E7',
+  300: '#CDD2D7',
+  400: '#B2BAC2',
+  500: '#A0AAB4',
+  600: '#6F7E8C',
+  700: '#3E5060',
+  800: '#2D3843',
+  900: '#1A2027',
+};
+
+const StyledButton = styled('button')(
+  ({ theme }) => `
+  font-family: IBM Plex Sans, sans-serif;
+  font-size: 0.875rem;
+  box-sizing: border-box;
+  min-height: calc(1.5em + 15px);
+  min-width: 200px;
+  background: ${theme.palette.mode === 'dark' ? grey[900] : '#fff'};
+  border: 1px solid ${theme.palette.mode === 'dark' ? grey[800] : grey[300]};
+  border-radius: 0.75em;
+  margin: 0.5em;
+  margin-left: 0px;
+  padding: 10px;
+  text-align: left;
+  line-height: 1.5;
+  color: ${theme.palette.mode === 'dark' ? grey[300] : grey[900]};
+
+  &:hover {
+    background: #fff3e0;
+  }
+
+  &.${selectUnstyledClasses.focusVisible} {
+    outline: 3px solid ${theme.palette.mode === 'dark' ? blue[600] : blue[100]};
+  }
+
+  &.${selectUnstyledClasses.expanded} {
+    &::after {
+      content: '▴';
+    }
+  }
+
+  &::after {
+    content: '▾';
+    float: right;
+  }
+  `,
+);
+
+const StyledListbox = styled('ul')(
+  ({ theme }) => `
+  font-family: IBM Plex Sans, sans-serif;
+  font-size: 0.875rem;
+  box-sizing: border-box;
+  padding: 5px;
+  margin: 10px 0;
+  min-width: 320px;
+  background: ${theme.palette.mode === 'dark' ? grey[900] : '#fff'};
+  border: 1px solid ${theme.palette.mode === 'dark' ? grey[800] : grey[300]};
+  border-radius: 0.75em;
+  color: ${theme.palette.mode === 'dark' ? grey[300] : grey[900]};
+  overflow: auto;
+  outline: 0px;
+  `,
+);
+
+const StyledOption = styled(OptionUnstyled)(
+  ({ theme }) => `
+  list-style: none;
+  padding: 8px;
+  border-radius: 0.45em;
+  cursor: default;
+
+  &:last-of-type {
+    border-bottom: none;
+  }
+
+  &.${optionUnstyledClasses.selected} {
+    background-color: ${theme.palette.mode === 'dark' ? blue[900] : blue[100]};
+    color: ${theme.palette.mode === 'dark' ? blue[100] : blue[900]};
+  }
+
+  &.${optionUnstyledClasses.highlighted} {
+    background-color: ${theme.palette.mode === 'dark' ? grey[800] : grey[100]};
+    color: ${theme.palette.mode === 'dark' ? grey[300] : grey[900]};
+  }
+
+  &.${optionUnstyledClasses.highlighted}.${optionUnstyledClasses.selected} {
+    background-color: #ffe0b2;
+    color: ${theme.palette.mode === 'dark' ? blue[100] : blue[900]};
+  }
+
+  &.${optionUnstyledClasses.disabled} {
+    color: ${theme.palette.mode === 'dark' ? grey[700] : grey[400]};
+  }
+
+  &:hover:not(.${optionUnstyledClasses.disabled}) {
+    background-color: #fff3e0;
+    color: ${theme.palette.mode === 'dark' ? grey[300] : grey[900]};
+  }
+  `,
+);
+
+const StyledPopper = styled(PopperUnstyled)`
+  z-index: 1;
+`;
+
+const CustomSelect = React.forwardRef(function CustomSelect(props, ref) {
+  const components = {
+    Root: StyledButton,
+    Listbox: StyledListbox,
+    Popper: StyledPopper,
+    ...props.components,
+  };
+
+  return <SelectUnstyled {...props} ref={ref} components={components} />;
+});
 
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
-  borderRadius: theme.shape.borderRadius,
-  backgroundColor: alpha(theme.palette.common.white, 0.75),
+  borderRadius: 9,
+  height: 43,
+  border: 'lightgrey 1px solid',
+  backgroundColor: '#ffffff',
   '&:hover': {
-    backgroundColor: alpha(theme.palette.common.white, 0.95),
+    backgroundColor: '#fff3e0',
   },
+  margin: '0.5em',
   marginLeft: 0,
-  marginRight: 30,
-  width: '100%',
-  [theme.breakpoints.up('sm')]: {
-    marginLeft: theme.spacing(1),
-    width: 'auto',
-  },
+  marginRight: 20,
+  width: 200,
+  // [theme.breakpoints.up('sm')]: {
+  //   marginLeft: theme.spacing(1),
+  //   width: 'auto',
+  // },
 }));
 
 const SearchIconWrapper = styled('div')(({ theme }) => ({
@@ -156,9 +296,8 @@ function StockAccordion() {
     [dispatch],
   );
 
-  // Список всех акций
-  // setInterval(() => {
   useEffect(() => {
+    console.log('ОЛЕГ ДЕРЖИ КОНСОЛЬ ЛОГ');
     axios
       .get(`${process.env.REACT_APP_API_URL}api/stocks/ru`)
       .then(({ data }) => {
@@ -168,7 +307,21 @@ function StockAccordion() {
         }
       });
   }, []);
-  // }, 1 * 60 * 1000)
+
+  // Список всех акций
+  setInterval(() => {
+    // useEffect(() => {
+    console.log('ОЛЕГ ДЕРЖИ КОНСОЛЬ ЛОГ ❤️‍🔥');
+    axios
+      .get(`${process.env.REACT_APP_API_URL}api/stocks/ru`)
+      .then(({ data }) => {
+        if (data.length) {
+          dispatch({ type: 'SET_ALL_STOCKS', payload: data });
+          setLoading(false);
+        }
+      });
+    // }, []);
+  }, 1 * 60 * 1000);
 
   const AccordionOpen = (panel) => (event, isExpanded) => {
     setExpanded(isExpanded ? panel : false);
@@ -259,18 +412,15 @@ function StockAccordion() {
   // Сортировка по валюте
   const currencyFilter = useCallback(
     (event) => {
-      setCurrency(event.target.value);
-      if (event.target.value === 'USD') {
-        const filtrstocks = stocks.filter(
-          (el) => el.currency === event.target.value,
-        );
+      console.log(event);
+      setCurrency(event);
+      if (event === 'USD') {
+        const filtrstocks = stocks.filter((el) => el.currency === event);
         setFilterStocks(filtrstocks);
-      } else if (event.target.value === 'RUB') {
-        const filtrstocks = stocks.filter(
-          (el) => el.currency === event.target.value,
-        );
+      } else if (event === 'RUB') {
+        const filtrstocks = stocks.filter((el) => el.currency === event);
         setFilterStocks(filtrstocks);
-      } else if (event.target.value === 'Все') {
+      } else if (event === 'Все') {
         setFilterStocks(stocks);
       }
     },
@@ -326,46 +476,64 @@ function StockAccordion() {
 
   return (
     <>
-      <Search sx={{ display: 'inline-block' }}>
-        <SearchIconWrapper>
-          <SearchIcon sx={{ color: 'gray' }} />
-        </SearchIconWrapper>
-        <StyledInputBase
-          onChange={(value) => searchStock(value)}
-          placeholder="Поиск по акциям"
-          inputProps={{ 'aria-label': 'search' }}
-        />
-      </Search>
-      <TextField
-        id="standard-select-currency-native"
-        sx={{ width: '180px', paddingLeft: '20px', paddingBottom: '20px' }}
-        select
-        value={stateFilter}
-        onChange={currencyFilter}
-        SelectProps={{
-          native: true,
-        }}
+      <Grid
+        container
+        spacing={1}
+        direction="row"
+        justifyContent="flex-start"
+        alignItems="center"
       >
-        {currencies.map((option) => (
-          <option key={option.value} value={option.value}>
-            {option.label}
-          </option>
-        ))}
-      </TextField>
-      <FormControlLabel
-        control={
-          <Checkbox
-            {...labelCheckBox}
-            icon={<FavoriteBorder />}
-            checkedIcon={<Favorite sx={{ fill: '#ad1457' }} />}
-            checked={checked}
-            sx={{ marginLeft: '20px' }}
-            onChange={FondsCheck}
+        <Grid
+          item
+          // xs={12} sm={12} md={4} lg={4} xl={4}
+        >
+          <Search sx={{ display: 'inline-block' }}>
+            <SearchIconWrapper>
+              <SearchIcon sx={{ color: 'gray' }} />
+            </SearchIconWrapper>
+            <StyledInputBase
+              onChange={(value) => searchStock(value)}
+              placeholder="Поиск по акциям"
+              inputProps={{ 'aria-label': 'search' }}
+            />
+          </Search>
+        </Grid>
+
+        <Grid
+          item
+          // xs={12} sm={12} md={4} lg={4} xl={4}
+        >
+          <CustomSelect
+            defaultValue={'Все'}
+            value={stateFilter}
+            onChange={currencyFilter}
+          >
+            <StyledOption value={'Все'}>Все</StyledOption>
+            <StyledOption value={'USD'}>USD</StyledOption>
+            <StyledOption value={'RUB'}>RUB</StyledOption>
+          </CustomSelect>
+        </Grid>
+
+        <Grid
+          item
+          // xs={12} sm={12} md={4} lg={4} xl={4}
+        >
+          <FormControlLabel
+            control={
+              <Checkbox
+                {...labelCheckBox}
+                icon={<FavoriteBorder />}
+                checkedIcon={<Favorite sx={{ fill: '#ad1457' }} />}
+                checked={checked}
+                sx={{ marginLeft: '20px' }}
+                onChange={FondsCheck}
+              />
+            }
+            label="Фонды"
+            sx={{ color: 'black', paddingTop: '6px' }}
           />
-        }
-        label="Фонды"
-        sx={{ color: 'black', paddingTop: '6px' }}
-      />
+        </Grid>
+      </Grid>
 
       {isFiltered().map((el, index) => {
         return (
@@ -397,10 +565,15 @@ function StockAccordion() {
                 <Typography sx={{ width: '3%', flexShrink: 0 }}>
                   {<img src={el.img} width={30} alt="icon" />}
                 </Typography>
-                <Typography sx={{ width: '33%', flexShrink: 0 }}>
+                <Typography
+                  sx={{ width: '33%', flexShrink: 0, paddingTop: '5px' }}
+                >
                   {el.shortName}
                 </Typography>
-                <Typography title="Текущая цена" sx={{ width: '20%' }}>
+                <Typography
+                  title="Текущая цена"
+                  sx={{ width: '20%', paddingTop: '5px' }}
+                >
                   {el.currency === 'USD' ? `${el.last} $` : `${el.last} ₽`}
                 </Typography>
                 <Typography
@@ -408,6 +581,7 @@ function StockAccordion() {
                   sx={{
                     width: '20%',
                     color: `${el.lastchange > 0 ? 'green' : 'red'}`,
+                    paddingTop: '5px',
                   }}
                 >
                   {el.currency === 'USD'
@@ -421,6 +595,8 @@ function StockAccordion() {
                     transform: `${
                       el.lastchange > 0 ? 'rotate(35deg)' : 'rotate(135deg)'
                     }`,
+                    marginTop: '7px',
+                    paddingBottom: '4px',
                   }}
                 />
                 <Typography
@@ -428,6 +604,7 @@ function StockAccordion() {
                   sx={{
                     width: '20%',
                     color: `${el.lastchange > 0 ? 'green' : 'red'}`,
+                    paddingTop: '5px',
                   }}
                 >
                   {el.lastchangeprcnt}%

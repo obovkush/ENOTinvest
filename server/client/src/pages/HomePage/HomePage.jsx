@@ -21,15 +21,15 @@ function HomePage() {
       <Grid container spacing={2} pt={2} >
         <Grid item xs={12} sm={12} md={12} lg={7} xl={8}>
           <Grid item xs={12} sm={12} md={12} lg={12} xl={12} sx={cardLineStyles}>
-                <MainPageHeader />
+            <MainPageHeader />
           </Grid>
-          <h1 style={{ marginTop: '1rem' }}>
+          <h3 style={{ marginTop: '1rem' }}>
             Лучшие акции за сегодня
-          </h1>
+          </h3>
           <Best />
-          <h1 style={{ marginTop: '1rem' }}>
+          <h3 style={{ marginTop: '1rem' }}>
             Лучшие падения за сегодня
-          </h1>
+          </h3>
           <Worst />
         </Grid>
         <Grid item xs={12} sm={12} md={7} lg={5} xl={4}>
