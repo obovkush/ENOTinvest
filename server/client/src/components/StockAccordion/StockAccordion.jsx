@@ -173,7 +173,7 @@ function StockAccordion() {
   // Список всех акций
   setInterval(() => {
   // useEffect(() => {
-    console.log('ОЛЕГ ДЕРЖИ КОНСОЛЬ ЛОГ')
+    console.log('ОЛЕГ ДЕРЖИ КОНСОЛЬ ЛОГ ❤️‍🔥');
     axios
       .get(`${process.env.REACT_APP_API_URL}api/stocks/ru`)
       .then(({ data }) => {

@@ -98,33 +98,33 @@ function ResponsiveDrawer(props) {
       display: 'Главная',
       to: '/',
       section: '',
-      icon: <Home sx={{ fill: '#ffffff' }} />,
+      icon: <Home sx={{ color: 'white' }} />,
     },
     {
       display: 'Акции',
       to: '/stocks',
       section: 'stocks',
-      icon: <Dns sx={{ fill: '#ffffff' }} />,
+      icon: <Dns sx={{ color: 'white' }} />,
     },
     {
       display: 'Портфель',
       to: '/profile',
       section: 'profile',
-      icon: <Public sx={{ fill: '#ffffff' }} />,
+      icon: <Public sx={{ color: 'white' }} />,
     },
     user.email
       ? {
           display: 'Выход',
           to: '/logout',
           section: 'logout',
-          icon: <PersonOffIcon sx={{ fill: '#ffffff' }} />,
+          icon: <PersonOffIcon sx={{ color: 'white' }} />,
           onClick: () => handleLogout(),
         }
       : {
           display: 'Вход / Регистрация',
           to: '/signin',
           section: 'signin',
-          icon: <PersonAddAlt1Icon sx={{ fill: '#ffffff' }} />,
+          icon: <PersonAddAlt1Icon sx={{ color: 'white' }} />,
         },
   ];
   const drawer = (
@@ -137,11 +137,11 @@ function ResponsiveDrawer(props) {
       <Divider sx={{ borderColor: 'white' }} />
       <Toolbar sx={{ justifyContent: 'center' }}>
         <div className="sidebar__menu__item" style={{ fontSize: '17px', textAlign: 'center' }}>
-          <Typography sx={{ fontSize: '14px', fontStyle: 'italic' }}>{date}</Typography>
           USD: {usd.toFixed(2)}
           <br />
           EUR: {eur.toFixed(2)}
           <br />
+          {/* <Typography sx={{ fontSize: '14px' }}>по курсу ЦБ</Typography> */}
         </div>
       </Toolbar>
       <Divider sx={{ borderColor: 'white' }} />
@@ -150,7 +150,7 @@ function ResponsiveDrawer(props) {
           <NavLink to={item.to} key={index} onClick={item.onClick}>
             <ListItem key={item.display} disablePadding>
               <ListItemButton>
-                <ListItemIcon>{item.icon}</ListItemIcon>
+                <ListItemIcon sx={{ minWidth: 40 }}>{item.icon}</ListItemIcon>
                 <ListItemText primary={item.display} />
               </ListItemButton>
             </ListItem>
