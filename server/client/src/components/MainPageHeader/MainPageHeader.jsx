@@ -41,7 +41,6 @@ export default function MainPageHeader() {
   const dispatch = useDispatch();
   const tinkoff = useSelector((state) => state.tinkoff);
   const [loading, setLoading] = useState(true);
-  const [sortprofile, setSortProfile] = useState()
   const user = useSelector((store) => store.user);
   const worst = 'worst'
   const best = 'best'
@@ -82,7 +81,9 @@ export default function MainPageHeader() {
     }
   }
 
-  const totalCash = `${(tinkoff[1].total_amount_currencies.units + tinkoff[1].total_amount_etf.units + tinkoff[1].total_amount_shares.units).toLocaleString()} ₽`
+  const totalCash = () => {
+    return `${(tinkoff[1].total_amount_currencies.units + tinkoff[1].total_amount_etf.units + tinkoff[1].total_amount_shares.units).toLocaleString()} ₽`
+  }
 
 
   return (
@@ -95,7 +96,7 @@ export default function MainPageHeader() {
         <CardContent>
           {informationForCards[1].icon}
           <Typography variant="h4" component="div">
-            {totalCash}
+            {totalCash()}
           </Typography>
           <Typography variant="body2">
             {`Результат за все время ${tinkoff[1].expected_yield.units}%`}
@@ -109,47 +110,6 @@ export default function MainPageHeader() {
           : 
       <CardContent >
         {informationForCards[0].icon}
-        <Box sx={{display: 'flex', justifyContent: 'space-around'}}>
-        <Box>
-        <Typography sx={{fontSize: '30px'}}>
-        {((`${tinkoff[1].total_amount_shares.units}` / (`${tinkoff[1].total_amount_currencies.units +
-              tinkoff[1].total_amount_etf.units +
-              tinkoff[1].total_amount_shares.units} `)) * 100).toFixed(1)}% 
-          </Typography>
-          <Typography sx={{fontSize: '20px'}}>
-        Акции
-        </Typography>
-        </Box>
-        <Box>
-        <Typography sx={{fontSize: '30px'}}>
-        {((`${tinkoff[1].total_amount_etf.units}` / (`${tinkoff[1].total_amount_currencies.units +
-              tinkoff[1].total_amount_etf.units +
-              tinkoff[1].total_amount_shares.units}`)) * 100).toFixed(1)}% 
-          </Typography>
-          <Typography sx={{fontSize: '20px'}}>
-        Фонды
-        </Typography>
-        </Box>
-        <Box>
-        <Typography sx={{fontSize: '30px'}}>
-        {((`${tinkoff[1].total_amount_currencies.units}` / (`${tinkoff[1].total_amount_currencies.units +
-              tinkoff[1].total_amount_etf.units +
-              tinkoff[1].total_amount_shares.units}`)) * 100).toFixed(1)}% 
-          </Typography>
-          <Typography sx={{fontSize: '20px'}}>
-        Валюта
-        </Typography>
-        </Box>
-        </Box>
-      </CardContent>
-  }
-    </Card>
-    <Card sx={{ width: '32%', backgroundColor: '#ffa801', textAlign: 'center', color: 'white' }}>
-    {loading
-          ? ''
-          : 
-      <CardContent>
-        {informationForCards[2].icon} 
         <Box sx={{display: 'flex', justifyContent: 'space-around'}}>
         <Box>
         <Typography sx={{fontSize: '30px'}}>
