@@ -31,7 +31,7 @@ export default function NewsBlock({ spinner, Item }) {
                 <Box
                   component="img"
                   sx={{
-                    background: 'white',
+                    background: 'gray',
                     borderRadius: 2,
                     width: 120,
                     maxHeight: { xs: 233, md: 167 },

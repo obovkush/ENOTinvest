@@ -157,28 +157,7 @@ const CustomSelect = React.forwardRef(function CustomSelect(props, ref) {
   return <SelectUnstyled {...props} ref={ref} components={components} />;
 });
 
-// export default function UnstyledSelectSimple() {
-//   const [stateFilter, setCurrency] = React.useState('Все');
-//   const stocks = useSelector((state) => state.stocks);
-//   const [filterStocks, setFilterStocks] = React.useState(stocks);
-
-//   return (
-//     <CustomSelect
-//       defaultValue={'Все'}
-//       value={stateFilter}
-//       onChange={currencyFilter}
-//       >
-//       <StyledOption value={'Все'}>Все</StyledOption>
-//       <StyledOption value={'USD'}>USD</StyledOption>
-//       <StyledOption value={'RUB'}>RUB</StyledOption>
-//     </CustomSelect>
-//   );
-// }
-
-
 // =================================
-
-
 
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
@@ -577,51 +556,55 @@ function StockAccordion() {
               text={el.secid}
               color={el.lastchange > 0 ? '#004d40' : '#ad1457'}
             >
-              <AccordionSummary
-                expandIcon={<ExpandMoreIcon />}
-                aria-controls={el.id}
-                id={el.id}
-                sx={{
-                  padding: '0 30px 0 70px',
-                }}
-              >
-                <Typography sx={{ width: '3%', flexShrink: 0 }}>
-                  {<img src={el.img} width={30} alt="icon" />}
-                </Typography>
-                <Typography sx={{ width: '33%', flexShrink: 0 }}>
-                  {el.shortName}
-                </Typography>
-                <Typography title="Текущая цена" sx={{ width: '20%' }}>
-                  {el.currency === 'USD' ? `${el.last} $` : `${el.last} ₽`}
-                </Typography>
-                <Typography
-                  title="Дневной прирост"
-                  sx={{
-                    width: '20%',
-                    color: `${el.lastchange > 0 ? 'green' : 'red'}`,
-                  }}
-                >
-                  {el.currency === 'USD'
-                    ? `${el.lastchange} $`
-                    : `${el.lastchange} ₽`}
-                </Typography>
-                <StraightOutlinedIcon
-                  fontSize="small"
-                  sx={{
-                    color: `${el.lastchange > 0 ? 'green' : 'red'}`,
-                    transform: `${el.lastchange > 0 ? 'rotate(35deg)' : 'rotate(135deg)'}`
-                  }}
-                />
-                <Typography
-                  title="Процент изменения за день"
-                  sx={{
-                    width: '20%',
-                    color: `${el.lastchange > 0 ? 'green' : 'red'}`,
-                  }}
-                >
-                  {el.lastchangeprcnt}%
-                </Typography>
-                {user.isActivated &&
+                  <AccordionSummary
+                    expandIcon={<ExpandMoreIcon />}
+                    aria-controls={el.id}
+                    id={el.id}
+                    sx={{
+                      padding: '0 30px 0 70px',
+                    }}
+                  >
+                    <Typography sx={{ width: '3%', flexShrink: 0 }}>
+                    {<img src={el.img} width={30} alt="icon" />}
+                    </Typography>
+                    <Typography sx={{ width: '33%', flexShrink: 0, paddingTop: '5px' }}>
+                      {el.shortName}
+                    </Typography>
+                    <Typography title="Текущая цена" sx={{ width: '20%', paddingTop: '5px' }}>
+                      {el.currency === 'USD' ? `${el.last} $` : `${el.last} ₽`}
+                    </Typography>
+                    <Typography
+                      title="Дневной прирост"
+                      sx={{
+                        width: '20%',
+                        color: `${el.lastchange > 0 ? 'green' : 'red'}`,
+                        paddingTop: '5px'
+                      }}
+                    >
+                      {el.currency === 'USD'
+                        ? `${el.lastchange} $`
+                        : `${el.lastchange} ₽`}
+                    </Typography>
+                    <StraightOutlinedIcon
+                      fontSize="small"
+                      sx={{ 
+                        color: `${el.lastchange > 0 ? 'green' : 'red'}`,
+                        transform: `${el.lastchange > 0 ? 'rotate(35deg)' : 'rotate(135deg)'}`,
+                        marginTop: '7px',
+                        paddingBottom: '4px'
+                      }}
+                    />
+                    <Typography
+                      title="Процент изменения за день"
+                      sx={{
+                        width: '20%',
+                        color: `${el.lastchange > 0 ? 'green' : 'red'}`,
+                        paddingTop: '5px'
+                      }}
+                    >
+                      {el.lastchangeprcnt}%
+                    </Typography>
+                    {user.isActivated &&
                   (favorite.some((favorite) => favorite.secid === el.secid) ? (
                     <FavoriteRemoveButton secid={el.secid} />
                   ) : (
