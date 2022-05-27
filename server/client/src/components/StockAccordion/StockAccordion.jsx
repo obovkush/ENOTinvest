@@ -20,8 +20,7 @@ import FavoriteBorder from '@mui/icons-material/FavoriteBorder';
 import Favorite from '@mui/icons-material/Favorite';
 import { Badge } from 'antd';
 import DetailsOfAccordion from './DetailsOfAccordion';
-import FavoriteAddButton from '../FavoriteButton/FavoriteAddButton';
-import FavoriteRemoveButton from '../FavoriteButton/FavoriteRemoveButton';
+import FavoriteButton from '../FavoriteButton/FavoriteButton';
 
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
@@ -88,14 +87,11 @@ function StockAccordion() {
   const user = useSelector((state) => state.user);
   const stocks = useSelector((state) => state.stocks);
   const allNews = useSelector((state) => state.allNews);
-  const favorite = useSelector((state) => state.favorite);
   const [filterStocks, setFilterStocks] = useState(stocks);
   const [loading, setLoading] = useState(true);
   const [checked, setChecked] = useState(false);
   const [stateFilter, setCurrency] = useState('Все');
   const [expanded, setExpanded] = useState(false);
-
-  console.log(favorite);
 
   // Исторические данные по акциям
   const historicalData = useCallback(
@@ -390,62 +386,59 @@ function StockAccordion() {
               text={el.secid}
               color={el.lastchange > 0 ? '#004d40' : '#ad1457'}
             >
-                  <AccordionSummary
-                    expandIcon={<ExpandMoreIcon />}
-                    aria-controls={el.id}
-                    id={el.id}
-                    sx={{
-                      padding: '0 30px 0 70px',
-                    }}
-                  >
-                    <Typography sx={{ width: '3%', flexShrink: 0 }}>
-                    {<img src={el.img} width={30} alt="icon" />}
-                    </Typography>
-                    <Typography sx={{ width: '33%', flexShrink: 0 }}>
-                      {el.shortName}
-                    </Typography>
-                    <Typography title="Текущая цена" sx={{ width: '20%' }}>
-                      {el.currency === 'USD' ? `${el.last} $` : `${el.last} ₽`}
-                    </Typography>
-                    <Typography
-                      title="Дневной прирост"
-                      sx={{
-                        width: '20%',
-                        color: `${el.lastchange > 0 ? 'green' : 'red'}`,
-                      }}
-                    >
-                      {el.currency === 'USD'
-                        ? `${el.lastchange} $`
-                        : `${el.lastchange} ₽`}
-                    </Typography>
-                    <StraightOutlinedIcon
-                      fontSize="small"
-                      sx={{ 
-                        color: `${el.lastchange > 0 ? 'green' : 'red'}`,
-                        transform: `${el.lastchange > 0 ? 'rotate(35deg)' : 'rotate(135deg)'}` 
-                      }}
-                    />
-                    <Typography
-                      title="Процент изменения за день"
-                      sx={{
-                        width: '20%',
-                        color: `${el.lastchange > 0 ? 'green' : 'red'}`,
-                      }}
-                    >
-                      {el.lastchangeprcnt}%
-                    </Typography>
-                    {user.isActivated &&
-                  (favorite.some((favorite) => favorite.secid === el.secid) ? (
-                    <FavoriteRemoveButton secid={el.secid} />
-                  ) : (
-                    <FavoriteAddButton secid={el.secid} />
-                  ))}
-                  </AccordionSummary>
-                </Badge.Ribbon>
-                {expanded === `panel${el.id}` && <DetailsOfAccordion />}
-              </Accordion>
-            );
-          })}
+              <AccordionSummary
+                expandIcon={<ExpandMoreIcon />}
+                aria-controls={el.id}
+                id={el.id}
+                sx={{
+                  padding: '0 30px 0 70px',
+                }}
+              >
+                <Typography sx={{ width: '3%', flexShrink: 0 }}>
+                  {<img src={el.img} width={30} alt="icon" />}
+                </Typography>
+                <Typography sx={{ width: '33%', flexShrink: 0 }}>
+                  {el.shortName}
+                </Typography>
+                <Typography title="Текущая цена" sx={{ width: '20%' }}>
+                  {el.currency === 'USD' ? `${el.last} $` : `${el.last} ₽`}
+                </Typography>
+                <Typography
+                  title="Дневной прирост"
+                  sx={{
+                    width: '20%',
+                    color: `${el.lastchange > 0 ? 'green' : 'red'}`,
+                  }}
+                >
+                  {el.currency === 'USD'
+                    ? `${el.lastchange} $`
+                    : `${el.lastchange} ₽`}
+                </Typography>
+                <StraightOutlinedIcon
+                  fontSize="small"
+                  sx={{
+                    color: `${el.lastchange > 0 ? 'green' : 'red'}`,
+                    transform: `${
+                      el.lastchange > 0 ? 'rotate(35deg)' : 'rotate(135deg)'
+                    }`,
+                  }}
+                />
+                <Typography
+                  title="Процент изменения за день"
+                  sx={{
+                    width: '20%',
+                    color: `${el.lastchange > 0 ? 'green' : 'red'}`,
+                  }}
+                >
+                  {el.lastchangeprcnt}%
+                </Typography>
+                {user.isActivated && <FavoriteButton secid={el.secid} />}
+              </AccordionSummary>
+            </Badge.Ribbon>
+            {expanded === `panel${el.id}` && <DetailsOfAccordion />}
+          </Accordion>
+        );
+      })}
       {loading && (
         <Box sx={{ width: '100%' }}>
           <LinearProgress />
