@@ -34,7 +34,7 @@ import { EyeOutlined, EyeInvisibleOutlined } from '@ant-design/icons';
 //   }
 // }
 
-SignIn = () => {
+const SignIn = () => {
   const user = useSelector((store) => store.user);
 
   console.log('user', user);
