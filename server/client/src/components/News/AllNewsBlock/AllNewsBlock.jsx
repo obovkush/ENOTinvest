@@ -13,10 +13,10 @@ export default function AllNewsBlock({ spinner, Item }) {
   const listFromChanelInvestFuture = useSelector((store) => store.youtube);
   const listOfConcatNews = useSelector((store) => store.allNews);
 
-  //Получаем данные с API YouTube и записываем в Redux
+  // Получаем данные с API YouTube и записываем в Redux
   useEffect(() => {
     // По необходимости нужно добавить различные свойства к запросу, например сортировка.
-    axios.get('https://youtube.googleapis.com/youtube/v3/search?part=snippet&channelId=UC-WK8QlQJpAROCrO7dRvqcw&maxResults=3&key=AIzaSyABhJbYlM-GGIKjhaAguyWZKyaRyKCdtVU')
+    axios.get('https://youtube.googleapis.com/youtube/v3/search?part=snippet&channelId=UC-WK8QlQJpAROCrO7dRvqcw&maxResults=3&key=AIzaSyBPSvvF8PBigMy9OHJv2N3FrSIE7zeYigo')
       .then((listFromChanelInvestFuture) => {
         const { items } = listFromChanelInvestFuture.data
         // console.log('====> Видео с канала InvestFuture', items);

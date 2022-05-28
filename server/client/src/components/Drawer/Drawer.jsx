@@ -93,40 +93,67 @@ function ResponsiveDrawer(props) {
     }
   };
 
-  const sidebarNavItems = [
-    {
-      display: 'Главная',
-      to: '/',
-      section: '',
-      icon: <Home sx={{ color: 'white' }} />,
-    },
-    {
-      display: 'Акции',
-      to: '/stocks',
-      section: 'stocks',
-      icon: <Dns sx={{ color: 'white' }} />,
-    },
-    {
-      display: 'Портфель',
-      to: '/profile',
-      section: 'profile',
-      icon: <Public sx={{ color: 'white' }} />,
-    },
-    user.email
-      ? {
+let sidebarNavItems = []
+
+    if (user.isActivated) {
+      sidebarNavItems = [
+        {
+          display: 'Главная',
+          to: '/',
+          section: '',
+          icon: <Home sx={{ fill: '#FFFFFF' }} />,
+        },
+        {
+          display: 'Акции',
+          to: '/stocks',
+          section: 'stocks',
+          icon: <Dns sx={{ fill: '#FFFFFF' }} />,
+        },
+        {
+          display: 'Портфель',
+          to: '/profile',
+          section: 'profile',
+          icon: <Public sx={{ fill: '#FFFFFF' }} />,
+        },
+        {
           display: 'Выход',
           to: '/logout',
           section: 'logout',
-          icon: <PersonOffIcon sx={{ color: 'white' }} />,
+          icon: <PersonOffIcon sx={{ fill: '#FFFFFF' }} />,
           onClick: () => handleLogout(),
-        }
-      : {
-          display: 'Вход / Регистрация',
-          to: '/signin',
-          section: 'signin',
-          icon: <PersonAddAlt1Icon sx={{ color: 'white' }} />,
         },
-  ];
+      ];
+    } else {
+      sidebarNavItems = [
+        {
+          display: 'Главная',
+          to: '/',
+          section: '',
+          icon: <Home sx={{ fill: '#FFFFFF' }} />,
+        },
+        {
+          display: 'Акции',
+          to: '/stocks',
+          section: 'stocks',
+          icon: <Dns sx={{ fill: '#FFFFFF' }} />,
+        },
+        user.email
+          ? {
+              display: 'Выход',
+              to: '/logout',
+              section: 'logout',
+              icon: <PersonOffIcon sx={{ fill: '#FFFFFF' }} />,
+              onClick: () => handleLogout(),
+            }
+          : {
+              display: 'Вход / Регистрация',
+              to: '/signin',
+              section: 'signin',
+              icon: <PersonAddAlt1Icon sx={{ fill: '#FFFFFF' }} />,
+            },
+      ];
+    }
+  
   const drawer = (
     <div>
       <Toolbar sx={{ maxHeight: '64px' }}>
