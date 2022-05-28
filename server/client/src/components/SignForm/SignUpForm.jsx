@@ -5,7 +5,6 @@ import { registration } from '../../api/userAPI';
 import { HOME_ROUTE, SIGNIN_ROUTE } from '../../utils/consts';
 import {
   Box,
-  Button,
   Divider,
   FormControl,
   FormHelperText,
