@@ -19,15 +19,19 @@ import InputBase from '@mui/material/InputBase';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import FavoriteBorder from '@mui/icons-material/FavoriteBorder';
 import Favorite from '@mui/icons-material/Favorite';
+import BookmarksOutlinedIcon from '@mui/icons-material/BookmarksOutlined';
+import BookmarksIcon from '@mui/icons-material/Bookmarks';
 import { Badge } from 'antd';
 import DetailsOfAccordion from './DetailsOfAccordion';
-import FavoriteAddButton from '../FavoriteButton/FavoriteAddButton';
-import FavoriteRemoveButton from '../FavoriteButton/FavoriteRemoveButton';
-import SelectUnstyled, { selectUnstyledClasses } from '@mui/base/SelectUnstyled';
-import OptionUnstyled, { optionUnstyledClasses } from '@mui/base/OptionUnstyled';
-import PopperUnstyled from '@mui/base/PopperUnstyled';
 
-// ====================================
+import FavoriteButton from '../FavoriteButton/FavoriteButton';
+import SelectUnstyled, {
+  selectUnstyledClasses,
+} from '@mui/base/SelectUnstyled';
+import OptionUnstyled, {
+  optionUnstyledClasses,
+} from '@mui/base/OptionUnstyled';
+import PopperUnstyled from '@mui/base/PopperUnstyled';
 
 const blue = {
   100: '#DAECFF',
@@ -70,7 +74,7 @@ const StyledButton = styled('button')(
   &:hover {
     background: #fff3e0;
   }
-  
+
   &.${selectUnstyledClasses.focusVisible} {
     outline: 3px solid ${theme.palette.mode === 'dark' ? blue[600] : blue[100]};
   }
@@ -157,8 +161,6 @@ const CustomSelect = React.forwardRef(function CustomSelect(props, ref) {
   return <SelectUnstyled {...props} ref={ref} components={components} />;
 });
 
-// =================================
-
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
   borderRadius: 9,
@@ -229,8 +231,10 @@ function StockAccordion() {
   const allNews = useSelector((state) => state.allNews);
   const favorite = useSelector((state) => state.favorite);
   const [filterStocks, setFilterStocks] = useState(stocks);
+  const [favoriteStocks, setFavoriteStocks] = useState(stocks);
   const [loading, setLoading] = useState(true);
   const [checked, setChecked] = useState(false);
+  const [favchecked, setFavChecked] = useState(false);
   const [stateFilter, setCurrency] = useState('Все');
   const [expanded, setExpanded] = useState(false);
 
@@ -245,7 +249,8 @@ function StockAccordion() {
         const day = new Date().getDate();
         axios
           .get(
-            `https://api.polygon.io/v2/aggs/ticker/${key}/range/1/day/${year - 1
+            `https://api.polygon.io/v2/aggs/ticker/${key}/range/1/day/${
+              year - 1
             }-0${month}-${day}/${year}-0${month}-${day}?apiKey=MVOp2FJDsLDLqEmq1t6tYy8hXro8YgUh`,
           )
           .then(({ data }) => {
@@ -298,7 +303,7 @@ function StockAccordion() {
   );
 
   useEffect(() => {
-    console.log('ОЛЕГ ДЕРЖИ КОНСОЛЬ ЛОГ')
+    console.log('ОЛЕГ ДЕРЖИ КОНСОЛЬ ЛОГ');
     axios
       .get(`${process.env.REACT_APP_API_URL}api/stocks/ru`)
       .then(({ data }) => {
@@ -310,19 +315,19 @@ function StockAccordion() {
   }, []);
 
   // Список всех акций
-  setInterval(() => {
-    // useEffect(() => {
-    console.log('ОЛЕГ ДЕРЖИ КОНСОЛЬ ЛОГ ❤️‍🔥');
-    axios
-      .get(`${process.env.REACT_APP_API_URL}api/stocks/ru`)
-      .then(({ data }) => {
-        if (data.length) {
-          dispatch({ type: 'SET_ALL_STOCKS', payload: data });
-          setLoading(false);
-        }
-      });
-    // }, []);
-  }, 1 * 60 * 1000)
+  // setInterval(() => {
+  // useEffect(() => {
+  // console.log('ОЛЕГ ДЕРЖИ КОНСОЛЬ ЛОГ ❤️‍🔥');
+  // axios
+  //   .get(`${process.env.REACT_APP_API_URL}api/stocks/ru`)
+  //   .then(({ data }) => {
+  //     if (data.length) {
+  //       dispatch({ type: 'SET_ALL_STOCKS', payload: data });
+  //       setLoading(false);
+  //     }
+  //   });
+  // }, []);
+  // }, 1 * 60 * 1000);
 
   const AccordionOpen = (panel) => (event, isExpanded) => {
     setExpanded(isExpanded ? panel : false);
@@ -413,17 +418,13 @@ function StockAccordion() {
   // Сортировка по валюте
   const currencyFilter = useCallback(
     (event) => {
-      console.log(event)
+      console.log(event);
       setCurrency(event);
       if (event === 'USD') {
-        const filtrstocks = stocks.filter(
-          (el) => el.currency === event,
-        );
+        const filtrstocks = stocks.filter((el) => el.currency === event);
         setFilterStocks(filtrstocks);
       } else if (event === 'RUB') {
-        const filtrstocks = stocks.filter(
-          (el) => el.currency === event,
-        );
+        const filtrstocks = stocks.filter((el) => el.currency === event);
         setFilterStocks(filtrstocks);
       } else if (event === 'Все') {
         setFilterStocks(stocks);
@@ -437,9 +438,9 @@ function StockAccordion() {
       const filtrstocks = stocks.filter(
         (el) =>
           el.secid.slice(0, event.target.value.length) ===
-          event.target.value.toUpperCase() ||
+            event.target.value.toUpperCase() ||
           el.shortName.slice(0, event.target.value.length).toLowerCase() ===
-          event.target.value.toLowerCase(),
+            event.target.value.toLowerCase(),
       );
       setFilterStocks(filtrstocks);
     },
@@ -459,6 +460,20 @@ function StockAccordion() {
     [checked, stocks],
   );
 
+  const FavoriteCheck = useCallback(
+    (event) => {
+      setFavChecked(event.target.checked);
+      const filterFav = favorite.map((el) => el.secid);
+      if (favchecked === false) {
+        const filtrstocks = stocks.filter((el) => filterFav.includes(el.secid));
+        setFilterStocks(filtrstocks);
+      } else {
+        setFilterStocks(stocks);
+      }
+    },
+    [favchecked, favorite, stocks],
+  );
+
   // Функция форматирования времени для истории (минус год)
   function formatDateMinusYear(date) {
     let month = String(date.getMonth() + 1);
@@ -474,6 +489,7 @@ function StockAccordion() {
   }
 
   const labelCheckBox = { inputProps: { 'aria-label': 'controlled' } };
+  const labelFavCheckBox = { inputProps: { 'aria-label': 'controlled' } };
   // Для проверки отфильтрован массив или нет
   const isFiltered = () => {
     return filterStocks.length ? filterStocks : stocks;
@@ -481,15 +497,16 @@ function StockAccordion() {
 
   return (
     <>
-      <Grid container
+      <Grid
+        container
         spacing={1}
         direction="row"
         justifyContent="flex-start"
         alignItems="center"
       >
-
-        <Grid item
-        // xs={12} sm={12} md={4} lg={4} xl={4}
+        <Grid
+          item
+          // xs={12} sm={12} md={4} lg={4} xl={4}
         >
           <Search sx={{ display: 'inline-block' }}>
             <SearchIconWrapper>
@@ -503,8 +520,9 @@ function StockAccordion() {
           </Search>
         </Grid>
 
-        <Grid item
-        // xs={12} sm={12} md={4} lg={4} xl={4}
+        <Grid
+          item
+          // xs={12} sm={12} md={4} lg={4} xl={4}
         >
           <CustomSelect
             defaultValue={'Все'}
@@ -517,8 +535,9 @@ function StockAccordion() {
           </CustomSelect>
         </Grid>
 
-        <Grid item
-        // xs={12} sm={12} md={4} lg={4} xl={4}
+        <Grid
+          item
+          // xs={12} sm={12} md={4} lg={4} xl={4}
         >
           <FormControlLabel
             control={
@@ -534,8 +553,21 @@ function StockAccordion() {
             label="Фонды"
             sx={{ color: 'black', paddingTop: '6px' }}
           />
+          <FormControlLabel
+            control={
+              <Checkbox
+                {...labelFavCheckBox}
+                icon={<BookmarksOutlinedIcon />}
+                checkedIcon={<BookmarksIcon sx={{ fill: '#ad1457' }} />}
+                checked={favchecked}
+                sx={{ marginLeft: '20px' }}
+                onChange={FavoriteCheck}
+              />
+            }
+            label="Избранное"
+            sx={{ color: 'black', paddingTop: '6px' }}
+          />
         </Grid>
-
       </Grid>
 
       {isFiltered().map((el, index) => {
@@ -557,60 +589,62 @@ function StockAccordion() {
               text={el.secid}
               color={el.lastchange > 0 ? '#004d40' : '#ad1457'}
             >
-                  <AccordionSummary
-                    expandIcon={<ExpandMoreIcon />}
-                    aria-controls={el.id}
-                    id={el.id}
-                    sx={{
-                      padding: '0 30px 0 70px',
-                    }}
-                  >
-                    <Typography sx={{ width: '3%', flexShrink: 0 }}>
-                    {<img src={el.img} width={30} alt="icon" />}
-                    </Typography>
-                    <Typography sx={{ width: '33%', flexShrink: 0, paddingTop: '5px' }}>
-                      {el.shortName}
-                    </Typography>
-                    <Typography title="Текущая цена" sx={{ width: '20%', paddingTop: '5px' }}>
-                      {el.currency === 'USD' ? `${el.last} $` : `${el.last} ₽`}
-                    </Typography>
-                    <Typography
-                      title="Дневной прирост"
-                      sx={{
-                        width: '20%',
-                        color: `${el.lastchange > 0 ? 'green' : 'red'}`,
-                        paddingTop: '5px'
-                      }}
-                    >
-                      {el.currency === 'USD'
-                        ? `${el.lastchange} $`
-                        : `${el.lastchange} ₽`}
-                    </Typography>
-                    <StraightOutlinedIcon
-                      fontSize="small"
-                      sx={{ 
-                        color: `${el.lastchange > 0 ? 'green' : 'red'}`,
-                        transform: `${el.lastchange > 0 ? 'rotate(35deg)' : 'rotate(135deg)'}`,
-                        marginTop: '7px',
-                        paddingBottom: '4px'
-                      }}
-                    />
-                    <Typography
-                      title="Процент изменения за день"
-                      sx={{
-                        width: '20%',
-                        color: `${el.lastchange > 0 ? 'green' : 'red'}`,
-                        paddingTop: '5px'
-                      }}
-                    >
-                      {el.lastchangeprcnt}%
-                    </Typography>
-                    {user.isActivated &&
-                  (favorite.some((favorite) => favorite.secid === el.secid) ? (
-                    <FavoriteRemoveButton secid={el.secid} />
-                  ) : (
-                    <FavoriteAddButton secid={el.secid} />
-                  ))}
+              <AccordionSummary
+                expandIcon={<ExpandMoreIcon />}
+                aria-controls={el.id}
+                id={el.id}
+                sx={{
+                  padding: '0 30px 0 70px',
+                }}
+              >
+                <Typography sx={{ width: '3%', flexShrink: 0 }}>
+                  {<img src={el.img} width={30} alt="icon" />}
+                </Typography>
+                <Typography
+                  sx={{ width: '33%', flexShrink: 0, paddingTop: '5px' }}
+                >
+                  {el.shortName}
+                </Typography>
+                <Typography
+                  title="Текущая цена"
+                  sx={{ width: '20%', paddingTop: '5px' }}
+                >
+                  {el.currency === 'USD' ? `${el.last} $` : `${el.last} ₽`}
+                </Typography>
+                <Typography
+                  title="Дневной прирост"
+                  sx={{
+                    width: '20%',
+                    color: `${el.lastchange > 0 ? 'green' : 'red'}`,
+                    paddingTop: '5px',
+                  }}
+                >
+                  {el.currency === 'USD'
+                    ? `${el.lastchange} $`
+                    : `${el.lastchange} ₽`}
+                </Typography>
+                <StraightOutlinedIcon
+                  fontSize="small"
+                  sx={{
+                    color: `${el.lastchange > 0 ? 'green' : 'red'}`,
+                    transform: `${
+                      el.lastchange > 0 ? 'rotate(35deg)' : 'rotate(135deg)'
+                    }`,
+                    marginTop: '7px',
+                    paddingBottom: '4px',
+                  }}
+                />
+                <Typography
+                  title="Процент изменения за день"
+                  sx={{
+                    width: '20%',
+                    color: `${el.lastchange > 0 ? 'green' : 'red'}`,
+                    paddingTop: '5px',
+                  }}
+                >
+                  {el.lastchangeprcnt}%
+                </Typography>
+                {user.isActivated && <FavoriteButton secid={el.secid} />}
               </AccordionSummary>
             </Badge.Ribbon>
             {expanded === `panel${el.id}` && <DetailsOfAccordion />}

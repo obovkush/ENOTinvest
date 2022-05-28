@@ -5,7 +5,6 @@ import { registration } from '../../api/userAPI';
 import { HOME_ROUTE, SIGNIN_ROUTE } from '../../utils/consts';
 import {
   Box,
-  Button,
   Divider,
   FormControl,
   FormHelperText,
@@ -122,7 +121,7 @@ const SignUp = () => {
             <Grid container spacing={1}>
               <Grid item xs={12}>
                 <Divider>
-                  <AssignmentIndOutlinedIcon fontSize="large" color="primary" />
+                  <AssignmentIndOutlinedIcon fontSize="large" color="warning" />
                 </Divider>
               </Grid>
               <Grid item xs={12}>
@@ -223,7 +222,7 @@ const SignUp = () => {
                   spacing={2}
                   sx={{ mt: 3 }}
                 >
-                  <FormControl sx={{ width: '50%', mt: 1 }}>
+                  <FormControl sx={{ width: '70%', mt: 1 }}>
                     <Grid
                       container
                       spacing={2}
@@ -252,7 +251,7 @@ const SignUp = () => {
                     sx={{ fontSize: '16px' }}
                     component={RouterLink}
                     to={SIGNIN_ROUTE}
-                    color="primary"
+                    color="#f07800"
                     underline="none"
                   >
                     Есть аккаунт?
@@ -281,7 +280,12 @@ const SignUp = () => {
                 {/* <AnimateButton> */}
                 <LoadingButton
                   disableElevation
-                  disabled={isSubmitting}
+                  disabled={
+                    !values.name ||
+                    !values.email ||
+                    !values.password ||
+                    isSubmitting
+                  }
                   fullWidth
                   color="warning"
                   size="large"

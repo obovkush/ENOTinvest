@@ -48,20 +48,20 @@ function ResponsiveDrawer(props) {
     year: 'numeric',
     month: 'numeric',
     day: 'numeric',
-    timezone: 'UTC'
+    timezone: 'UTC',
   };
-  const date = new Date().toLocaleString("ru", options)
+  const date = new Date().toLocaleString('ru', options);
 
   // Меняем цвет на hover элементов сайдбара + теперь заработал NavLink
   const linkStyle = {
     [`& .active, & .${listItemClasses.root}:hover`]: {
-      color: "#f07800",
-      fontWeight: "bold",
-      "& svg": {
-        fill: "#f07800"
-      }
-    }
-  }
+      color: '#f07800',
+      fontWeight: 'bold',
+      '& svg': {
+        fill: '#f07800',
+      },
+    },
+  };
 
   useEffect(() => {
     axios
@@ -93,67 +93,67 @@ function ResponsiveDrawer(props) {
     }
   };
 
-let sidebarNavItems = []
+  let sidebarNavItems = [];
 
-    if (user.isActivated) {
-      sidebarNavItems = [
-        {
-          display: 'Главная',
-          to: '/',
-          section: '',
-          icon: <Home sx={{ fill: '#FFFFFF' }} />,
-        },
-        {
-          display: 'Акции',
-          to: '/stocks',
-          section: 'stocks',
-          icon: <Dns sx={{ fill: '#FFFFFF' }} />,
-        },
-        {
-          display: 'Портфель',
-          to: '/profile',
-          section: 'profile',
-          icon: <Public sx={{ fill: '#FFFFFF' }} />,
-        },
-        {
-          display: 'Выход',
-          to: '/logout',
-          section: 'logout',
-          icon: <PersonOffIcon sx={{ fill: '#FFFFFF' }} />,
-          onClick: () => handleLogout(),
-        },
-      ];
-    } else {
-      sidebarNavItems = [
-        {
-          display: 'Главная',
-          to: '/',
-          section: '',
-          icon: <Home sx={{ fill: '#FFFFFF' }} />,
-        },
-        {
-          display: 'Акции',
-          to: '/stocks',
-          section: 'stocks',
-          icon: <Dns sx={{ fill: '#FFFFFF' }} />,
-        },
-        user.email
-          ? {
-              display: 'Выход',
-              to: '/logout',
-              section: 'logout',
-              icon: <PersonOffIcon sx={{ fill: '#FFFFFF' }} />,
-              onClick: () => handleLogout(),
-            }
-          : {
-              display: 'Вход / Регистрация',
-              to: '/signin',
-              section: 'signin',
-              icon: <PersonAddAlt1Icon sx={{ fill: '#FFFFFF' }} />,
-            },
-      ];
-    }
-  
+  if (user.isActivated) {
+    sidebarNavItems = [
+      {
+        display: 'Главная',
+        to: '/',
+        section: '',
+        icon: <Home sx={{ fill: '#ffffff' }} />,
+      },
+      {
+        display: 'Акции',
+        to: '/stocks',
+        section: 'stocks',
+        icon: <Dns sx={{ fill: '#ffffff' }} />,
+      },
+      {
+        display: 'Портфель',
+        to: '/profile',
+        section: 'profile',
+        icon: <Public sx={{ fill: '#ffffff' }} />,
+      },
+      {
+        display: 'Выход',
+        to: '/logout',
+        section: 'logout',
+        icon: <PersonOffIcon sx={{ fill: '#ffffff' }} />,
+        onClick: () => handleLogout(),
+      },
+    ];
+  } else {
+    sidebarNavItems = [
+      {
+        display: 'Главная',
+        to: '/',
+        section: '',
+        icon: <Home sx={{ fill: '#ffffff' }} />,
+      },
+      {
+        display: 'Акции',
+        to: '/stocks',
+        section: 'stocks',
+        icon: <Dns sx={{ fill: '#ffffff' }} />,
+      },
+      user.email
+        ? {
+            display: 'Выход',
+            to: '/logout',
+            section: 'logout',
+            icon: <PersonOffIcon sx={{ fill: '#ffffff' }} />,
+            onClick: () => handleLogout(),
+          }
+        : {
+            display: 'Вход / Регистрация',
+            to: '/signin',
+            section: 'signin',
+            icon: <PersonAddAlt1Icon sx={{ fill: '#ffffff' }} />,
+          },
+    ];
+  }
+
   const drawer = (
     <div>
       <Toolbar sx={{ maxHeight: '64px' }}>
@@ -172,7 +172,7 @@ let sidebarNavItems = []
         </div>
       </Toolbar>
       <Divider sx={{ borderColor: 'white' }} />
-      <List sx={ linkStyle }>
+      <List sx={linkStyle}>
         {sidebarNavItems.map((item, index) => (
           <NavLink to={item.to} key={index} onClick={item.onClick}>
             <ListItem key={item.display} disablePadding>

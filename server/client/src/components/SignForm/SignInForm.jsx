@@ -4,7 +4,7 @@ import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import { login } from '../../api/userAPI';
 import { HOME_ROUTE, SIGNUP_ROUTE } from '../../utils/consts';
 import {
-  Button,
+  TextField,
   Checkbox,
   FormControlLabel,
   FormHelperText,
@@ -24,7 +24,15 @@ import * as Yup from 'yup';
 import { Formik } from 'formik';
 import { EyeOutlined, EyeInvisibleOutlined } from '@ant-design/icons';
 
-const labelSX = { mb: 0 };
+// const linkStyle = {
+//   [`& .active, & .${listItemClasses.root}:hover`]: {
+//     color: "#f07800",
+//     fontWeight: "bold",
+//     "& svg": {
+//       fill: "#f07800"
+//     }
+//   }
+// }
 
 const SignIn = () => {
   const user = useSelector((store) => store.user);
@@ -102,15 +110,34 @@ const SignIn = () => {
               <Grid item xs={12}>
                 <Divider>
                   <Typography variant="caption">
-                    <LockOutlinedIcon fontSize="large" color="primary" />
+                    <LockOutlinedIcon fontSize="large" color="warning" />
                   </Typography>
                 </Divider>
               </Grid>
               <Grid item xs={12}>
                 <Stack spacing={2}>
-                  <InputLabel htmlFor="email-login" sx={labelSX}>
+                  {/* <InputLabel htmlFor="email-login" sx={labelSX}>
                     Email
-                  </InputLabel>
+                  </InputLabel> */}
+                  <TextField
+                    value={values.email}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    name="email"
+                    variant="outlined"
+                    label="Email"
+                    fullWidth
+                    error={Boolean(touched.email && errors.email)}
+                    sx={[
+                      {
+                        '&.MuiOutlinedInput-notchedOutline:active': {
+                          borderColor: 'green',
+                        },
+                      },
+                    ]}
+                  />
+                  {/* <br />
+                  <br />
                   <OutlinedInput
                     id="email-login"
                     type="email"
@@ -121,7 +148,7 @@ const SignIn = () => {
                     placeholder="Введите email"
                     fullWidth
                     error={Boolean(touched.email && errors.email)}
-                  />
+                  /> */}
                   {touched.email && errors.email && (
                     <FormHelperText
                       error
@@ -134,10 +161,37 @@ const SignIn = () => {
               </Grid>
               <Grid item xs={12}>
                 <Stack spacing={1}>
-                  <InputLabel htmlFor="password-login" sx={labelSX}>
+                  {/* <InputLabel htmlFor="password-login" sx={labelSX}>
                     Пароль
-                  </InputLabel>
-                  <OutlinedInput
+                  </InputLabel> */}
+                  <TextField
+                    value={values.password}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    name="password"
+                    variant="outlined"
+                    label="Password"
+                    fullWidth
+                    error={Boolean(touched.password && errors.password)}
+                    endAdornment={
+                      <InputAdornment position="end">
+                        <IconButton
+                          aria-label="toggle password visibility"
+                          onClick={handleClickShowPassword}
+                          onMouseDown={handleMouseDownPassword}
+                          edge="end"
+                          size="small"
+                        >
+                          {showPassword ? (
+                            <EyeOutlined />
+                          ) : (
+                            <EyeInvisibleOutlined />
+                          )}
+                        </IconButton>
+                      </InputAdornment>
+                    }
+                  />
+                  {/* <OutlinedInput
                     fullWidth
                     error={Boolean(touched.password && errors.password)}
                     id="-password-login"
@@ -164,7 +218,7 @@ const SignIn = () => {
                       </InputAdornment>
                     }
                     placeholder="Введите пароль"
-                  />
+                  /> */}
                   {touched.password && errors.password && (
                     <FormHelperText
                       error
@@ -182,7 +236,7 @@ const SignIn = () => {
                   justifyContent="space-between"
                   alignItems="center"
                   spacing={2}
-                  sx={{ mt: 3 }}
+                  sx={{ mt: 3, mb: 1 }}
                 >
                   <FormControlLabel
                     control={
@@ -191,11 +245,15 @@ const SignIn = () => {
                         onChange={(event) => setChecked(event.target.checked)}
                         name="checked"
                         color="primary"
+                        sx={{ display: 'none' }}
                         // size="small"
                       />
                     }
                     label={
-                      <Typography variant="p" sx={{ fontSize: '16px' }}>
+                      <Typography
+                        variant="p"
+                        sx={{ fontSize: '16px', display: 'none' }}
+                      >
                         Запомнить
                       </Typography>
                     }
@@ -205,7 +263,7 @@ const SignIn = () => {
                     sx={{ fontSize: '16px' }}
                     component={RouterLink}
                     to={SIGNUP_ROUTE}
-                    color="primary"
+                    color="#f07800"
                     underline="none"
                   >
                     Нет аккаунта?
@@ -220,7 +278,7 @@ const SignIn = () => {
               <Grid item xs={12}>
                 <LoadingButton
                   disableElevation
-                  disabled={isSubmitting || !values.email || !values.password}
+                  disabled={!values.email || !values.password || isSubmitting}
                   fullWidth
                   color="warning"
                   size="large"
