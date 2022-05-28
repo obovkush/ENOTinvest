@@ -55,7 +55,7 @@ function FavoriteButton({ secid }) {
     <>
       <IconButton
         aria-label="delete"
-        title="Добавить в избранное"
+        title={statusFavIcon ? 'Удалить из избранного' : 'Добавить в избранное'}
         onClick={statusFavIcon ? handleRemoveFavorite : handleCreateFavorite}
         sx={[
           { margin: 0, padding: 0, width: '30px' },
