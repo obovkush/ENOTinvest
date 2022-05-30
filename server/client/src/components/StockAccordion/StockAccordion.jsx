@@ -236,6 +236,7 @@ function StockAccordion() {
   // Исторические данные по акциям
   const historicalData = useCallback(
     (key, currency, board) => {
+      console.log('=============================> Заход в историю')
       if (currency === 'USD') {
         dispatch({ type: 'REMOVE_HISTORY', payload: [] });
         const year = new Date().getFullYear();
