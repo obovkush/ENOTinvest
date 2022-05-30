@@ -4,7 +4,7 @@ import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import { login } from '../../api/userAPI';
 import { HOME_ROUTE, SIGNUP_ROUTE } from '../../utils/consts';
 import {
-  Button,
+  TextField,
   Checkbox,
   FormControlLabel,
   FormHelperText,
@@ -24,7 +24,15 @@ import * as Yup from 'yup';
 import { Formik } from 'formik';
 import { EyeOutlined, EyeInvisibleOutlined } from '@ant-design/icons';
 
-const labelSX = { mb: 0 };
+// const linkStyle = {
+//   [`& .active, & .${listItemClasses.root}:hover`]: {
+//     color: "#f07800",
+//     fontWeight: "bold",
+//     "& svg": {
+//       fill: "#f07800"
+//     }
+//   }
+// }
 
 const SignIn = () => {
   const user = useSelector((store) => store.user);
@@ -108,9 +116,28 @@ const SignIn = () => {
               </Grid>
               <Grid item xs={12}>
                 <Stack spacing={2}>
-                  <InputLabel htmlFor="email-login" sx={labelSX}>
+                  {/* <InputLabel htmlFor="email-login" sx={labelSX}>
                     Email
-                  </InputLabel>
+                  </InputLabel> */}
+                  <TextField
+                    value={values.email}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    name="email"
+                    variant="outlined"
+                    label="Email"
+                    fullWidth
+                    error={Boolean(touched.email && errors.email)}
+                    sx={[
+                      {
+                        '&.MuiOutlinedInput-notchedOutline:active': {
+                          borderColor: 'green',
+                        },
+                      },
+                    ]}
+                  />
+                  {/* <br />
+                  <br />
                   <OutlinedInput
                     id="email-login"
                     type="email"
@@ -121,7 +148,7 @@ const SignIn = () => {
                     placeholder="Введите email"
                     fullWidth
                     error={Boolean(touched.email && errors.email)}
-                  />
+                  /> */}
                   {touched.email && errors.email && (
                     <FormHelperText
                       error
@@ -134,10 +161,37 @@ const SignIn = () => {
               </Grid>
               <Grid item xs={12}>
                 <Stack spacing={1}>
-                  <InputLabel htmlFor="password-login" sx={labelSX}>
+                  {/* <InputLabel htmlFor="password-login" sx={labelSX}>
                     Пароль
-                  </InputLabel>
-                  <OutlinedInput
+                  </InputLabel> */}
+                  <TextField
+                    value={values.password}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    name="password"
+                    variant="outlined"
+                    label="Password"
+                    fullWidth
+                    error={Boolean(touched.password && errors.password)}
+                    endAdornment={
+                      <InputAdornment position="end">
+                        <IconButton
+                          aria-label="toggle password visibility"
+                          onClick={handleClickShowPassword}
+                          onMouseDown={handleMouseDownPassword}
+                          edge="end"
+                          size="small"
+                        >
+                          {showPassword ? (
+                            <EyeOutlined />
+                          ) : (
+                            <EyeInvisibleOutlined />
+                          )}
+                        </IconButton>
+                      </InputAdornment>
+                    }
+                  />
+                  {/* <OutlinedInput
                     fullWidth
                     error={Boolean(touched.password && errors.password)}
                     id="-password-login"
@@ -164,7 +218,7 @@ const SignIn = () => {
                       </InputAdornment>
                     }
                     placeholder="Введите пароль"
-                  />
+                  /> */}
                   {touched.password && errors.password && (
                     <FormHelperText
                       error

@@ -3,12 +3,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
 
 import { IconButton } from '@mui/material';
-import CircularProgress from '@mui/material/CircularProgress';
 import BookmarkAddOutlinedIcon from '@mui/icons-material/BookmarkAddOutlined';
 import BookmarkRemoveIcon from '@mui/icons-material/BookmarkRemove';
 
 function FavoriteButton({ secid }) {
-  const [loading, setLoading] = useState(true);
   const user = useSelector((state) => state.user);
   const dispatch = useDispatch();
   const favorite = useSelector((state) => state.favorite);
@@ -17,7 +15,6 @@ function FavoriteButton({ secid }) {
   };
 
   useEffect(() => {
-    favorite.length && setLoading(false);
     setStatusFavIcon(isFavorite());
   }, [favorite]);
 
@@ -56,25 +53,21 @@ function FavoriteButton({ secid }) {
 
   return (
     <>
-      {loading ? (
-        <CircularProgress color="warning" size="1.5rem" />
-      ) : (
-        <IconButton
-          aria-label="delete"
-          title="Добавить в избранное"
-          onClick={statusFavIcon ? handleRemoveFavorite : handleCreateFavorite}
-          sx={[
-            { margin: 0, padding: 0, width: '30px' },
-            {
-              '&.active, &:hover': {
-                color: '#f07800',
-              },
+      <IconButton
+        aria-label="delete"
+        title={statusFavIcon ? 'Удалить из избранного' : 'Добавить в избранное'}
+        onClick={statusFavIcon ? handleRemoveFavorite : handleCreateFavorite}
+        sx={[
+          { margin: 0, padding: 0, width: '30px' },
+          {
+            '&.active, &:hover': {
+              color: '#f07800',
             },
-          ]}
-        >
-          {statusFavIcon ? <BookmarkRemoveIcon /> : <BookmarkAddOutlinedIcon />}
-        </IconButton>
-      )}
+          },
+        ]}
+      >
+        {statusFavIcon ? <BookmarkRemoveIcon /> : <BookmarkAddOutlinedIcon />}
+      </IconButton>
     </>
   );
 }
