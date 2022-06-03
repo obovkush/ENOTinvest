@@ -2,9 +2,8 @@ const { Model } = require('sequelize');
 
 module.exports = (sequelize, DataTypes) => {
   class Favorite extends Model {
-    static associate({ User, FavoriteAction }) {
+    static associate({ User }) {
       Favorite.belongsTo(User, { foreignKey: 'userId' });
-      Favorite.hasMany(FavoriteAction, { foreignKey: 'favoriteId' });
     }
   }
   Favorite.init(
@@ -16,11 +15,14 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.INTEGER,
       },
       userId: {
-        allowNull: false,
         type: DataTypes.INTEGER,
         references: {
           model: 'Users',
         },
+      },
+      secid: {
+        allowNull: false,
+        type: DataTypes.TEXT,
       },
       createdAt: {
         allowNull: false,

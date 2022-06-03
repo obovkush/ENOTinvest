@@ -1,15 +1,10 @@
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
-
 import { registration } from '../../api/userAPI';
-
 import { HOME_ROUTE, SIGNIN_ROUTE } from '../../utils/consts';
-
-// material-ui
 import {
   Box,
-  Button,
   Divider,
   FormControl,
   FormHelperText,
@@ -22,9 +17,8 @@ import {
   Stack,
   Typography,
 } from '@mui/material';
+import { LoadingButton } from '@mui/lab';
 import AssignmentIndOutlinedIcon from '@mui/icons-material/AssignmentIndOutlined';
-
-// formik
 import * as Yup from 'yup';
 import { Formik } from 'formik';
 
@@ -39,10 +33,12 @@ import {
 // assets
 import { EyeOutlined, EyeInvisibleOutlined } from '@ant-design/icons';
 
-const labelSX = { mb: -2 };
+const labelSX = { mb: 0 };
 
 const SignUp = () => {
   const user = useSelector((store) => store.user);
+
+  const [loading, setLoading] = useState(false);
 
   console.log('user', user);
 
@@ -89,6 +85,7 @@ const SignUp = () => {
             .required('Обязательное поле'),
         })}
         onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
+          setLoading(true);
           try {
             console.log(values);
             await registration(values.name, values.email, values.password)
@@ -107,6 +104,7 @@ const SignUp = () => {
             setStatus({ success: false });
             setErrors({ submit: err.response.data.description });
             setSubmitting(false);
+            setLoading(false);
           }
         }}
       >
@@ -123,7 +121,7 @@ const SignUp = () => {
             <Grid container spacing={1}>
               <Grid item xs={12}>
                 <Divider>
-                  <AssignmentIndOutlinedIcon fontSize="large" color="primary" />
+                  <AssignmentIndOutlinedIcon fontSize="large" color="warning" />
                 </Divider>
               </Grid>
               <Grid item xs={12}>
@@ -224,7 +222,7 @@ const SignUp = () => {
                   spacing={2}
                   sx={{ mt: 3 }}
                 >
-                  <FormControl sx={{ width: '50%', mt: 1 }}>
+                  <FormControl sx={{ width: '70%', mt: 1 }}>
                     <Grid
                       container
                       spacing={2}
@@ -253,7 +251,7 @@ const SignUp = () => {
                     sx={{ fontSize: '16px' }}
                     component={RouterLink}
                     to={SIGNIN_ROUTE}
-                    color="primary"
+                    color="#f07800"
                     underline="none"
                   >
                     Есть аккаунт?
@@ -280,24 +278,32 @@ const SignUp = () => {
               )}
               <Grid item xs={12}>
                 {/* <AnimateButton> */}
-                <Button
+                <LoadingButton
                   disableElevation
-                  disabled={isSubmitting}
+                  disabled={
+                    !values.name ||
+                    !values.email ||
+                    !values.password ||
+                    isSubmitting
+                  }
                   fullWidth
+                  color="warning"
                   size="large"
+                  // onClick={handleClick}
+                  loading={loading}
+                  loadingPosition="start"
                   type="submit"
                   variant="contained"
-                  color="primary"
                 >
-                  Создать
-                </Button>
+                  {loading ? 'Создаем аккаунт' : 'Создать'}
+                </LoadingButton>
                 {/* </AnimateButton> */}
               </Grid>
-              <Grid item xs={12}>
+              {/* <Grid item xs={12}>
                 <Divider>
                   <Typography variant="caption">Войти с помощью</Typography>
                 </Divider>
-              </Grid>
+              </Grid> */}
               {/* <Grid item xs={12}>
                 <FirebaseSocial />
               </Grid> */}

@@ -1,40 +1,47 @@
-@import '~antd/dist/antd.css';
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Mochiy+Pop+P+One&display=swap');
 
-.App {
-  text-align: center;
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+body {
+  background-color: #eaeaea !important;
+  color: rgb(0, 0, 0) !important;
+  font-family: 'Roboto', sans-serif;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+a {
+  text-decoration: none;
+  color: unset;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
+#custom_scroll::-webkit-scrollbar {
+  width: 7px;
+}
+
+#custom_scroll::-webkit-scrollbar-track {
+  -webkit-box-shadow: 5px 5px 5px -5px rgba(34, 60, 80, 0.2) inset;
+  background-color: rgb(249, 249, 253);
+  border-radius: 10px;
+}
+
+#custom_scroll::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  background: linear-gradient(180deg, #ffa801, #ca441a);
+}
+
+#simple-tabpanel-0>div>p>ul,
+#simple-tabpanel-1>div>p>ul {
+  max-width: 500px;
+}
+
+#root>div>main>div>div.MuiGrid-root.MuiGrid-item.MuiGrid-grid-xs-12.MuiGrid-grid-sm-12.MuiGrid-grid-md-7.MuiGrid-grid-lg-5.MuiGrid-grid-xl-4.css-1hbkgir-MuiGrid-root>div>div.MuiTabs-root.css-jkvau6-MuiTabs-root>div>div>button.MuiButtonBase-root.MuiTab-root.MuiTab-textColorPrimary.Mui-selected.css-1t4lqmc-MuiButtonBase-root-MuiTab-root>svg>path {
+  color: #ca441a;
+}
+
+#root>div>nav>div>div>div>ul>a.active>li>div>div.MuiListItemIcon-root.css-cveggr-MuiListItemIcon-root>svg>path {
   color: white;
-}
-
-.App-link {
-  color: #61dafb;
-}
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
 }
