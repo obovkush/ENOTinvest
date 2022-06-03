@@ -3,8 +3,8 @@ const fetch = require('node-fetch');
 const stockService = require('../service/stockservice');
 const ApiError = require('../exceptions/apiError');
 
-// задаем массив выборки русских акций
-const demoStocks = [
+// задаем массив выборки русских акций  за которыми будем следить
+const demoRuStocks = [
   'ABRD',
   'ALRS',
   'GMKN',
@@ -16,8 +16,21 @@ const demoStocks = [
   'YNDX',
 ];
 
-// задаем массив выборки фондов
+// задаем массив выборки фондов  за которыми будем следить
 const demoFunds = ['TBRU', 'TMOS', 'TRUR'];
+
+// задаем массив выборки иностранных акций за которыми будем следить
+const demoEngStocks = [
+  'NFLX',
+  'INTC',
+  'NVDA',
+  'AAPL',
+  'TWTR',
+  'DIS',
+  'AMZN',
+  'TSLA',
+  // 'GOOGL',
+];
 
 class StockController {
   async getRuStocksFromMOEX() {
@@ -26,7 +39,15 @@ class StockController {
         'https://iss.moex.com/iss/engines/stock/markets/shares/boards/TQBR/securities.json',
       );
       const stocksData = await data.json();
-      stockService.updateStockFromMOEX(stocksData, demoStocks);
+      stockService.updateStockFromMOEX(stocksData, demoRuStocks);
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  async getEngStocksFromFINNHUB() {
+    try {
+      stockService.updateStockFromFINNHUB(demoEngStocks);
     } catch (err) {
       console.log(err);
     }

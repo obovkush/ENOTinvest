@@ -163,7 +163,10 @@ function ResponsiveDrawer(props) {
       </Toolbar>
       <Divider sx={{ borderColor: 'white' }} />
       <Toolbar sx={{ justifyContent: 'center' }}>
-        <div className="sidebar__menu__item" style={{ fontSize: '17px', textAlign: 'center' }}>
+        <div
+          className="sidebar__menu__item"
+          style={{ fontSize: '17px', textAlign: 'center' }}
+        >
           USD: {usd.toFixed(2)}
           <br />
           EUR: {eur.toFixed(2)}
@@ -275,7 +278,7 @@ function ResponsiveDrawer(props) {
       >
         {user.isActivated === false ? (
           <Alert severity="warning">
-            <AlertTitle>Не активирован</AlertTitle>
+            <AlertTitle>Требуется активация</AlertTitle>
             Вам на почту направлено письмо со ссылкой на активацию — пожалуйста,
             перейдите по ссылке в письме для активации аккаунта. <br />
             Если у вас есть активированный аккаунт
@@ -291,7 +294,7 @@ function ResponsiveDrawer(props) {
           aria-label="open drawer"
           edge="start"
           onClick={handleDrawerToggle}
-          sx={{ mr: 2, mt: 2, display: { sm: 'none' } }}
+          sx={{ mr: 2, mt: 2, display: { md: 'none' } }}
         >
           <MenuIcon />
         </IconButton>
