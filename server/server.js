@@ -61,8 +61,13 @@ const start = async () => {
 
 start();
 
-// Вызов функции обновления информации по русским акциям/фондам с API в базу
-const intStocks = setInterval(stockController.getRuStocksFromMOEX, 60 * 1000);
-setTimeout(() => clearInterval(intStocks), 3000);
-const intFunds = setInterval(stockController.getRuFundsFromMOEX, 60 * 1000);
-setTimeout(() => clearInterval(intFunds), 3000);
+// Вызов функций обновления информации по акциям/фондам с API в базу
+const intStocksMOEX = setInterval(stockController.getRuStocksFromMOEX, 1000);
+setTimeout(() => clearInterval(intStocksMOEX), 2000);
+const intFundsMOEX = setInterval(stockController.getRuFundsFromMOEX, 1000);
+setTimeout(() => clearInterval(intFundsMOEX), 2000);
+const intStocksFINNHUB = setInterval(
+  stockController.getEngStocksFromFINNHUB,
+  1000,
+);
+setTimeout(() => clearInterval(intStocksFINNHUB), 2000);
