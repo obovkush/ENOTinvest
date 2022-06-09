@@ -3,7 +3,6 @@ const express = require('express');
 const router = express.Router();
 
 const Parser = require('rss-parser');
-const jsoner = require('../json/first.json');
 
 const parser = new Parser();
 
@@ -18,14 +17,14 @@ router.get('', async (req, res) => {
       'https://www.interfax.ru/rss.asp',
     );
 
-    // const rssDataFinam = await parser.parseURL(
-    //   'https://www.finam.ru/analysis/conews/rsspoint',
-    // );
+    const rssDataFinam = await parser.parseURL(
+      'https://www.finam.ru/analysis/conews/rsspoint',
+    );
 
     const investNews = rssDataInvest.items;
     const interNews = rssDataInter.items;
-    // const finamNews = rssDataFinam.items;
-    const arrayOfAllNews = [investNews, interNews, jsoner];
+    const finamNews = rssDataFinam.items;
+    const arrayOfAllNews = [investNews, interNews, finamNews];
 
     res.json(arrayOfAllNews.flat());
   } catch (error) {
