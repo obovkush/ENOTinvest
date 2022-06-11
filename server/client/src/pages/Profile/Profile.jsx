@@ -50,9 +50,33 @@ const logos = [
     url: 'https://invest-brands.cdn-tinkoff.ru/TSPXx160.png',
   },
   {
-    value: 'RUB',
-    url: 'https://i.pinimg.com/originals/45/57/24/455724f1105f77c3217b7a48f64f71ec.png',
+    value: 'CNX',
+    url: 'https://invest-brands.cdn-tinkoff.ru/US12653C1080x640.png',
   },
+  {
+    value: 'NFE',
+    url: 'https://lh5.googleusercontent.com/-cMQ83PTT9eM/AAAAAAAAAAI/AAAAAAAAAAA/AAKWJJMngtlmNsG3oC6j_7qpx8cK_mwJYQ/photo.jpg',
+  },
+  {
+    value: 'MRO',
+    url: 'https://invest-brands.cdn-tinkoff.ru/US5658491064x640.png',
+  },
+  {
+    value: 'CTRA',
+    url: 'https://invest-brands.cdn-tinkoff.ru/coterrax640.png',
+  },
+  {
+    value: 'PTR',
+    url: 'https://invest-brands.cdn-tinkoff.ru/US71646E1001x640.png',
+  },
+  {
+    value: 'RRC',
+    url: 'https://invest-brands.cdn-tinkoff.ru/US75281A1097x640.png',
+  },
+  {
+    value: 'WTTR',
+    url: 'https://invest-brands.cdn-tinkoff.ru/US81617J3014x640.png',
+  }
 ];
 
 const Search = styled('div')(({ theme }) => ({
@@ -98,6 +122,7 @@ export default function Profile() {
   const [key, setKey] = useState();
 
   useEffect(() => {
+    console.log('что там в портфеле у тебя', tinkoff)
     tinkoff.length && setLoading(false)
   }, [tinkoff])
 
@@ -276,16 +301,15 @@ export default function Profile() {
     if (type === 'share') {
       const findTiker = tinkoff[0].instruments.filter((el) => el.figi === figi);
       const fltr = logos.filter((el) => el.value === findTiker[0].ticker)
+      console.log('share', fltr)
       return fltr[0].url
     } else if (type === 'etf') {
       const findTikerEtfs = tinkoff[2].instruments.filter((el) => el.figi === figi);
       const fltr = logos.filter((el) => el.value === findTikerEtfs[0].ticker)
-      console.log('///', fltr)
+      console.log('etf', fltr)
       return fltr[0].url
     } else {
-      const findTiker = tinkoff[1].positions.filter((el) => el.figi === figi);
-      const fltr = logos.filter((el) => el.value === findTiker[0].current_nkd.currency.toUpperCase())
-      return fltr[0].url
+      return 'https://invest-brands.cdn-tinkoff.ru/TBRUx640.png'
     }
   }
 
