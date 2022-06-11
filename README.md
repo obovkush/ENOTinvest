@@ -9,7 +9,7 @@
 
 # Новости
 
-<img src="./readme-assets/news.gif"/>
+<img src="/readme-assets/news.gif"/>
 
 Блок поделен на 3 вкладки: все новости, только текстовые, только YouTube.
 
@@ -25,7 +25,7 @@
 
 # Акции
 
-<img src="./readme-assets/stockpage.gif"/>
+<img src="/readme-assets/stockpage.gif"/>
 
 Работа с акциями Московской биржи (котировки, исторические данные, тикеры, имена компаний):
 
@@ -48,7 +48,7 @@
 
 # Логин / регистрация
 
-<img src="./readme-assets/loginreg.gif"/>
+<img src="/readme-assets/loginreg.gif"/>
 
 Хранение данных:
 
@@ -64,11 +64,11 @@
 
 При регистрации проходит проверка по email на наличии уже такого в базе. Также есть проверка на сложность пароля и правильность его ввода при логине на сайт. После регистрации необходимо подтвердить аккаунт через переход по пришедшей ссылки на почту.
 
-<img src="./readme-assets/validation.jpg"/>
+<img src="/readme-assets/validation.jpg"/>
 
 # Портфель
 
-<img src="./readme-assets/profile.gif"/>
+<img src="/readme-assets/profile.gif"/>
 
 Подключение личного кабинета:
 
