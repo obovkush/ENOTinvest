@@ -90,19 +90,3 @@
   <img src="https://github.com/devicons/devicon/blob/master/icons/bootstrap/bootstrap-original.svg" title="Bootstrap" **alt="Bootstrap" width="40" height="40"/>
   <img src="https://github.com/devicons/devicon/blob/master/icons/materialui/materialui-original.svg" title="Material UI" alt="Material UI" width="40" height="40"/>&nbsp;
 </div>
-
-# Планы проекта
-
-- Рефакторинг кода, увеличение скорости работы.
-- Возможность настраивать новостную ленту. Добавлять / выбирать / удалять источники.
-- Подключение всех доступных компаний к сервису.
-- Покупка продажа акций не выходя с сайта.
-- Покупка продажа фейковых акций для тренировок.
-- Инвестиционный советник.
-
-# Над проектом работают
-
-<a href="https://hh.ru/resume/7ecfe5ffff09b03f4a0039ed1f7735554a4938" target="_blank">Василий Полищук</a> |
-<a href="https://hh.ru/resume/37f4c5eeff0aeb229f0039ed1f3777786a4b4c" target="_blank">Олег Бовкуш</a> |
-<a href="https://hh.ru/resume/f5ee496aff0aeb14aa0039ed1f30457438626d" target="_blank">Максим Евдокимов</a> |
-<a href="https://spb.hh.ru/resume/9a062fbcff02f464b60039ed1f467036325872" target="_blank">Клычников Сергей</a>
